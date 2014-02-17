@@ -1,2 +1,0 @@
-
-define('libs/require/text!siteconfig/pages/photo-siteconfig.json',[],function () { return '{\n    "version": 2,\n    "pages": [\n        {\n            "name": "Photo Asset",\n            "appName": "Overlay-with-arrows",\n            "urls": [\n                "^((photos|picture-gallery)/.*/)$"\n            ],\n            "init_modules": [\n                {\n                    "name": "taboola-outbrain-recommendations"\n                }\n            ]\n        }\n    ]\n}';});

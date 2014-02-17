@@ -1,2 +1,0 @@
-
-define('libs/require/text!siteconfig/apps/puzzles-siteconfig.json',[],function () { return '{\n    "version": 2,\n    "pages": [\n        {\n            "name": "Puzzles Html5 Legacy Overlay",\n            "appName": "Overlay",\n            "path": "apps/overlay/pages/puzzles-oldhtml5-overlay",\n            "preloadedUrl": "life/",\n            "css": ["life", "puzzles"],\n            "urls": [\n                "^(puzzles/(crossword|sudoku|roundup|upanddown).*)$"\n            ]\n        }\n    ]\n}';});
