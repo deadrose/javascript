@@ -1,0 +1,2 @@
+
+define('libs/require/text!siteconfig/apps/stories-wide-siteconfig.json',[],function () { return '{\n    "version": 2,\n    "apps": {\n        "stories_wide": {\n            "path": "modules/stories_wide/stories_wide_app"\n        }\n    },\n    "pages": [\n        {\n            "css": ["stories_wide"],\n            "name": "Stories Wide",\n            "appName": "stories_wide",\n            "path": "modules/stories_wide/stories_wide",\n            "urls": ["^(wide-story/.*)$"]\n        }\n    ]\n}';});

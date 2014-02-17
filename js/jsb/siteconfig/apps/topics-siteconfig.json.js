@@ -1,0 +1,2 @@
+
+define('libs/require/text!siteconfig/apps/topics-siteconfig.json',[],function () { return '{\n    "version": 2,\n    "apps": {\n        "Topics": {\n            "path": "apps/stag-front",\n            "init_modules": [\n                {\n                    "name": "footer"\n                }\n            ]\n        }\n    },\n    "pages": [\n        {\n            "name": "Default",\n            "appName": "Topics",\n            "urls": [\n                "^(topic/.*)$"\n            ]\n        }\n    ]\n}';});

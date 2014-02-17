@@ -1,0 +1,2 @@
+
+define('libs/require/text!siteconfig/modules/gallery-siteconfig.json',[],function () { return '{\n    "version": 2,\n    "global": {\n        "pubSub": {\n            "openFullScreenCarousel": "modules/carousel/carousel-fullscreen"\n        }\n    },\n    "siteModules": {\n        "front-galleries": {\n            "path": "modules/fronts/front-galleries",\n            "css": "modules/front-gallery"\n        },\n        "gallery": {\n            "path": "modules/carousel/carousel",\n            "selector": ".galleries"\n        }\n    }\n}';});
