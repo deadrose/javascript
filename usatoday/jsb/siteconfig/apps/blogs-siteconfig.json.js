@@ -1,0 +1,2 @@
+
+define('libs/require/text!siteconfig/apps/blogs-siteconfig.json',[],function () { return '{\n    "version": 2,\n    "apps": {\n        "Blog": {\n            "path": "apps/stag-front",\n            "css": "blog",\n            "init_modules": [\n                {\n                    "name": "footer"\n                }\n            ]\n        }\n    },\n    "pages": [\n        {\n            "name": "Default",\n            "appName": "Blog",\n            "urls": ["^(blog/.*)$"]\n        }\n    ]\n}';});

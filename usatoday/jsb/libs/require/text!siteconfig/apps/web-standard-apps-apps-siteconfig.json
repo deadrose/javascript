@@ -1,0 +1,2 @@
+
+define('libs/require/text!siteconfig/apps/web-standard-apps-apps-siteconfig.json',[],function () { return '{\n    "version": 2,\n    "apps": {\n        "Error": {\n            "path": "apps/404",\n            "overlay": true,\n            "css": "404"\n        }\n    },\n    "pages": [\n        {\n            "name": "CatchAll",\n            "appName": "Error",\n            "urls": ["^(errors/.*)$", "^(404.html)$"]\n        }\n    ]\n}';});
