@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="resources/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="resources/jsa.js"></script>
+    <script type="text/javascript">
+    var TestClass = jsa.ui('TestClass', {
+        bindjQuery: 'testClass',
+        events: {
+            'click .btn': 'onButtonClick'
+        },
+        selectors: {
+            btn: '.btn'
+        },
+        initialize: function(el, options) {
+            var me = this;
+            if(me.supr(el, options) === false) { return; }
+
+               me.on('click', function(e){
+                   console.log(e.type);
+               });
+
+        },
+        onButtonClick: function(e) {
+            alert('aa');
+        }
+    });
+
+    $(function(){
+       var t = new TestClass($('#test'));
+       var t = new TestClass($('#test'));
+       var t = new TestClass($('#test'));
+    });
+    </script>
+</head>
+<body>
+<div id="test">
+    <button class="btn">버튼</button>
+</div>
+</body>
+</html>
