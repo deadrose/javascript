@@ -8,10 +8,9 @@
     /* jshint expr: true, validthis: true */
     /* global jsa, alert, escape, unescape */
 
-    var $root = $(document.documentElement);
-    $root.addClass('js');
-    'ontouchstart' in context && $root.addClass('touch');
-    'orientation' in window && $root.addClass('mobile');
+    var $root = $(document.documentElement).addClass('js');
+    ('ontouchstart' in context) && $root.addClass('touch');
+    ('orientation' in context) && $root.addClass('mobile');
 
     /**
      * @namespace
@@ -35,9 +34,42 @@
 
     var toString = Object.prototype.toString,
         hasOwn = Object.prototype.hasOwnProperty,
+        arraySlice = Array.prototype.slice,
         doc = context.document,
+        tmpInput = doc.createElement('input'),
+        tmpNode = doc.createElement('div'),
         emptyFn = function () {},
-        arraySlice = Array.prototype.slice;
+        each = function (obj, cb, ctx) {
+            if(!obj){ return obj; }
+            var i;
+            if(obj && obj.push) {
+               if(obj.forEach) {
+                   obj.forEach(cb, ctx);
+               } else {
+                   for (i = 0; i < obj.length; i++) {
+                       if(cb.call(ctx || obj, obj[i], i, obj) === false) { return; }
+                   }
+               }
+            } else {
+                for(i in obj) {
+                    if(hasOwn.call(obj, i)) {
+                        if (cb.call(obj, obj[i], i, obj) === false) { return; }
+                    }
+                }
+            }
+            return obj;
+        },
+        extend = function(obj) {
+            each(arraySlice.call(arguments, 1), function(source) {
+                each(source, function(val, key) {
+                    obj[key] = source[key];
+                });
+            });
+            return obj;
+        };
+
+    jsa.each = each;
+    jsa.extend = extend;
 
     if (typeof Function.prototype.bind === 'undefined') {
         /**
@@ -92,7 +124,7 @@
      * @return {String} 문자열
      */
     $.fn.trimVal = (function() {
-        var supportPlaceholder = ('placeholder' in jsa.tmpInput);
+        var supportPlaceholder = ('placeholder' in tmpInput);
 
         return supportPlaceholder ? function(value) {
             if(arguments.length === 0) { return $.trim(this.val()); }
@@ -161,7 +193,7 @@
      * @param {Function} options.onShow (Optional) 표시될 때 실행될 함수
      */
     $.fn.showLayer = function(options, isBubble) {
-        options = $.extend({
+        options = extend({
             onShow: jsa.emptyFn,
             opener: null
         }, options);
@@ -193,7 +225,7 @@
      * @param {Function} options.onHide (Optional) 숨겨진 후에 실행될 함수
      */
     $.fn.hideLayer = function(options, isBubble) {
-        options = $.extend({
+        options = extend({
             onHide: jsa.emptyFn,
             focusOpener: false
         }, options);
@@ -388,7 +420,7 @@
             root = root[names[i]] || (root[names[i]] = {});
         }
 
-        (leaf && (root[leaf] ? $.extend(root[leaf], object) : (root[leaf] = object))) || $.extend(root, object);
+        (leaf && (root[leaf] ? extend(root[leaf], object) : (root[leaf] = object))) || extend(root, object);
     };
 
     /**
@@ -433,14 +465,14 @@
         /**
          * 임시 노드: css3스타일의 지원여부와 html을 인코딩/디코딩하거나 노드생성할 때  사용
          */
-        tmpNode: doc.createElement('div'),
+        tmpNode: tmpNode,
 
         /**
          * html5 속성의 지원여부를 체크할 때 사용
          * @example
          * is = 'placeholder' in jsa.tmpInput;  // placeholder를 지원하는가
          */
-        tmpInput: doc.createElement('input'),
+        tmpInput: tmpInput,
 
         /**
          * 터치기반 디바이스 여부
@@ -684,7 +716,7 @@
             },
             unescapeChars = (function (escapeChars) {
                 var results = {};
-                $.each(escapeChars, function (k, v) {
+                each(escapeChars, function (v, k) {
                     results[v] = k;
                 });
                 return results;
@@ -1167,7 +1199,7 @@
                 shuffled = [],
                 number = jsa.number;
 
-            $.each(obj, function (k, value) {
+            each(obj, function (value, k) {
                 rand = number.random(index++);
                 shuffled[index - 1] = shuffled[rand], shuffled[rand] = value;
             });
@@ -1278,8 +1310,8 @@
          */
         keys: function (obj) {
             var results = [];
-            $.each(obj, function (k) {
-                results[results.length] = k;
+            each(obj, function (v, k) {
+                results.push(k);
             });
             return results;
         },
@@ -1295,8 +1327,8 @@
          */
         values: function (obj) {
             var results = [];
-            $.each(obj, function (k, v) {
-                results[results.length] = v;
+            each(obj, function (v) {
+                results.push(v);
             });
             return results;
         },
@@ -1317,11 +1349,9 @@
         map: function(obj, cb) {
             if (!jsa.isObject(obj) || !jsa.isFunction(cb)){ return obj; }
             var results = {};
-            for(var k in obj) {
-                if (obj.hasOwnProperty(k)) {
-                    results[k] = cb(obj[k], k, obj);
-                }
-            }
+            each(obj, function(v, k) {
+                results[k] = cb(obj[k], k, obj);
+            });
             return results;
         },
 
@@ -1329,20 +1359,19 @@
          * 요소가 있는 json객체인지 체크
          *
          *
-         * @param {Object} value json객체
+         * @param {Object} obj json객체
          * @return {Boolean} 요소가 하나라도 있는지 여부
          */
-        hasItems: function (value) {
-            if (!jsa.isObject(value)) {
+        hasItems: function (obj) {
+            if (!jsa.isObject(obj)) {
                 return false;
             }
 
-            for (var key in value) {
-                if (value.hasOwnProperty(key)) {
-                    return true;
-                }
-            }
-            return false;
+            var has = false;
+            each(obj, function(v) {
+                return has = true, false;
+            });
+            return has;
         },
 
 
@@ -1350,7 +1379,7 @@
          * 객체를 쿼리스크링으로 변환
          *
          * @param {Object} obj 문자열
-         * @param {Boolean} isEncode {Optional} URL 인코딩할지 여부
+         * @param {Boolean} isEncode (Optional) URL 인코딩할지 여부
          * @return {String} 결과 문자열
          *
          * @example
@@ -1365,9 +1394,9 @@
                     return v;
                 } : encodeURIComponent;
 
-            $.each(params, function (key, value) {
+            each(params, function (value, key) {
                 if (typeof (value) === 'object') {
-                    $.each(value, function (innerKey, innerValue) {
+                    each(value, function (innerValue, innerKey) {
                         if (queryString !== '') {
                             queryString += '&';
                         }
@@ -1395,7 +1424,7 @@
 		 */
         traverse: function (obj) {
             var result = {};
-            $.each(obj, function (index, item) {
+            each(obj, function (item, index) {
                 result[item] = index;
             });
             return result;
@@ -1504,7 +1533,7 @@
             equalsYMH: function(a, b){
                 var ret = true;
                 if(!a || !a.getDate || !b || !b.getDate) { return false; }
-                $.each(['getFullYear', 'getMonth', 'getDate'], function(i, fn){
+                each(['getFullYear', 'getMonth', 'getDate'], function(fn){
                     ret = ret && (a[fn]() === b[fn]());
                     if(!ret){ return false; }
                 });
@@ -1866,9 +1895,10 @@
              */
             Class.mixins = function (o) {
                 if (!o.push) { o = [o]; }
-                $.each(o, function (index, value) {
-                    $.each(value, function (key, item) {
-                        Class.prototype[key] = item;
+                var proto = this.prototype;
+                each(o, function (value, index) {
+                    each(value, function (item, key) {
+                        proto[key] = item;
                     });
                 });
             };
@@ -1948,7 +1978,7 @@
          * 설정값을 꺼내오는 함수
          *
          * @param {String} name 설정명. `.`를 구분값으로 단계별로 값을 가져올 수 있다.
-         * @param {Object} def {Optional} 설정된 값이 없을 경우 사용할 기본값
+         * @param {Object} def (Optional) 설정된 값이 없을 경우 사용할 기본값
          * @return {Object} 설정값
          */
         getConfig: function (name, def) {
@@ -2338,7 +2368,7 @@
              * @param {opts=} 팝업 창 모양 제어 옵션.
              */
             openPopup: function (url, width, height, opts) {
-                opts = $.extend({
+                opts = extend({
 
                 }, opts);
                 width = width || 600;
@@ -2558,7 +2588,7 @@
 
                     if( !(instance = $this.data(name)) || (a.length === 1 && typeof options !== 'string')) {
                         instance && (instance.destroy(), instance = null);
-                        $this.data(name, (instance = new Klass(this, $.extend({}, $this.data(), options), me)));
+                        $this.data(name, (instance = new Klass(this, extend({}, $this.data(), options), me)));
                     }
 
                     if (typeof options === 'string' && jsa.isFunction(instance[options])) {
@@ -2625,7 +2655,7 @@
             /**
              * 이벤트 핸들러 삭제
              * @param {Object} name 삭제할 이벤트명
-             * @param {Object} cb {Optional} 삭제할 핸들러. 이 인자가 없을 경우 name에 등록된 모든 핸들러를 삭제.
+             * @param {Object} cb (Optional) 삭제할 핸들러. 이 인자가 없을 경우 name에 등록된 모든 핸들러를 삭제.
              */
             off: function () {
                 var lsn = this._listeners;
@@ -2683,7 +2713,7 @@
 
         delete attr.bindjQuery;
 
-        $.extend(attr, {
+        jsa.extend(attr, {
             $extend: jsa.ui.View,
             name: name
         });
@@ -2785,7 +2815,7 @@
                 View._instances.push(me);
                 superClass = me.constructor.superclass;
                 me.el = me.$el[0];													// 원래 엘리먼트도 변수에 설정
-                me.options = $.extend({}, superClass.defaults, me.defaults, options);			// 옵션 병합
+                me.options = jsa.extend({}, superClass.defaults, me.defaults, options);			// 옵션 병합
                 me.cid = me.moduleName + '_' + jsa.nextSeq();					// 객체 고유 키
                 me.subViews = {};														// 하위 컨트롤를 관리하기 위함
                 me._eventNamespace = '.' + me.cid;	// 객체 고유 이벤트 네임스페이스명
@@ -2796,10 +2826,10 @@
                 // events: {
                 //	'click ul>li.item': 'onItemClick', //=> this.$el.on('click', 'ul>li.item', this.onItemClick); 으로 변환
                 // }
-                me.options.events = $.extend({},
+                me.options.events = jsa.extend({},
                     execObject(me.events, me),
                     execObject(me.options.events, me));
-                $.each(me.options.events, function (key, value) {
+                jsa.each(me.options.events, function (value, key) {
                     if (!eventPattern.test(key)) { return false; }
 
                     var name = RegExp.$1,
@@ -2816,7 +2846,7 @@
                 });
 
                 // options.on에 지정한 이벤트들을 클래스에 바인딩
-                $.each(me.options.on || {}, function (key, value) {
+                jsa.each(me.options.on || {}, function (value, key) {
                     me.on(key, value);
                 });
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2834,11 +2864,11 @@
                 //  box: 'ul',			// => this.$box = this.$el.find('ul');
                 //  items: 'ul>li.item'  // => this.$items = this.$el.find('ul>li.item');
                 // }
-                me.options.selectors = $.extend({},
+                me.options.selectors = jsa.extend({},
                     execObject(me.constructor.superclass.selectors, me),
                     execObject(me.selectors, me),
                     execObject(me.options.selectors, me));
-                $.each(me.options.selectors, function (key, value) {
+                jsa.each(me.options.selectors, function (value, key) {
                     if (typeof value === 'string') {
                         me['$' + key] = me.$el.find(value);
                     } else if (value instanceof jQuery) {
@@ -2870,7 +2900,7 @@
                 me.$el.off(me._eventNamespace);
 
                 // me.subviews에 등록된 자식들의 파괴자 호출
-                $.each(me.subViews, function(key, item) {
+                jsa.each(me.subViews, function(item, key) {
                     if(key.substr(0, 1) === '$') {
                         item.off(me._eventNamespace);
                     } else {
@@ -2904,7 +2934,7 @@
              * 인자수에 따라 옵션값을 설정하거나 반환해주는 함수
              *
              * @param {String} name 옵션명
-             * @param {Mixed} value {Optional} 옵션값: 없을 경우 name에 해당하는 값을 반환
+             * @param {Mixed} value (Optional) 옵션값: 없을 경우 name에 해당하는 값을 반환
              * @return {Mixed}
              * @example
              * $('...').tabs('option', 'startIndex', 2);
@@ -2935,8 +2965,8 @@
                     return eventNames;
                 }
 
-                var name, tmp = [];
-                for(var i = -1, name; name = m[++i]; ) {
+                var name, tmp = [], i;
+                for(i = -1; name = m[++i]; ) {
                     if (name.indexOf('.') === -1) {
                         tmp.push(name + me._eventNamespace);
                     } else {
