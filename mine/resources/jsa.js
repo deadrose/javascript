@@ -9,6 +9,9 @@
     /* global jsa, alert, escape, unescape */
 
     var $root = $(document.documentElement);
+    $root.addClass('js');
+    'ontouchstart' in context && $root.addClass('touch');
+    'orientation' in window && $root.addClass('mobile');
 
     /**
      * @namespace
@@ -53,7 +56,7 @@
                 args = arraySlice.call(arguments),
                 object = args.shift();
 
-            return function () {
+            return function (context) {
                 // bind로 넘어오는 인자와 원본함수의 인자를 병합하여 넘겨줌.
                 var local_args = args.concat(arraySlice.call(arguments));
                 if (this !== window) { local_args.push(this); }
@@ -89,7 +92,7 @@
      * @return {String} 문자열
      */
     $.fn.trimVal = (function() {
-        var supportPlaceholder = ('placeholder' in document.createElement('input'));
+        var supportPlaceholder = ('placeholder' in jsa.tmpInput);
 
         return supportPlaceholder ? function(value) {
             if(arguments.length === 0) { return $.trim(this.val()); }
@@ -112,6 +115,8 @@
      * @function
      * @name $#checked
      * @param {Boolean} checked 체크여부
+     * @param {Boolean} isBubble 버블링 여부
+     * @returns {jQuery}
      * @fires $#changed
      * @example
      * // 먼저 changed 이벤트 바인딩
@@ -120,7 +125,7 @@
      * // checked 값을 변경
      * $('input:checkbox').checked(true); // 해당체크박스의 부모에 on클래스가 추가된다.
      */
-    $.fn.checked = function(checked) {
+    $.fn.checked = function(checked, isBubble) {
         return this.each(function() {
             if(this.type !== 'checkbox' && this.type !== 'radio'){ return; }
             /**
@@ -128,7 +133,7 @@
              * @type {object}
              * @peoperty {boolean} checked - 체크 여부
              */
-            var $this = $(this).prop('checked', checked).trigger('changed', [checked]);
+            $(this).prop('checked', checked)[isBubble === false ? 'triggerHandler' : 'trigger']('checkedchanged', [checked]);
         });
     };
 
@@ -138,6 +143,7 @@
      * @name $#replaceClass
      * @param {String} old 대상클래스
      * @param {String} newCls 치환클래스
+     * @returns {jQuery}
      */
     $.fn.replaceClass = function(old, newCls) {
         return this.each(function() {
@@ -154,7 +160,7 @@
      * @param {Element|jQuery} options.button (Optional) 버튼
      * @param {Function} options.onShow (Optional) 표시될 때 실행될 함수
      */
-    $.fn.showLayer = function(options) {
+    $.fn.showLayer = function(options, isBubble) {
         options = $.extend({
             onShow: jsa.emptyFn,
             opener: null
@@ -162,17 +168,18 @@
 
         return this.each(function() {
             var $this = $(this),
+                trigger = [isBubble === false ? 'triggerHandler' : 'trigger'],
                 evt;
             if (options.opener) {
                 $this.data('opener', options.opener);
                 $(options.opener).attr({'aria-pressed': 'true', 'aria-expand': 'true'});
             }
 
-            $this.trigger(evt = $.Event('beforeshow'));
+            $this[trigger](evt = $.Event('layerbeforeshow'));
             if (evt.isDefaultPrevented()){ return; }
 
             // 표시될 때 d_open 클래스 추가
-            $this.addClass('d_open').show().trigger('show');
+            $this.addClass('d-open').show()[trigger]('layershow');
             options.onShow.call($this[0]);
         });
     };
@@ -185,7 +192,7 @@
      * @param {Boolean} options.focusOpener (Optional) 숨겨진 후에 버튼에 포커스를 줄것인지 여부
      * @param {Function} options.onHide (Optional) 숨겨진 후에 실행될 함수
      */
-    $.fn.hideLayer = function(options) {
+    $.fn.hideLayer = function(options, isBubble) {
         options = $.extend({
             onHide: jsa.emptyFn,
             focusOpener: false
@@ -193,7 +200,7 @@
 
         return this.each(function() {
             var $this = $(this);
-            $this.removeClass('d_open').hide().trigger('hide');
+            $this.removeClass('d-open').hide()[isBubble === false ? 'triggerHandler' : 'trigger']('layerhide');
             options.onHide.call($this[0]);
 
             // 숨겨진 후에 열었던 원래버튼에 포커스를 강제로 준다.
@@ -228,7 +235,7 @@
         var results = [];
         this.each(function() {
             if((this.type === 'checkbox' || this.type === 'radio') && this.checked === true) {
-                results[results.length] = this.value;
+                results.push(this.value);
             }
         });
         return results;
@@ -237,11 +244,11 @@
     /**
      * 같은 레벨에 있는 다른 row에서 on를 제거하고 현재 row에 on 추가
      * @function
-     * @name $#activeRow
+     * @name $#activeItem
      * @param {String} cls 활성 클래스명
      * @return {jQuery}
      */
-    $.fn.activeRow = function(cls) {
+    $.fn.activeItem = function(cls) {
         cls = cls || 'on';
         return this.addClass(cls).siblings().removeClass(cls).end();
     };
@@ -262,7 +269,7 @@
      */
     jsa.timeStart = function(name, reset){
         if(!name) { return; }
-        var time = new Date().getTime(),
+        var time = +new Date,
             key = "KEY" + name.toString();
 
         this.timeCounters || (this.timeCounters = {});
@@ -285,9 +292,9 @@
      * jsa.timeEnd('animate'); -> animate: 10203ms
      */
     jsa.timeEnd = function(name){
-        if(!this.timeCounters) { return; }
+        if(!this.timeCounters) { return null; }
 
-        var time = new Date().getTime(),
+        var time = +new Date,
             key = "KEY" + name.toString(),
             timeCounter = this.timeCounters[key],
             diff, label;
@@ -295,6 +302,7 @@
         if(timeCounter) {
             diff = time - timeCounter;
             label = name + ": " + diff + "ms";
+            // 이 콘솔은 디버깅을 위한 것이므로 지우지 말것.
             console.log('[' + name + '] ' + label + 'ms');
             delete this.timeCounters[key];
         }
@@ -311,7 +319,7 @@
      * @name namespace
      *
      * @param {String} name 네임스페이스명
-     * @param {Object} obj {Optional} 지정된 네임스페이스에 등록할 객체, 함수 등
+     * @param {Object} obj {Optional) 지정된 네임스페이스에 등록할 객체, 함수 등
      * @return {Object} 생성된 네임스페이스
      *
      * @example
@@ -330,14 +338,15 @@
         }
         var root = context,
             names = name.split('.'),
-            isSet = arguments.length === 2;
+            isSet = arguments.length === 2,
+            i, item;
 
         if(isSet) {
-            for(var i = -1, item; item = names[++i]; ){
+            for(i = -1; item = names[++i]; ){
                 root = root[item] || (root[item] = (i === names.length - 1 ? obj : {}));
             }
         } else { // isGet
-            for(var i = -1, item; item = names[++i]; ){
+            for(i = -1; item = names[++i]; ){
                 if(item in root) { root = root[item] }
                 else { throw Error(name + '은(는) 정의되지 않은 네임스페이스입니다.'); }
             }
@@ -355,7 +364,7 @@
      *
      * @param {String} name .를 구분자로 해서 common를 시작으로 하위 네임스페이스를 생성. 없으면 common에 추가된다.
      * @param {Object|Function} object
-     * @param {Boolean} (Optional) isExecFn object값이 함수형일 때 실행을 시킨 후에 설정할 것인가 여부
+     * @param {Boolean} isExecFn (Optional) object값이 함수형일 때 실행을 시킨 후에 설정할 것인가 여부
      *
      * @example
      * jsa.define('', [], {});
@@ -613,7 +622,7 @@
 
         /**
          * 정의된 값인지 체크
-         * @param {Object} 체크할 값
+         * @param {Object} value 체크할 값
          * @return {Boolean}
          */
         isDefined: function (value) {
@@ -623,7 +632,7 @@
         /**
          * 주어진 값을 배열로 변환
          *
-         * @param {Mixed} 배열로 변환하고자 하는 값
+         * @param {Mixed} value 배열로 변환하고자 하는 값
          * @return {Array}
          *
          * @example
@@ -648,10 +657,11 @@
          * @function
          * @return {Number}
          */
-        getUniqKey: (function() {
-            var uniqKey = 0;
-            return function() {
-                return (uniqKey += 1);
+        nextSeq: (function() {
+            var seq = 0;
+            return function(step) {
+                step = step || 1;
+                return (seq += step);
             };
         }())
 
@@ -689,8 +699,8 @@
              * 정규식이나 검색문자열을 사용하여 문자열에서 텍스트를 교체
              *
              * @param {String} value 교체를 수행할 문자열
-             * @param {RegExp|String} 검색할 문자열이나 정규식 패턴
-             * @param {String} 대체할 문자열
+             * @param {RegExp|String} find 검색할 문자열이나 정규식 패턴
+             * @param {String} rep 대체할 문자열
              * @return {String} 대체된 결과 문자열
              *
              * @example
@@ -800,6 +810,11 @@
                 return value ? value.replace(/[_\s]+/g, '-').replace(/([A-Z])/g, '-$1').replace(/-+/g, '-').toLowerCase() : value;
             },
 
+            /**
+             * 첫글자를 소문자로 변환
+             * @param {String} value
+             * @returns {string}
+             */
             toFirstLower: function (value) {
                 return value ? value.replace(/^[A-Z]/, function(s) { return s.toLowerCase(); }) : value;
             },
@@ -956,14 +971,14 @@
             }
             if (query.length > 0 && query.charAt(0) === '?'){ query = query.substr(1); }
 
-            var params = (query + '').split('&');
-            var obj = {};
-            var params_length = 0,
+            var params = (query + '').split('&'),
+                obj = {},
+                params_length = params.length,
                 tmp = '',
-                x = 0;
-            params_length = params.length;
-            for (x = 0; x < params_length; x++) {
-                tmp = params[x].split('=');
+                i;
+
+            for (i = 0; i < params_length; i++) {
+                tmp = params[i].split('=');
                 obj[decodeURIComponent(tmp[0])] = decodeURIComponent(tmp[1]).replace(/[+]/g, ' ');
             }
             return obj;
@@ -2771,7 +2786,7 @@
                 superClass = me.constructor.superclass;
                 me.el = me.$el[0];													// 원래 엘리먼트도 변수에 설정
                 me.options = $.extend({}, superClass.defaults, me.defaults, options);			// 옵션 병합
-                me.cid = me.moduleName + '_' + jsa.getUniqKey();					// 객체 고유 키
+                me.cid = me.moduleName + '_' + jsa.nextSeq();					// 객체 고유 키
                 me.subViews = {};														// 하위 컨트롤를 관리하기 위함
                 me._eventNamespace = '.' + me.cid;	// 객체 고유 이벤트 네임스페이스명
 
@@ -2807,7 +2822,11 @@
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             },
-            
+
+            /**
+             * this.selectors를 기반으로 엘리먼트를 조회해서 멤버변수에 겍팅
+             * @returns {jsa.ui.View}
+             */
             updateSelectors: function () {
                 var me = this;
                 // selectors 속성 처리
@@ -2832,7 +2851,12 @@
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 return me;                
             },
-            
+
+            /**
+             * this.$el하위에 있는 엘리먼트를 조회
+             * @param {String} selector 셀렉터
+             * @returns {jQuery}
+             */
             $: function (selector) {
                 return this.$el.find(selector);
             },
