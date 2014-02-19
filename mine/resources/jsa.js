@@ -2775,28 +2775,8 @@
                 me.subViews = {};														// 하위 컨트롤를 관리하기 위함
                 me._eventNamespace = '.' + me.cid;	// 객체 고유 이벤트 네임스페이스명
 
-
-                // selectors 속성 처리
-                // selectors: {
-                //  box: 'ul',			// => this.$box = this.$el.find('ul');
-                //  items: 'ul>li.item'  // => this.$items = this.$el.find('ul>li.item');
-                // }
-                me.options.selectors = $.extend({},
-                    execObject(superClass.selectors, me),
-                    execObject(me.selectors, me),
-                    execObject(me.options.selectors, me));
-                $.each(me.options.selectors, function (key, value) {
-                    if (typeof value === 'string') {
-                        me['$' + key] = me.$el.find(value);
-                    } else if (value instanceof jQuery) {
-                        me['$' + key] = value;
-                    } else {
-                        me['$' + key] = $(value);
-                    }
-                    me.subViews['$' + key] = me['$' + key];
-                });
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+                me.updateSelectors();
+		
                 // events 속성 처리
                 // events: {
                 //	'click ul>li.item': 'onItemClick', //=> this.$el.on('click', 'ul>li.item', this.onItemClick); 으로 변환
@@ -2826,6 +2806,35 @@
                 });
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+            },
+            
+            updateSelectors: function () {
+                var me = this;
+                // selectors 속성 처리
+                // selectors: {
+                //  box: 'ul',			// => this.$box = this.$el.find('ul');
+                //  items: 'ul>li.item'  // => this.$items = this.$el.find('ul>li.item');
+                // }
+                me.options.selectors = $.extend({},
+                    execObject(me.constructor.superclass.selectors, me),
+                    execObject(me.selectors, me),
+                    execObject(me.options.selectors, me));
+                $.each(me.options.selectors, function (key, value) {
+                    if (typeof value === 'string') {
+                        me['$' + key] = me.$el.find(value);
+                    } else if (value instanceof jQuery) {
+                        me['$' + key] = value;
+                    } else {
+                        me['$' + key] = $(value);
+                    }
+                    me.subViews['$' + key] = me['$' + key];
+                });
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                return me;                
+            },
+            
+            $: function (selector) {
+                return this.$el.find(selector);
             },
 
             /**
