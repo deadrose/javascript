@@ -680,8 +680,12 @@
          *
          * @return {String}
          */
-        getUniqId: function () {
-            return Number(String(Math.random() * 10).replace(/\D/g, ''));
+        getUniqId: function (len) {
+        	len = len || 32;
+            //return Number(String(Math.random() * 10).replace(/\D/g, ''));
+		    var rdmString = "";
+		    for( ; rdmString.length < len; rdmString  += Math.random().toString(36).substr(2));
+		    return  rdmString.substr(0, len);
         },
 
         /**
@@ -727,6 +731,9 @@
             scriptRegexp = /<script[^>]*>([\\S\\s]*?)<\/script>/img;
 
         return /** @lends jsa.string */{
+        	trim: function(value) {
+        		return value ? value.replace(/^\s+|\s+$/g, "") : value;
+        	},
             /**
              * 정규식이나 검색문자열을 사용하여 문자열에서 텍스트를 교체
              *
@@ -1164,6 +1171,11 @@
      * @name jsa.array
      */
     jsa.define('array', /** @lends jsa.array */{
+    	append: function () {
+    		var args = [].slice.call(arguments);
+    		Array.prototype.push.apply.apply(args);
+    		return args[0];
+    	},
         /**
          * 콜백함수로 하여금 요소를 가공하는 함수
          *
