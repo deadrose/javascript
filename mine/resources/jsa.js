@@ -1461,6 +1461,9 @@
         }
 
         return /** @lends jsa.date */{
+            MONTHS_NAME: months,
+            MONTHS_FULLNAME: fullMonths,
+
             /**
              * 날짜형식을 지정한 포맷의 문자열로 변환
              *
@@ -1479,8 +1482,8 @@
                         yy = yyyy.toString().substring(2),
                         M = formatDate.getMonth() + 1,
                         MM = M < 10 ? "0" + M : M,
-                        MMM = months[M - 1],
-                        MMMM = fullMonths[M - 1],
+                        MMM = this.MONTHS_NAME[M - 1],
+                        MMMM = this.MONTHS_FULLNAME[M - 1],
                         d = formatDate.getDate(),
                         dd = d < 10 ? "0" + d : d,
                         h = formatDate.getHours(),
@@ -1750,12 +1753,10 @@
         }
 
         // 속성 중에 부모클래스에 똑같은 이름의 함수가 있을 경우 래핑처리
-        function process(what, o, supr) {
-            for (var k in o) {
-                if (o.hasOwnProperty(k)) {
-                    what[k] = isFn(o[k]) && isFn(supr.prototype[k]) ? wrap(k, o[k], supr) : o[k];
-                }
-            }
+        function inherits(what, o, supr) {
+            each(o, function(v, k) {
+                what[k] = isFn(v) && isFn(supr.prototype[k]) ? wrap(k, v, supr) : v;
+            });
         }
 
         /**
@@ -1776,18 +1777,17 @@
 
             // 생성자 몸체
             function constructor() {
-                if (singleton) {
-                    if (instance) {
-                        return instance;
-                    } else {
-                        instance = this;
-                    }
+                if (singleton && instance) {
+                    return instance;
+                } else {
+                    instance = this;
                 }
+                var args = arraySlice.call(args);
 
                 if (this.initialize) {
-                    this.initialize.apply(this, arguments);
+                    this.initialize.apply(this, args);
                 } else {
-                    supr.prototype.initialize && supr.prototype.initialize.apply(this, arguments);
+                    supr.prototype.initialize && supr.prototype.initialize.apply(this, args);
                 }
             }
 
@@ -1924,7 +1924,7 @@
              * person.newFunc();
              */
             Class.members = function (o) {
-                process(Class.prototype, o, supr);
+                inherits(Class.prototype, o, supr);
             };
             attr && Class.members.call(Class, attr);
 
@@ -1964,6 +1964,10 @@
             return Class;
         };
     });
+
+    ea
+
+
 
     jsa.define( /** @lends jsa */{
         /**
@@ -2012,10 +2016,8 @@
                 pair = pair[names[i]] || (pair[names[i]] = {});
             }
             return (pair[names[last]] = value);
-        }
-    });
+        },
 
-    jsa.define( /** @lends jsa */{
         /**
          * 템플릿 생성
          *
@@ -2226,6 +2228,15 @@
                 if (sum !== buf[12]) { return false; }
 
                 return true;
+            },
+
+
+            run: function(frm, validators) {
+                var isValid = true;
+                each(validators, function(v, k) {
+
+                });
+                return isValid;
             }
         };
     });

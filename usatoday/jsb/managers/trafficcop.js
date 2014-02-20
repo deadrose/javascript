@@ -1,5 +1,5 @@
 define(['jquery', 'underscore'],
-    function($, _) {
+    function ($, _) {
         /**
          * Traffic Cop that will gate dom changing ajax events until animations are complete.
          * The advantage of this is that multiple animations could all be happening, and ajax requests will
@@ -7,7 +7,7 @@ define(['jquery', 'underscore'],
          * @exports managers/trafficcop
          * @author jmerrifiel@gannett.com (Jay Merrifield)
          */
-        var TrafficCop = function(){
+        var TrafficCop = function () {
             this.DEBUG = true;
             this.defaultTimeout = 2000; // ms
             this.minTimeout = 500; // ms
@@ -22,19 +22,19 @@ define(['jquery', 'underscore'],
              * @param ajaxPromise {Deferred} promise object representing an ajax request
              * @return {Deferred} promise object that will fire when all animations are done
              */
-            addRequest: function(ajaxPromise){
+            addRequest: function (ajaxPromise) {
                 var resultPromise = {
                     ajaxPromise: ajaxPromise,
                     gate: $.Deferred(),
                     requestResult: null
                 };
                 this.activeRequests.push(resultPromise);
-                ajaxPromise.always(_.bind(function(requestResult){
+                ajaxPromise.always(_.bind(function (requestResult) {
                     resultPromise.requestResult = requestResult;
-                    if (this.activeAnimations.length === 0){
-                        if (ajaxPromise.state() === 'resolved'){
+                    if (this.activeAnimations.length === 0) {
+                        if (ajaxPromise.state() === 'resolved') {
                             resultPromise.gate.resolve();
-                        }else{
+                        } else {
                             resultPromise.gate.reject();
                         }
                         this._clearFinishedRequests();
@@ -43,9 +43,9 @@ define(['jquery', 'underscore'],
                 // we need to filter the results, cause we're not returning the correct promise
                 var gate = resultPromise.gate.promise();
                 // copy the abort function pointer
-                gate = gate.pipe(function(){
+                gate = gate.pipe(function () {
                     return resultPromise.requestResult;
-                }, function(e){
+                }, function (e) {
                     return resultPromise.requestResult;
                 });
                 gate.original = ajaxPromise;
@@ -63,12 +63,12 @@ define(['jquery', 'underscore'],
              * @param {Number} [timeMs] time for animation
              * @return {Deferred} representing when all animations are done
              */
-            addAnimation: function(promise, el, property, value, timeMs){
+            addAnimation: function (promise, el, property, value, timeMs) {
                 // why are you wasting my time?
-                if (!promise || promise.state() !== 'pending'){
+                if (!promise || promise.state() !== 'pending') {
                     return promise;
                 }
-                if (!this.animationCompletion){
+                if (!this.animationCompletion) {
                     this.animationCompletion = $.Deferred();
                 }
                 var animationInfo = {
@@ -77,20 +77,20 @@ define(['jquery', 'underscore'],
                     property: property,
                     value: value
                 }, waitTime = Math.max(timeMs * 2, this.minTimeout) || this.defaultTimeout;
-                animationInfo.timeout = setTimeout(_.bind(function(){
+                animationInfo.timeout = setTimeout(_.bind(function () {
                     console.warn('ANIMATION did NOT resolve within ' + waitTime + ' ms, releasing barrier ' + this._getAnimationPropertyDescription(property, value), animationInfo.el);
                     this.activeAnimations = _.without(this.activeAnimations, animationInfo);
                     this._resolveAnimation();
                 }, this), waitTime);
 
                 this.activeAnimations.push(animationInfo);
-                promise.always(_.bind(function(){
+                promise.always(_.bind(function () {
                     clearTimeout(animationInfo.timeout);
                     var index = $.inArray(animationInfo, this.activeAnimations);
-                    if (index !== -1){
+                    if (index !== -1) {
                         this.activeAnimations.splice(index, 1);
                         this._resolveAnimation();
-                    }else{
+                    } else {
                         console.warn('animation finished after being released ' + this._getAnimationPropertyDescription(property, value), animationInfo.el);
                     }
                 }, this));
@@ -100,22 +100,22 @@ define(['jquery', 'underscore'],
              * Gets the current animation completion promise so we can delay destructive calls between animations
              * @return {Deferred} that will resolve when it's safe to make a destructive call
              */
-            getAnimationCompletion: function() {
+            getAnimationCompletion: function () {
                 if (this.animationCompletion) {
                     return this.animationCompletion.promise();
                 } else {
                     return $.Deferred().resolve();
                 }
             },
-            _getAnimationPropertyDescription: function(property, value){
-                if (property){
+            _getAnimationPropertyDescription: function (property, value) {
+                if (property) {
                     return 'on property ' + property + ':' + value;
-                }else{
+                } else {
                     return 'on unregistered element';
                 }
             },
-            _resolveAnimation: function(){
-                if (this.activeAnimations.length === 0){
+            _resolveAnimation: function () {
+                if (this.activeAnimations.length === 0) {
                     // we do this because the animation completion and the triggerEvents()
                     // might register another animation which we want to generate a new animation
                     // completion deferred
@@ -127,19 +127,19 @@ define(['jquery', 'underscore'],
                     completion.resolve();
                 }
             },
-            _triggerEvents: function(){
-                _.each(this.activeRequests, function(itm){
+            _triggerEvents: function () {
+                _.each(this.activeRequests, function (itm) {
                     var state = itm.ajaxPromise.state();
-                    if (state === 'resolved'){
+                    if (state === 'resolved') {
                         itm.gate.resolve();
-                    }else if (state === 'rejected'){
+                    } else if (state === 'rejected') {
                         itm.gate.reject();
                     }
                 });
                 this._clearFinishedRequests();
             },
-            _clearFinishedRequests: function(){
-                this.activeRequests = _.reject(this.activeRequests, function(itm){
+            _clearFinishedRequests: function () {
+                this.activeRequests = _.reject(this.activeRequests, function (itm) {
                     return itm.gate.state() !== 'pending';
                 });
             }

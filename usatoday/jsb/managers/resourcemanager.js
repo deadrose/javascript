@@ -1,8 +1,8 @@
 define(['jquery', 'underscore'],
-    function($, _) {
+    function ($, _) {
         'use strict';
 
-		var cidx = window.cidx = window.cidx || 0;
+        var cidx = window.cidx = window.cidx || 0;
 
         /**
          * Resource Manager that handles loading modularized javascript and css
@@ -12,7 +12,7 @@ define(['jquery', 'underscore'],
          * @constructor
          * @author Jay Merrifield <jmerrifiel@gannett.com>
          */
-        var ResourceManager = function(options){
+        var ResourceManager = function (options) {
             this._initialize(options);
         };
         ResourceManager.prototype = {
@@ -20,8 +20,8 @@ define(['jquery', 'underscore'],
              * private function that sets up resource manager
              * @private
              */
-            _initialize: function(options) {
-            	console.log(window.cidx++, '!!!ResourceManager._initialize(', options, ')');
+            _initialize: function (options) {
+                console.log(window.cidx++, '!!!ResourceManager._initialize(', options, ')');
 
                 this.siteModules = options.siteModules || {};
                 this.$stylesheets = $([]);
@@ -29,7 +29,7 @@ define(['jquery', 'underscore'],
                 this.staticUrl = window.site_static_url || '/static/';
                 this.staticVersion = window.site_static_version || 'off';
                 // build up existing stylesheets
-                $('link[data-identifier]').each(_.bind(function(idx, itm) {
+                $('link[data-identifier]').each(_.bind(function (idx, itm) {
                     var identifier = $(itm).data('identifier');
                     if (identifier != 'main') {
                         this.stylesheets.push($(itm).data('identifier'));
@@ -43,24 +43,26 @@ define(['jquery', 'underscore'],
              * @param {Deferred} removalPromise promise that will resolve when it's safe to remove the unneeded stylesheets
              * @param {Boolean} [log] boolean to log the changes to the stylesheets
              */
-            fetchStyles: function(stylesheets, removalPromise, log) {
-            	console.log(window.cidx++, '!!!ResourceManager.fetchStyles(', stylesheets, removalPromise, log, ')');
+            fetchStyles: function (stylesheets, removalPromise, log) {
+                console.log(window.cidx++, '!!!ResourceManager.fetchStyles(', stylesheets, removalPromise, log, ')');
 
                 var newStyles = _.difference(stylesheets, this.stylesheets);
                 var stylesToRemove = _.difference(this.stylesheets, stylesheets);
-                if (log && stylesToRemove.length){
+                if (log && stylesToRemove.length) {
                     console.log('removing styles from dom: ', stylesToRemove);
                 }
-                if (log && newStyles.length){
+                if (log && newStyles.length) {
                     console.log('adding styles to dom: ', newStyles);
                 }
                 var $stylesToRemove = this._findStyleTags(stylesToRemove);
                 this.stylesheets = stylesheets;
                 // _.without doesn't work on jquery objects
-                this.$stylesheets = $(_.filter(this.$stylesheets, function(value){ return !_.include($stylesToRemove, value); }));
+                this.$stylesheets = $(_.filter(this.$stylesheets, function (value) {
+                    return !_.include($stylesToRemove, value);
+                }));
                 this._addStylesToHead(newStyles);
-                if ($stylesToRemove.length){
-                    removalPromise.done(function(){
+                if ($stylesToRemove.length) {
+                    removalPromise.done(function () {
                         $stylesToRemove.remove();
                     });
                 }
@@ -73,19 +75,19 @@ define(['jquery', 'underscore'],
              * @param {Array} [pageModules] any modules that are needed for the page view
              * @return {Deferred} promise object
              */
-            fetchJavascript: function(requirePackage, view, pageModules) {
-            	console.log(window.cidx++, '!!!ResourceManager.fetchJavascript(', requirePackage, view, pageModules, ')');
+            fetchJavascript: function (requirePackage, view, pageModules) {
+                console.log(window.cidx++, '!!!ResourceManager.fetchJavascript(', requirePackage, view, pageModules, ')');
 
-                return $.Deferred(_.bind(function(deferred){
+                return $.Deferred(_.bind(function (deferred) {
                     if (requirePackage && view) {
-                        require([requirePackage], _.bind(function(){
+                        require([requirePackage], _.bind(function () {
                             // the view SHOULD be included in the module, if not, something went wrong
-                            require([view], _.bind(function(ViewClass){
+                            require([view], _.bind(function (ViewClass) {
                                 this._resolveFetchJavascript(deferred, ViewClass, pageModules);
                             }, this));
                         }, this));
                     } else if (view) {
-                        require([view], _.bind(function(ViewClass){
+                        require([view], _.bind(function (ViewClass) {
                             this._resolveFetchJavascript(deferred, ViewClass, pageModules);
                         }, this));
                     } else {
@@ -100,10 +102,10 @@ define(['jquery', 'underscore'],
              * @param {Array} [pageModules]
              * @private
              */
-            _resolveFetchJavascript: function(deferred, ViewClass, pageModules) {
-            	console.log(window.cidx++, '!!!ResourceManager._resolveFetchJavascript(', deferred, ViewClass, pageModules, ')');
+            _resolveFetchJavascript: function (deferred, ViewClass, pageModules) {
+                console.log(window.cidx++, '!!!ResourceManager._resolveFetchJavascript(', deferred, ViewClass, pageModules, ')');
 
-                this.fetchPageModules(pageModules).done(function(moduleList){
+                this.fetchPageModules(pageModules).done(function (moduleList) {
                     deferred.resolve(ViewClass, moduleList);
                 });
             },
@@ -113,33 +115,33 @@ define(['jquery', 'underscore'],
              * @param {Array.<Object>} pageModules
              * @returns {Deferred} jQuery Promise that will resolve when all resources are found
              */
-            fetchPageModules: function(pageModules) {
-            	console.log(window.cidx++, '!!!ResourceManager.fetchPageModules(', pageModules, ')');
+            fetchPageModules: function (pageModules) {
+                console.log(window.cidx++, '!!!ResourceManager.fetchPageModules(', pageModules, ')');
 
                 pageModules = pageModules || [];
-                return $.Deferred(_.bind(function(defer) {
+                return $.Deferred(_.bind(function (defer) {
                     var numWaiting = pageModules.length,
                         retrievedModules = [];
                     if (!numWaiting) {
                         defer.resolve(retrievedModules);
                         return;
                     }
-                    _.each(pageModules, function(pageModule) {
+                    _.each(pageModules, function (pageModule) {
                         // assume we're going to succeed, but more importantly we need to preserve the ordering
                         retrievedModules.push(pageModule);
-                        this.getSiteModuleByName(pageModule.name).done(function(siteModule){
+                        this.getSiteModuleByName(pageModule.name).done(function (siteModule) {
                             pageModule.selector = siteModule.selector || '.' + siteModule.name + '-module';
                             pageModule.ModuleClass = siteModule.ModuleClass;
-                        }).fail(function(){
-                            retrievedModules = _.reject(retrievedModules, function(module){
-                                return module.name === pageModule.name;
+                        }).fail(function () {
+                                retrievedModules = _.reject(retrievedModules, function (module) {
+                                    return module.name === pageModule.name;
+                                });
+                            }).always(function () {
+                                numWaiting--;
+                                if (numWaiting === 0) {
+                                    defer.resolve(retrievedModules);
+                                }
                             });
-                        }).always(function(){
-                            numWaiting--;
-                            if (numWaiting === 0){
-                                defer.resolve(retrievedModules);
-                            }
-                        });
                     }, this);
                 }, this)).promise();
             },
@@ -149,10 +151,10 @@ define(['jquery', 'underscore'],
              * @param {String} moduleName
              * @returns {Deferred} jQuery Promise that will resolve when the code is found, or reject if no such module exists
              */
-            getSiteModuleByName: function(moduleName) {
-            	console.log(window.cidx++, '!!!ResourceManager.getSiteModuleByName(', moduleName, ')');
+            getSiteModuleByName: function (moduleName) {
+                console.log(window.cidx++, '!!!ResourceManager.getSiteModuleByName(', moduleName, ')');
 
-                return $.Deferred(_.bind(function(defer){
+                return $.Deferred(_.bind(function (defer) {
                     var siteModule = this.siteModules[moduleName];
                     if (!siteModule) {
                         defer.reject("No Such Module Found");
@@ -160,11 +162,11 @@ define(['jquery', 'underscore'],
                         if (siteModule.ModuleClass) {
                             defer.resolve(siteModule);
                         } else if (siteModule.path) {
-                            require([siteModule.path], function(ModuleClass) {
+                            require([siteModule.path], function (ModuleClass) {
                                 siteModule.ModuleClass = ModuleClass;
                                 siteModule.name = moduleName;
                                 defer.resolve(siteModule);
-                            }, function(err) {
+                            }, function (err) {
                                 console.error('Failed loading ' + siteModule.path + ': ' + err.message, err);
                                 defer.reject(err);
                             });
@@ -182,12 +184,12 @@ define(['jquery', 'underscore'],
              * @return {jQuery} link tags
              * @private
              */
-            _findStyleTags: function(stylesNames) {
-            	console.log(window.cidx++, '!!!ResourceManager._findStyleTags(', stylesNames, ')');
+            _findStyleTags: function (stylesNames) {
+                console.log(window.cidx++, '!!!ResourceManager._findStyleTags(', stylesNames, ')');
 
-                return $(_.filter(this.$stylesheets, function(itm) {
+                return $(_.filter(this.$stylesheets, function (itm) {
                     var section = $(itm).data('identifier');
-                    return _.find(stylesNames, function(style) {
+                    return _.find(stylesNames, function (style) {
                         return section === style;
                     });
                 }));
@@ -197,12 +199,12 @@ define(['jquery', 'underscore'],
              * @param {Array} newStyles names of styles we want to add
              * @private
              */
-            _addStylesToHead: function(newStyles) {
-            	console.log(window.cidx++, '!!!ResourceManager._addStylesToHead(', newStyles, ')');
+            _addStylesToHead: function (newStyles) {
+                console.log(window.cidx++, '!!!ResourceManager._addStylesToHead(', newStyles, ')');
 
                 if (newStyles && newStyles.length > 0) {
                     var $newStyles = $([]);
-                    _.each(newStyles, function(itm) {
+                    _.each(newStyles, function (itm) {
                         var link = $('<link rel="stylesheet" data-identifier="' + itm + '" href="' + this.staticUrl + 'css/bundles/' + itm + (window.use_minified_css ? '.min' : '') + '.css?v=' + this.staticVersion + '">')[0];
                         $newStyles.push(link);
                         this.$stylesheets.push(link);

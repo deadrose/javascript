@@ -11,49 +11,37 @@ define([
     'site-manager',
     'managers/siteconfig'
 ],
-function(
-    $,
-    _,
-    PubSub,
-    Utils,
-    Alert,
-    TrafficCop,
-    RequestManager,
-    RouteManager,
-    ResourceManager,
-    SiteManager,
-    SiteConfig
-) {
-    'use strict';
-    if (!Object.getPrototypeOf) {
-        // polyfill for IE8 (fullscreen transitions need it)
-        Object.getPrototypeOf = function(object){
-            // May break if the constructor has been tampered with
-            return object.constructor.prototype;
-        };
-    }
-	
-	var cidx = window.cidx = window.cidx || 0;
+    function ($, _, PubSub, Utils, Alert, TrafficCop, RequestManager, RouteManager, ResourceManager, SiteManager, SiteConfig) {
+        'use strict';
+        if (!Object.getPrototypeOf) {
+            // polyfill for IE8 (fullscreen transitions need it)
+            Object.getPrototypeOf = function (object) {
+                // May break if the constructor has been tampered with
+                return object.constructor.prototype;
+            };
+        }
 
-    /**
-     * @event page:unload
-     * @desc This event is fired when a page is torn down before all animation and ajax requests are fired
-     */
-    /**
-     * State Manager that handles the application state. Maintains the active view and
-     * manages routing and transitioning between the views. Ajax calls and animation calls
-     * should be registered with the state manager to guarantee that animation isn't interrupted
-     * and that stale or requests that are being thrown out.
-     * @requires managers/trafficcop
-     * @requires managers/requestmanager
-     * @exports state
-     * @author Jay Merrifield <jmerrifiel@gannett.com>
-     */
-    var StateManager = function(){
-        this.scrollEl = Utils.get('scrollEl');
-        this.body = Utils.get('body');
-        this.initialize();
-    };
+        var cidx = window.cidx = window.cidx || 0;
+
+        /**
+         * @event page:unload
+         * @desc This event is fired when a page is torn down before all animation and ajax requests are fired
+         */
+        /**
+         * State Manager that handles the application state. Maintains the active view and
+         * manages routing and transitioning between the views. Ajax calls and animation calls
+         * should be registered with the state manager to guarantee that animation isn't interrupted
+         * and that stale or requests that are being thrown out.
+         * @requires managers/trafficcop
+         * @requires managers/requestmanager
+         * @exports state
+         * @author Jay Merrifield <jmerrifiel@gannett.com>
+         */
+        var StateManager = function () {
+            this.scrollEl = Utils.get('scrollEl');
+            this.body = Utils.get('body');
+            this.initialize();
+        };
         StateManager.prototype = {
             /** @const
              * @private */
@@ -74,10 +62,10 @@ function(
             /**
              * This starts state manager, spin up the route manager, resource manager, and refresh timer
              */
-            start: function() {
-            	console.log(window.cidx++, '!!!StateManager.start(', ')');
+            start: function () {
+                console.log(window.cidx++, '!!!StateManager.start(', ')');
 
-                return SiteConfig.loadSiteConfigs(window.site_config.JS.CONFIG).done(_.bind(function(siteConfig) {
+                return SiteConfig.loadSiteConfigs(window.site_config.JS.CONFIG).done(_.bind(function (siteConfig) {
                     this.siteConfig = siteConfig; // stash this so we can debug it's value
                     this._setupGlobalPubSub(siteConfig.global.pubSub);
                     this.routeManager = new RouteManager({
@@ -96,15 +84,15 @@ function(
                 }, this));
             },
 
-            _setupGlobalPubSub: function(pubSubMap) {
+            _setupGlobalPubSub: function (pubSubMap) {
 
-            	console.log(window.cidx++, '!!!StateManager._setupGlobalPubSub(', pubSubMap, ')');
+                console.log(window.cidx++, '!!!StateManager._setupGlobalPubSub(', pubSubMap, ')');
 
-                _.each(pubSubMap, function(paths, key) {
-                    require(paths, function() {
+                _.each(pubSubMap, function (paths, key) {
+                    require(paths, function () {
                         var mods = arguments;
-                        PubSub.on(key, function(options) {
-                            _.each(mods, function(Mod) {
+                        PubSub.on(key, function (options) {
+                            _.each(mods, function (Mod) {
                                 new Mod(options);
                             });
                         });
@@ -112,17 +100,17 @@ function(
                 });
             },
 
-            fetchPageModules: function(pageModules) {
+            fetchPageModules: function (pageModules) {
 
-            	console.log(window.cidx++, '!!!StateManager.fetchPageModules(', pageModules, ')');
+                console.log(window.cidx++, '!!!StateManager.fetchPageModules(', pageModules, ')');
 
                 return this.resourceManager.fetchPageModules(pageModules);
             },
             /**
              * Internal initialization helper, builds activeAppInfo and preloadedAppInfo objects
              */
-            initialize: function() {
-            	console.log(window.cidx++, '!!!StateManager.initialize(', ')');
+            initialize: function () {
+                console.log(window.cidx++, '!!!StateManager.initialize(', ')');
 
                 this.activeAppInfo = {
                     url: null,
@@ -135,8 +123,8 @@ function(
                 this._clearPreloadedAppInfo();
                 this.fullscreenView = null;
             },
-            _clearPreloadedAppInfo: function() {
-            	console.log(window.cidx++, '!!!StateManager._clearPreloadedAppInfo(', ')');
+            _clearPreloadedAppInfo: function () {
+                console.log(window.cidx++, '!!!StateManager._clearPreloadedAppInfo(', ')');
 
                 this.preloadedAppInfo = {
                     url: null,
@@ -155,8 +143,8 @@ function(
              * @param {Boolean} [preload] specifying if the change is a preloaded url or not
              * @private
              */
-            _onRouteChange: function(app, page, url, preload) {
-            	console.log(window.cidx++, '!!!StateManager._onRouteChange(', app, page, url, preload, ')');
+            _onRouteChange: function (app, page, url, preload) {
+                console.log(window.cidx++, '!!!StateManager._onRouteChange(', app, page, url, preload, ')');
 
                 if (this.DEBUG) {
                     console.log('App: ' + page.appName + '/' + page.name);
@@ -178,8 +166,8 @@ function(
              * @param {String} fragment to preload
              * @return {Deferred} promise object that resolves when the path is fully loaded
              */
-            preloadPath: function(fragment) {
-            	console.log(window.cidx++, '!!!StateManager.preloadPath(', fragment, ')');
+            preloadPath: function (fragment) {
+                console.log(window.cidx++, '!!!StateManager.preloadPath(', fragment, ')');
 
                 var url = Utils.getDefinedRoute(fragment);
                 if (url || url === '') {
@@ -201,8 +189,8 @@ function(
              * @return {Deferred} promise object
              * @private
              */
-            _loadPath: function(url, preload) {
-            	console.log(window.cidx++, '!!!StateManager._loadPath(', url, preload, ')');
+            _loadPath: function (url, preload) {
+                console.log(window.cidx++, '!!!StateManager._loadPath(', url, preload, ')');
 
                 var routeInfo = this.routeManager.getRouteInfoForUrl(url);
                 if (!routeInfo) {
@@ -217,8 +205,8 @@ function(
              * Triggers an ajax reload of the current page
              * @returns {Deferred}
              */
-            refreshActiveApp: function() {
-            	console.log(window.cidx++, '!!!StateManager.refreshActiveApp(', ')');
+            refreshActiveApp: function () {
+                console.log(window.cidx++, '!!!StateManager.refreshActiveApp(', ')');
 
                 var currentPath = this.activeAppInfo.url,
                     pageInfo = this.routeManager.getRouteInfoForUrl(currentPath).page,
@@ -237,8 +225,8 @@ function(
              * @param {String} url
              * @returns {Boolean} whether or not the ajax navigate succeeded. It doesn't succeed if the url isn't
              */
-            partialNavigateToUrl: function(url) {
-            	console.log(window.cidx++, '!!!StateManager.partialNavigateToUrl(', url, ')');
+            partialNavigateToUrl: function (url) {
+                console.log(window.cidx++, '!!!StateManager.partialNavigateToUrl(', url, ')');
 
                 if (Utils.triggerRoute(url, null, null, true)) {
                     this.activeAppInfo.intentUrl = Utils.getDefinedRoute(url);
@@ -251,8 +239,8 @@ function(
              * Navigates to the current preloaded url, or the default path passed in if no preloaded app is currently there
              * @param defaultPath
              */
-            navigateToPreloadedUrl: function(defaultPath) {
-            	console.log(window.cidx++, '!!!StateManager.navigateToPreloadedUrl(', defaultPath, ')');
+            navigateToPreloadedUrl: function (defaultPath) {
+                console.log(window.cidx++, '!!!StateManager.navigateToPreloadedUrl(', defaultPath, ')');
 
                 var navPath = this.preloadedAppInfo.url || defaultPath;
                 if (!navPath) {
@@ -275,8 +263,8 @@ function(
              * of the state manager
              * @param {Object} fullscreenView
              */
-            registerFullScreenView: function(fullscreenView) {
-            	console.log(window.cidx++, '!!!StateManager.registerFullScreenView(', fullscreenView, ')');
+            registerFullScreenView: function (fullscreenView) {
+                console.log(window.cidx++, '!!!StateManager.registerFullScreenView(', fullscreenView, ')');
 
                 this._setFixedPosition(this.activeAppInfo, this.activeAppInfo.app, true);
                 this.fullscreenView = fullscreenView;
@@ -284,9 +272,9 @@ function(
                 this.activeAppInfo.app.pause();
             },
 
-            setActiveAppFixed: function(partialCover) {
+            setActiveAppFixed: function (partialCover) {
 
-            	console.log(window.cidx++, '!!!StateManager.setActiveAppFixed(', partialCover, ')');
+                console.log(window.cidx++, '!!!StateManager.setActiveAppFixed(', partialCover, ')');
 
                 this._setFixedPosition(this.activeAppInfo, this.activeAppInfo.app, partialCover);
             },
@@ -294,8 +282,8 @@ function(
             /**
              * Clears out the full screen view from the state manager
              */
-            clearFullScreenView: function() {
-            	console.log(window.cidx++, '!!!StateManager.clearFullScreenView(', ')');
+            clearFullScreenView: function () {
+                console.log(window.cidx++, '!!!StateManager.clearFullScreenView(', ')');
 
                 this._clearFixedPosition(this.activeAppInfo, this.activeAppInfo.app, true);
                 // fullscreenView will be null if state manager triggered the close, which means
@@ -308,9 +296,9 @@ function(
                 }
             },
 
-            clearActiveAppFixed: function(partialCover) {
+            clearActiveAppFixed: function (partialCover) {
 
-            	console.log(window.cidx++, '!!!StateManager.clearActiveAppFixed(', partialCover, ')');
+                console.log(window.cidx++, '!!!StateManager.clearActiveAppFixed(', partialCover, ')');
 
                 this._clearFixedPosition(this.activeAppInfo, this.activeAppInfo.app, partialCover);
             },
@@ -327,8 +315,8 @@ function(
              * @param {Boolean} overlay overlay the view on top of the existing view.
              * @param {Object} pageInfo page info for the path
              */
-            _loadApp: function(NextAppClass, initOptions, toUrl, overlay, pageInfo) {
-            	console.log(window.cidx++, '!!!StateManager._loadApp(', NextAppClass, initOptions, toUrl, overlay, pageInfo, ')');
+            _loadApp: function (NextAppClass, initOptions, toUrl, overlay, pageInfo) {
+                console.log(window.cidx++, '!!!StateManager._loadApp(', NextAppClass, initOptions, toUrl, overlay, pageInfo, ')');
 
                 var finishPromise, type = (overlay ? this.LAYER_OVERLAY : this.LAYER_BASE),
                     resourcePromise = this.resourceManager.fetchJavascript(pageInfo.buildfile && pageInfo.buildfile.path, pageInfo.path, pageInfo.modules);
@@ -351,7 +339,7 @@ function(
                     }
                     this.activeAppInfo.intentUrl = null;
                     finishPromise = this._handleTransition(this.activeAppInfo.app, NextAppClass, initOptions,
-                                                           type, this.activeAppInfo.url, toUrl, resourcePromise);
+                        type, this.activeAppInfo.url, toUrl, resourcePromise);
                 }
                 this.activeAppInfo.url = toUrl;
                 this.activeAppInfo.css = pageInfo.css || [];
@@ -362,26 +350,26 @@ function(
              * Retrieves the last url the site ajax'd from
              * @returns {String}
              */
-            getLastUrl: function() {
-            	console.log(window.cidx++, '!!!StateManager.getLastUrl(', ')');
+            getLastUrl: function () {
+                console.log(window.cidx++, '!!!StateManager.getLastUrl(', ')');
 
                 return this.lastUrl;
             },
-            _preloadApp: function(NextAppClass, initOptions, toUrl, pageInfo) {
-            	console.log(window.cidx++, '!!!StateManager._preloadApp(', NextAppClass, initOptions, toUrl, pageInfo, ')');
+            _preloadApp: function (NextAppClass, initOptions, toUrl, pageInfo) {
+                console.log(window.cidx++, '!!!StateManager._preloadApp(', NextAppClass, initOptions, toUrl, pageInfo, ')');
 
                 if (this.DEBUG) {
                     console.log('Router: Preloading: ', toUrl);
                 }
                 var finishPromise = this._handleTransition(this.preloadedAppInfo.app, NextAppClass, initOptions,
-                                                           this.LAYER_PRELOAD, this.preloadedAppInfo.url, toUrl, $.Deferred().resolve());
+                    this.LAYER_PRELOAD, this.preloadedAppInfo.url, toUrl, $.Deferred().resolve());
                 this.preloadedAppInfo.css = pageInfo.css || [];
                 this.preloadedAppInfo.url = toUrl;
                 this.resourceManager.fetchStyles(_.union(this.preloadedAppInfo.css, this.activeAppInfo.css), finishPromise);
                 return finishPromise;
             },
-            _closeFullscreenView: function() {
-            	console.log(window.cidx++, '!!!StateManager._closeFullscreenView(', ')');
+            _closeFullscreenView: function () {
+                console.log(window.cidx++, '!!!StateManager._closeFullscreenView(', ')');
 
                 // full screen views live outside of the state manager because they don't
                 // modify the url. If that assumption ever changes, we should switch
@@ -395,8 +383,8 @@ function(
                     fullscreenView.close();
                 }
             },
-            _handleTransition: function(activeApp, NextAppClass, initOptions, requestedLayerType, fromUrl, toUrl, resourcePromise) {
-            	console.log(window.cidx++, '!!!StateManager._handleTransition(', activeApp, NextAppClass, initOptions, requestedLayerType, fromUrl, toUrl, resourcePromise, ')');
+            _handleTransition: function (activeApp, NextAppClass, initOptions, requestedLayerType, fromUrl, toUrl, resourcePromise) {
+                console.log(window.cidx++, '!!!StateManager._handleTransition(', activeApp, NextAppClass, initOptions, requestedLayerType, fromUrl, toUrl, resourcePromise, ')');
 
                 // the goal of this function is to trigger both an animation and an ajax request
                 // at the same time. We use registerAnimation to make certain both events
@@ -437,10 +425,10 @@ function(
                     } else if (!preload) {
                         RequestManager.abortAllRequests();
                     }
-                    animationPromise = $.Deferred(_.bind(function(defer) {
-                        removalPromise.done(_.bind(function() {
+                    animationPromise = $.Deferred(_.bind(function (defer) {
+                        removalPromise.done(_.bind(function () {
                             // transition the active app to optionally trigger an animation and init it
-                            activeApp.changePage(fromUrl, toUrl, requestPromise, resourcePromise, preload).done(function() {
+                            activeApp.changePage(fromUrl, toUrl, requestPromise, resourcePromise, preload).done(function () {
                                 defer.resolve();
                             });
                         }, this));
@@ -449,10 +437,10 @@ function(
                     // We need a new app, build that bitch
                     requestPromise = this._fetchPathHtml(toUrl, preload);
                     requestedApp = this._buildNewApp(NextAppClass, initOptions, requestedLayerType);
-                    animationPromise = $.Deferred(_.bind(function(defer) {
-                        removalPromise.done(_.bind(function() {
+                    animationPromise = $.Deferred(_.bind(function (defer) {
+                        removalPromise.done(_.bind(function () {
                             SiteManager.scrollTop(0); // need to trigger scrollTop to maintain the header position
-                            requestedApp.revealApp(fromUrl, toUrl, requestPromise, resourcePromise, preload).done(function() {
+                            requestedApp.revealApp(fromUrl, toUrl, requestPromise, resourcePromise, preload).done(function () {
                                 defer.resolve();
                             });
                         }, this));
@@ -460,8 +448,8 @@ function(
                 }
                 return animationPromise;
             },
-            _movePreloadAppToActiveApp: function(requestedLayer) {
-            	console.log(window.cidx++, '!!!StateManager._movePreloadAppToActiveApp(', requestedLayer, ')');
+            _movePreloadAppToActiveApp: function (requestedLayer) {
+                console.log(window.cidx++, '!!!StateManager._movePreloadAppToActiveApp(', requestedLayer, ')');
 
                 var activeApp = this.activeAppInfo.app = this.preloadedAppInfo.app;
                 this.activeAppInfo.css = this.preloadedAppInfo.css;
@@ -470,8 +458,8 @@ function(
                 this._clearPreloadedAppInfo();
                 return activeApp;
             },
-            _buildNewApp: function(NewAppType, initOptions, layerType) {
-            	console.log(window.cidx++, '!!!StateManager._buildNewApp(', NewAppType, initOptions, layerType, ')');
+            _buildNewApp: function (NewAppType, initOptions, layerType) {
+                console.log(window.cidx++, '!!!StateManager._buildNewApp(', NewAppType, initOptions, layerType, ')');
 
                 var nextView = new NewAppType(initOptions);
 
@@ -490,8 +478,8 @@ function(
                 }
                 return nextView;
             },
-            _revealOverlay: function(nextApp, fromUrl, toUrl, requestPromise, resourcePromise) {
-            	console.log(window.cidx++, '!!!StateManager._revealOverlay(', nextApp, fromUrl, toUrl, requestPromise, resourcePromise, ')');
+            _revealOverlay: function (nextApp, fromUrl, toUrl, requestPromise, resourcePromise) {
+                console.log(window.cidx++, '!!!StateManager._revealOverlay(', nextApp, fromUrl, toUrl, requestPromise, resourcePromise, ')');
 
                 // save the transitionView, cause the world might change by the time we finish animating
                 var transitionView = this.preloadedAppInfo.app;
@@ -500,27 +488,27 @@ function(
                 this._fadeInOverlayFilm(nextApp);
                 var promise = nextApp.revealApp(fromUrl, toUrl, requestPromise, resourcePromise, false);
                 SiteManager.scrollTop(0);
-                promise.done(_.bind(function() {
+                promise.done(_.bind(function () {
                     this.body.css('overflow-y', '');
                     transitionView.afterOverlayReveal(this.scrollTop);
                 }, this));
                 return promise;
             },
-            _fadeInOverlayFilm: function(nextApp) {
-            	console.log(window.cidx++, '!!!StateManager._fadeInOverlayFilm(', nextApp, ')');
+            _fadeInOverlayFilm: function (nextApp) {
+                console.log(window.cidx++, '!!!StateManager._fadeInOverlayFilm(', nextApp, ')');
 
                 var fadeInOptions = nextApp.options.animations.fadeIn;
                 this.$overlayFilm = $('<div class="ui-film"></div>');
                 this.body.append(this.$overlayFilm);
                 nextApp.animate(this.$overlayFilm, 'opacity', 0.7, fadeInOptions.duration, 'ease-in');
             },
-            _fadeOutOverlayFilm: function(activeApp) {
-            	console.log(window.cidx++, '!!!StateManager._fadeOutOverlayFilm(', activeApp, ')');
+            _fadeOutOverlayFilm: function (activeApp) {
+                console.log(window.cidx++, '!!!StateManager._fadeOutOverlayFilm(', activeApp, ')');
 
                 var overlayFilm = this.$overlayFilm,
                     fadeOutOptions = activeApp.options.animations.fadeOut;
                 this.$overlayFilm = null;
-                activeApp.animate(overlayFilm, 'opacity', 0, fadeOutOptions.duration, 'ease-out').done(function(){
+                activeApp.animate(overlayFilm, 'opacity', 0, fadeOutOptions.duration, 'ease-out').done(function () {
                     overlayFilm.remove();
                 });
             },
@@ -534,8 +522,8 @@ function(
              * @returns {Deferred|null} an optional promise that will resolve when the app is fully removed
              * @private
              */
-            _removeApps: function(NewAppType, requestedLayerType, fromUrl, toUrl) {
-            	console.log(window.cidx++, '!!!StateManager._removeApps(', NewAppType, requestedLayerType, fromUrl, toUrl, ')');
+            _removeApps: function (NewAppType, requestedLayerType, fromUrl, toUrl) {
+                console.log(window.cidx++, '!!!StateManager._removeApps(', NewAppType, requestedLayerType, fromUrl, toUrl, ')');
 
                 var removalPromise = null,
                     preloadedAppInfo = this.preloadedAppInfo,
@@ -560,12 +548,12 @@ function(
                     removalPromise = this.activeAppInfo.app.removeApp(fromUrl, toUrl);
                     if (preloadedApp) {
                         // so there's a preloaded app, do we need to remove it also?
-                        if (this._shouldRemoveApp(preloadedApp, NewAppType)){
+                        if (this._shouldRemoveApp(preloadedApp, NewAppType)) {
                             removalPromise = $.when(removalPromise, preloadedApp.removeApp(fromUrl, toUrl));
                             this._clearPreloadedAppInfo();
-                        }else{
+                        } else {
                             // otherwise, we need to transition the preloaded app from an overlay scroll
-                            removalPromise.done(_.bind(function() {
+                            removalPromise.done(_.bind(function () {
                                 this._transitionFromOverlayScroll(preloadedAppInfo);
                             }, this));
                         }
@@ -576,17 +564,17 @@ function(
                 }
                 return removalPromise;
             },
-            _shouldRemoveApp: function(activeApp, NewAppType) {
-            	console.log(window.cidx++, '!!!StateManager._shouldRemoveApp(', activeApp, NewAppType, ')');
+            _shouldRemoveApp: function (activeApp, NewAppType) {
+                console.log(window.cidx++, '!!!StateManager._shouldRemoveApp(', activeApp, NewAppType, ')');
 
                 return Object.getPrototypeOf(activeApp) !== NewAppType.prototype || !activeApp.isRevealed();
             },
-            _fetchPathHtml: function(toUrl, preload) {
-            	console.log(window.cidx++, '!!!StateManager._fetchPathHtml(', toUrl, preload, ')');
+            _fetchPathHtml: function (toUrl, preload) {
+                console.log(window.cidx++, '!!!StateManager._fetchPathHtml(', toUrl, preload, ')');
 
                 var requestPromise = this.fetchHtml(toUrl, null, !preload);
                 if (!preload) {
-                    requestPromise.fail(_.bind(function(e) {
+                    requestPromise.fail(_.bind(function (e) {
                         if (e) {
                             if (e === 'NOT AUTHORIZED') {
                                 this._loadPath(Utils.getNested(window, 'firefly_urls', 'samSubscribeURL') || '');
@@ -606,8 +594,8 @@ function(
                 }
                 return requestPromise;
             },
-            generateRequestError: function(e) {
-            	console.log(window.cidx++, '!!!StateManager.generateRequestError(', e, ')');
+            generateRequestError: function (e) {
+                console.log(window.cidx++, '!!!StateManager.generateRequestError(', e, ')');
 
                 if (e) {
                     if (e.status === 500) {
@@ -621,8 +609,8 @@ function(
                 }
                 return null;
             },
-            _transitionFromOverlayScroll: function(appInfo) {
-            	console.log(window.cidx++, '!!!StateManager._transitionFromOverlayScroll(', appInfo, ')');
+            _transitionFromOverlayScroll: function (appInfo) {
+                console.log(window.cidx++, '!!!StateManager._transitionFromOverlayScroll(', appInfo, ')');
 
                 var app = appInfo.app;
                 if (app) {
@@ -636,8 +624,8 @@ function(
                     app.$el.css('z-index', '');
                 }
             },
-            _transitionToOverlayScroll: function(appInfo) {
-            	console.log(window.cidx++, '!!!StateManager._transitionToOverlayScroll(', appInfo, ')');
+            _transitionToOverlayScroll: function (appInfo) {
+                console.log(window.cidx++, '!!!StateManager._transitionToOverlayScroll(', appInfo, ')');
 
                 var app = appInfo.app;
                 if (app) {
@@ -651,14 +639,14 @@ function(
                     app.$el.css('z-index', '0');
                 }
             },
-            _clearFixedPosition: function(appInfo, app, partialCover) {
-            	console.log(window.cidx++, '!!!StateManager._clearFixedPosition(', appInfo, app, partialCover, ')');
+            _clearFixedPosition: function (appInfo, app, partialCover) {
+                console.log(window.cidx++, '!!!StateManager._clearFixedPosition(', appInfo, app, partialCover, ')');
 
                 app.clearFixedPosition(partialCover);
                 SiteManager.scrollTop(appInfo.scrollTop || 0);
             },
-            _setFixedPosition: function(appInfo, app, partialCover) {
-            	console.log(window.cidx++, '!!!StateManager._setFixedPosition(', appInfo, app, partialCover, ')');
+            _setFixedPosition: function (appInfo, app, partialCover) {
+                console.log(window.cidx++, '!!!StateManager._setFixedPosition(', appInfo, app, partialCover, ')');
 
                 var appPosition = app.getWindowOffset().top;
                 appInfo.scrollTop = Utils.getScrollPosition();
@@ -671,8 +659,8 @@ function(
              * to determine whether to refresh browser automatically after a
              * certain period of idle time.
              */
-            updateActivityTimestamp: function() {
-            	//console.log(window.cidx++, '!!!StateManager.updateActivityTimestamp(', ')');
+            updateActivityTimestamp: function () {
+                //console.log(window.cidx++, '!!!StateManager.updateActivityTimestamp(', ')');
 
                 this.lastActivityTimestamp = (new Date()).getTime();
             },
@@ -681,18 +669,18 @@ function(
              * Gets the active page info object
              * @returns {PageInfo}
              */
-            getActivePageInfo: function() {
+            getActivePageInfo: function () {
 
                 var activeApp = this.getActiveApp() || {};
-            	console.log(window.cidx++, '!!!StateManager.getActivePageInfo(', activeApp.pageInfo || {}, ')');
+                console.log(window.cidx++, '!!!StateManager.getActivePageInfo(', activeApp.pageInfo || {}, ')');
                 return activeApp.pageInfo || {};
             },
             /**
              * Gets the preloaded page info object
              * @returns {PageInfo}
              */
-            getPreloadedPageInfo: function() {
-            	console.log(window.cidx++, '!!!StateManager.getPreloadedPageInfo(', this.preloadedAppInfo.app && this.preloadedAppInfo.app.pageInfo || {}, ')');
+            getPreloadedPageInfo: function () {
+                console.log(window.cidx++, '!!!StateManager.getPreloadedPageInfo(', this.preloadedAppInfo.app && this.preloadedAppInfo.app.pageInfo || {}, ')');
 
                 return this.preloadedAppInfo.app && this.preloadedAppInfo.app.pageInfo || {};
             },
@@ -700,8 +688,8 @@ function(
              * Gets the current active app
              * @returns {Object}
              */
-            getActiveApp: function() {
-            	console.log(window.cidx++, '!!!StateManager.getActiveApp(', this.activeAppInfo.app, ')');
+            getActiveApp: function () {
+                console.log(window.cidx++, '!!!StateManager.getActiveApp(', this.activeAppInfo.app, ')');
 
                 return this.activeAppInfo.app;
             },
@@ -709,8 +697,8 @@ function(
              * Gets the preloaded app if one exists
              * @returns {Object}
              */
-            getPreloadedApp: function() {
-            	console.log(window.cidx++, '!!!StateManager.getPreloadedApp(', this.preloadedAppInfo.app, ')');
+            getPreloadedApp: function () {
+                console.log(window.cidx++, '!!!StateManager.getPreloadedApp(', this.preloadedAppInfo.app, ')');
 
                 return this.preloadedAppInfo.app;
             },
@@ -720,12 +708,12 @@ function(
              * and refresh the page if it's been longer than threshold of idle
              * time.
              */
-            startRefreshTimer: function() {
-            	console.log(window.cidx++, '!!!StateManager.startRefreshTimer(', ')');
+            startRefreshTimer: function () {
+                console.log(window.cidx++, '!!!StateManager.startRefreshTimer(', ')');
 
                 if (!this.refreshTimer && this.REFRESH_FREQUENCY) {
                     this.lastActivityTimestamp = 0;
-                    this.refreshTimer = setInterval(_.bind(function(){
+                    this.refreshTimer = setInterval(_.bind(function () {
                         if (!this.fullscreenView && this.activeAppInfo.layer !== this.LAYER_OVERLAY) {
                             var currentTime = (new Date()).getTime();
                             var idleTime = currentTime - this.lastActivityTimestamp;
@@ -741,8 +729,8 @@ function(
             /**
              * Stop refresh timer.
              */
-            stopRefreshTimer: function() {
-            	console.log(window.cidx++, '!!!StateManager.stopRefreshTimer(', ')');
+            stopRefreshTimer: function () {
+                console.log(window.cidx++, '!!!StateManager.stopRefreshTimer(', ')');
 
                 if (this.refreshTimer) {
                     clearInterval(this.refreshTimer);
@@ -759,8 +747,8 @@ function(
              * @param {Number} [timeMs] time for animation
              * @return {Deferred} representing when all animations are done
              */
-            registerAnimation: function(deferred, el, property, value, timeMs) {
-            	console.log(window.cidx++, '!!!StateManager.registerAnimation(', deferred, el, property, value, timeMs, ')');
+            registerAnimation: function (deferred, el, property, value, timeMs) {
+                console.log(window.cidx++, '!!!StateManager.registerAnimation(', deferred, el, property, value, timeMs, ')');
 
                 return TrafficCop.addAnimation(deferred, el, property, value, timeMs);
             },
@@ -775,8 +763,8 @@ function(
              *      the pjax headers or not
              * @return {Deferred} jQuery promise object
              */
-            fetchHtml: function(path, options, isNavigation, isStatic) {
-            	console.log(window.cidx++, '!!!StateManager.fetchHtml(', path, options, isNavigation, isStatic, ')');
+            fetchHtml: function (path, options, isNavigation, isStatic) {
+                console.log(window.cidx++, '!!!StateManager.fetchHtml(', path, options, isNavigation, isStatic, ')');
 
                 return RequestManager.fetchHtml(path, options, isNavigation, isStatic, true);
             },
@@ -793,8 +781,8 @@ function(
              * @param {Boolean} [isHtml] will return a quickly built jQuery dom object.
              * @return {Deferred} jQuery promise object
              */
-            fetchData: function(path, options, isNavigation, isStatic, isHtml) {
-            	console.log(window.cidx++, '!!!StateManager.fetchData(', path, options, isNavigation, isStatic, isHtml, ')');
+            fetchData: function (path, options, isNavigation, isStatic, isHtml) {
+                console.log(window.cidx++, '!!!StateManager.fetchData(', path, options, isNavigation, isStatic, isHtml, ')');
 
                 return RequestManager.fetchData(path, options, isNavigation, isStatic, isHtml);
             },
@@ -808,8 +796,8 @@ function(
              * @param {Boolean} [isStatic] tells the ajax request whether to add the pjax headers or not
              * @return {Number} setInterval id
              */
-            recurringFetchHtml: function(path, options, interval, callback, isStatic) {
-            	console.log(window.cidx++, '!!!StateManager.recurringFetchHtml(', path, options, interval, callback, isStatic, ')');
+            recurringFetchHtml: function (path, options, interval, callback, isStatic) {
+                console.log(window.cidx++, '!!!StateManager.recurringFetchHtml(', path, options, interval, callback, isStatic, ')');
 
                 return RequestManager.recurringFetchHtml(path, options, interval, callback, isStatic, true);
             },
@@ -824,8 +812,8 @@ function(
              * @param {Boolean} [isHtml] will return a quickly built jQuery dom object
              * @return {Number} setInterval id
              */
-            recurringFetchData: function(path, options, interval, callback, isStatic, isHtml) {
-            	console.log(window.cidx++, '!!!StateManager.recurringFetchData(', path, options, interval, callback, isStatic, isHtml, ')');
+            recurringFetchData: function (path, options, interval, callback, isStatic, isHtml) {
+                console.log(window.cidx++, '!!!StateManager.recurringFetchData(', path, options, interval, callback, isStatic, isHtml, ')');
 
                 return RequestManager.recurringFetchData(path, options, interval, callback, isStatic, isHtml);
             }

@@ -2,10 +2,10 @@ define([
     'jquery',
     'underscore',
     'pubsub'
-], function($, _, PubSub) {
+], function ($, _, PubSub) {
     'use strict';
 
-	var cidx = window.cidx = window.cidx || 0;
+    var cidx = window.cidx = window.cidx || 0;
 
     /**
      * SiteConfig Loading Helper Manager that will load and merge a number of site configs into one site config
@@ -18,10 +18,10 @@ define([
          * @param {Array.<Object>} siteConfigList list of site configs to load and merge
          * @returns {Object} merged site config
          */
-        loadSiteConfigs: function(siteConfigList) {
-        	console.log(window.cidx++, '!!!SiteConfig.loadSiteConfigs(', /*siteConfigList, */')');
+        loadSiteConfigs: function (siteConfigList) {
+            console.log(window.cidx++, '!!!SiteConfig.loadSiteConfigs(', /*siteConfigList, */')');
 
-            return $.Deferred(function(defer) {
+            return $.Deferred(function (defer) {
                 var numConfigsLoaded = 0,
                     siteConfigMap = {
                     },
@@ -29,18 +29,18 @@ define([
                 if (!siteConfigList.length) {
                     defer.resolve(mergedSiteConfig);
                 }
-                _.each(siteConfigList, function(config) {
-                    require(['libs/require/text!' + config], function(siteConfig) {
+                _.each(siteConfigList, function (config) {
+                    require(['libs/require/text!' + config], function (siteConfig) {
                         // save the config, will process later to make certain we process all the files in a consistent order
-						try {
-							siteConfigMap[config] = $.parseJSON(siteConfig);
-						} catch(e) {
-							console.log('config error:', config, siteConfig, e);
-						}
+                        try {
+                            siteConfigMap[config] = $.parseJSON(siteConfig);
+                        } catch (e) {
+                            console.log('config error:', config, siteConfig, e);
+                        }
                         numConfigsLoaded++;
                         if (numConfigsLoaded === siteConfigList.length) {
                             // parse each file in the order defined in window.site_config.JS.CONFIG
-                            _.each(siteConfigList, function(config) {
+                            _.each(siteConfigList, function (config) {
                                 SiteConfig._mergeSiteConfig(mergedSiteConfig, siteConfigMap[config]);
                             });
                             if (!_.isEmpty(mergedSiteConfig.require.paths) || !_.isEmpty(mergedSiteConfig.require.shim)) {
@@ -54,19 +54,19 @@ define([
             }).promise();
         },
 
-        _replaceEnvVariables: function(siteConfig) {
+        _replaceEnvVariables: function (siteConfig) {
 
-        	console.log(window.cidx++, '!!!SiteConfig._replaceEnvVariables(', siteConfig, ')');
+            console.log(window.cidx++, '!!!SiteConfig._replaceEnvVariables(', siteConfig, ')');
 
             // environment variables only are allowed in page urls at the moment
-            _.each(siteConfig.pages, function(page){
+            _.each(siteConfig.pages, function (page) {
                 if (page.urls) {
                     var pageUrls = [];
-                    _.each(page.urls, function(url){
+                    _.each(page.urls, function (url) {
                         if (url.indexOf('<%') != -1 && url.indexOf('%>') != -1) {
-                            try{
+                            try {
                                 url = _.template(url, {});
-                            } catch(e) {
+                            } catch (e) {
                                 console.error("invalid url template: " + url);
                                 url = undefined;
                             }
@@ -80,9 +80,9 @@ define([
             });
         },
 
-        _getEmptySiteConfig: function() {
+        _getEmptySiteConfig: function () {
 
-        	console.log(window.cidx++, '!!!SiteConfig._getEmptySiteConfig(', ')');
+            console.log(window.cidx++, '!!!SiteConfig._getEmptySiteConfig(', ')');
 
             return {
                 apps: {},
@@ -101,9 +101,9 @@ define([
         },
         numMigrated: 0,
 
-        _mergeSiteConfig: function(mergedSiteConfig, siteConfig) {
+        _mergeSiteConfig: function (mergedSiteConfig, siteConfig) {
 
-        	//console.log(window.cidx++, '!!!SiteConfig._mergeSiteConfig(', mergedSiteConfig, siteConfig, ')');
+            //console.log(window.cidx++, '!!!SiteConfig._mergeSiteConfig(', mergedSiteConfig, siteConfig, ')');
 
             if (siteConfig.require) {
                 if (siteConfig.require.paths) {
@@ -115,7 +115,7 @@ define([
             }
             if (siteConfig.global) {
                 if (siteConfig.global.pubSub) {
-                    _.each(siteConfig.global.pubSub, function(path, key) {
+                    _.each(siteConfig.global.pubSub, function (path, key) {
                         if (!_.isArray(path)) {
                             path = [path];
                         }
@@ -131,11 +131,11 @@ define([
             }
             if (!siteConfig.version) {
                 // old format, migrate to new format
-                _.each(siteConfig.apps, function(app){
+                _.each(siteConfig.apps, function (app) {
                     SiteConfig.numMigrated++;
                     app.name = app.name + SiteConfig.numMigrated;
                     if (app.pages) {
-                        _.each(app.pages, function(page){
+                        _.each(app.pages, function (page) {
                             page.appName = app.name;
                             mergedSiteConfig.pages = mergedSiteConfig.pages.concat(page);
                         });

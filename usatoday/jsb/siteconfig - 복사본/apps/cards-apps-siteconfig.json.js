@@ -18,7 +18,7 @@
             "urls": [
                 "^(<%=site_vars.sections%>)/.*$",
                 "^()$",
-                "^(index.html)$",
+                "^(index.php)$",
                 "^(section/[a-zA-Z0-9%\\-/\\.]*)$"
             ]
         }

@@ -63,7 +63,7 @@
         {
             "name": "Home",
             "appName": "Cards",
-            "urls": ["^()$", "^(index.html)$"],
+            "urls": ["^()$", "^(index.php)$"],
             "init_modules": [
                 {
                     "name": "snapshots"

@@ -1,41 +1,41 @@
 define(['jquery', 'underscore', 'backbone'],
-    function($, _, Backbone) {
-		var cidx = window.cidx = window.cidx || 0;
+    function ($, _, Backbone) {
+        var cidx = window.cidx = window.cidx || 0;
 
         var RouteManager = Backbone.Router.extend({
-            initialize: function(options) {
-            	console.log(window.cidx++, '!!!RouteManager.initialize(', options, ')');
+            initialize: function (options) {
+                console.log(window.cidx++, '!!!RouteManager.initialize(', options, ')');
 
                 this.options = $.extend(true, {
                     appMap: {},
                     pageList: [],
-                    onRouteChange: function(app, route, path) {
-                    	console.log(window.cidx++, '!!!RouteManager.onRouteChange(', app, route, path, ')');
-}
+                    onRouteChange: function (app, route, path) {
+                        console.log(window.cidx++, '!!!RouteManager.onRouteChange(', app, route, path, ')');
+                    }
                 }, options);
                 this.urls = [];
                 this._preloadRoutes(this.options.pageList, this.options.appMap);
             },
-            destroy: function() {
-            	console.log(window.cidx++, '!!!RouteManager.destroy(', ')');
+            destroy: function () {
+                console.log(window.cidx++, '!!!RouteManager.destroy(', ')');
 
                 Backbone.history.stop();
             },
-            getRouteInfoForUrl: function(path) {
-            	console.log(window.cidx++, '!!!RouteManager.getRouteInfoForUrl(', path, ')');
+            getRouteInfoForUrl: function (path) {
+                console.log(window.cidx++, '!!!RouteManager.getRouteInfoForUrl(', path, ')');
 
-                return _.find(this.urls, function(url){
+                return _.find(this.urls, function (url) {
                     return url.url.test(path);
                 });
             },
-            _preloadRoutes: function(pageList, appMap) {
-            	console.log(window.cidx++, '!!!RouteManager._preloadRoutes(', pageList, appMap, ')');
+            _preloadRoutes: function (pageList, appMap) {
+                console.log(window.cidx++, '!!!RouteManager._preloadRoutes(', pageList, appMap, ')');
 
                 var numAppsLoading = _.size(appMap);
                 var _this = this;
                 // we preload all apps so we can load them quickly, pages are lazy
-                _.each(appMap, function(app, appName) {
-                    require([app.path], function(AppClass) {
+                _.each(appMap, function (app, appName) {
+                    require([app.path], function (AppClass) {
                         app.AppClass = AppClass;
                         numAppsLoading--;
                         if (!numAppsLoading) {
@@ -45,28 +45,28 @@ define(['jquery', 'underscore', 'backbone'],
                     });
                 });
             },
-            _loadBackboneRoute: function(pageList, appMap) {
-            	console.log(window.cidx++, '!!!RouteManager._loadBackboneRoute(', pageList, appMap, ')');
+            _loadBackboneRoute: function (pageList, appMap) {
+                console.log(window.cidx++, '!!!RouteManager._loadBackboneRoute(', pageList, appMap, ')');
 
                 // backbone matches last to first to allow for new routes to overwrite old routes,
                 // but we're loading siteconfigs in python order which is first match, so we reverse the list
                 // to get the right order
 
-				// app: appMap
-				// page: pageList
+                // app: appMap
+                // page: pageList
                 var _this = this;
                 pageList.reverse();
 
-                _.each(pageList, function(page) {
-					// page.appName: Search, Overlay-with-footer ...
-					// ÆäÀÌÁö¸®½ºÆ®¿¡ ÀÖ´Â appName¿¡ ÇØ´çÇÏ´Â ¸ðµâÁ¤º¸¸¦ appmap¿¡¼­ Ã£¾Æ¼­ ½ÇÇà
+                _.each(pageList, function (page) {
+                    // page.appName: Search, Overlay-with-footer ...
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ö´ï¿½ appNameï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ appmapï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½
                     var app = appMap[page.appName];
                     if (!app) {
                         console.error('Invalid appName for Page ' + page.name);
                     } else {
                         page.modules = (page.init_modules || []).concat(app.init_modules || []);
                         var urls = (page.hosturls && page.hosturls[location.hostname]) || page.urls;
-                        _.each(urls, function(url) {
+                        _.each(urls, function (url) {
                             var regEx = new RegExp(url);
                             // later urls are matched first to match backbone's route matcher
                             _this.urls.unshift({url: regEx, app: app, page: page});
@@ -79,13 +79,13 @@ define(['jquery', 'underscore', 'backbone'],
 
                 // Special route to handle Facebook Connect #_=_ mess.  Won't be necessary after Backbone 1.1.0.
                 // See https://developers.facebook.com/blog/post/552/ under "Change in Session Redirect Behavior".
-                _this.route('_=_', 'facebook-connect-login-fragment', function() {
-                        // keep the path, modulo the preceeding slash and the stuff we're trying to remove
-                        var fixedpath = window.location.pathname.replace(/^\//, '').replace(/_=_$/, '');
+                _this.route('_=_', 'facebook-connect-login-fragment', function () {
+                    // keep the path, modulo the preceeding slash and the stuff we're trying to remove
+                    var fixedpath = window.location.pathname.replace(/^\//, '').replace(/_=_$/, '');
 
-                        // Remove it from the URL while we're at it.
-                        _this.navigate(fixedpath + window.location.search, {trigger: true, replace: true});
-                    });
+                    // Remove it from the URL while we're at it.
+                    _this.navigate(fixedpath + window.location.search, {trigger: true, replace: true});
+                });
 
                 Backbone.history.start({pushState: true, hashChange: false});
                 console.log("Site Loaded");

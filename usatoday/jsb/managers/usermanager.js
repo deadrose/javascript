@@ -4,18 +4,14 @@ define([
     'pubsub',
     'cookie'
 ],
-function(
-    $,
-    _,
-    PubSub
-) {
-    'use strict';
+    function ($, _, PubSub) {
+        'use strict';
         /**
          * User Manager manages the state of a user on the site providing login and logout functionality.
          * @exports user-manager
          * @author Mark Kennedy <mdkennedy@gannett.com>
          */
-        var UserManager = function(){
+        var UserManager = function () {
             this.initialize();
         };
 
@@ -27,7 +23,7 @@ function(
             /**
              * Initializes UserManager and gets initial variables.
              */
-            initialize: function() {
+            initialize: function () {
                 this.resetManager();
                 if (this.preferredAccount) {
                     this.state = 'loggingIn';
@@ -35,9 +31,9 @@ function(
                 }
             },
 
-            autoLogin: function() {
+            autoLogin: function () {
                 this.state = null;
-                this.loginUser(this.preferredAccount, true).fail(_.bind(function(){
+                this.loginUser(this.preferredAccount, true).fail(_.bind(function () {
                     // if we can't auto login, trigger a logout to flush any caches we may have
                     this.logoutUser();
                 }, this));
@@ -48,7 +44,7 @@ function(
              * Registers a account which gets added to User Manager's workflow.
              * @param {Object} Account view account
              */
-            registerAccount: function(Account) {
+            registerAccount: function (Account) {
                 var accountName = Account.getName();
 
                 if (!this.accounts[accountName]) {
@@ -63,7 +59,7 @@ function(
              * Un-registers a account.
              * @param {Object} Account view
              */
-            unRegisterAccount: function(Account) {
+            unRegisterAccount: function (Account) {
                 var accountName = Account.getName();
 
                 if (this.accounts[accountName]) {
@@ -83,8 +79,8 @@ function(
              * @param {Boolean} [isAutoLogin] True if this is an autoLogin attempt
              * @return {Deferred} promise object that resolves when the user is logged in successfully
              */
-            loginUser: function(accountName, isAutoLogin) {
-                return this._askAccount('login', accountName, isAutoLogin).done(_.bind(function(userData) {
+            loginUser: function (accountName, isAutoLogin) {
+                return this._askAccount('login', accountName, isAutoLogin).done(_.bind(function (userData) {
                     this._onLoginSuccess(userData, accountName);
                 }, this));
             },
@@ -95,7 +91,7 @@ function(
              * @param {String} accountName The account view that user has logged into
              * @private
              */
-            _onLoginSuccess: function(userData, accountName) {
+            _onLoginSuccess: function (userData, accountName) {
                 this.setPreferredAccount(accountName);
                 PubSub.trigger("user:login", userData);
             },
@@ -104,7 +100,7 @@ function(
              * Sets the preferred account
              * @param {String} accountName The name of the account to use as the preferred one.
              */
-            setPreferredAccount: function(accountName) {
+            setPreferredAccount: function (accountName) {
                 $.cookie(this.PREFERRED_ACCOUNT_KEY, accountName, { path: '/'});
                 this.preferredAccount = accountName;
             },
@@ -112,7 +108,7 @@ function(
             /**
              * Gets the currently set preferred account.
              */
-            getPreferredAccount: function() {
+            getPreferredAccount: function () {
                 return this.preferredAccount || $.cookie(this.PREFERRED_ACCOUNT_KEY);
             },
 
@@ -120,7 +116,7 @@ function(
              * Reports the user's login/logout state.
              * @returns {String} returns 'loggedIn', 'loggingIn', 'loginFailed' or 'loggedOut'
              */
-            getLoginStatus: function(accountName) {
+            getLoginStatus: function (accountName) {
                 var loginStatus, account = this.getAccount(accountName);
                 if (account) {
                     loginStatus = account.getLoginStatus();
@@ -137,7 +133,7 @@ function(
              * @param {String} [accountName=preferredAccount] optional account name to log out of
              * @return {Deferred} promise object that resolves when the user logged out successfully
              */
-            logoutUser: function(accountName) {
+            logoutUser: function (accountName) {
                 var promise = this._askAccount('logout', accountName);
                 if (!accountName || accountName === this.getPreferredAccount()) {
                     //TODO is this the behavior we want?
@@ -150,8 +146,8 @@ function(
              * Logs out of all accounts in the system
              * @returns {Deferred} promise that will resolve when all accounts are logged out of
              */
-            logoutAll: function() {
-                return $.when.apply($, _.map(this.accounts, function(account) {
+            logoutAll: function () {
+                return $.when.apply($, _.map(this.accounts, function (account) {
                     return account.logout();
                 })).always(_.bind(this._onLogoutSuccess, this));
             },
@@ -160,7 +156,7 @@ function(
              * Clears user session data.
              * @private
              */
-            _onLogoutSuccess: function() {
+            _onLogoutSuccess: function () {
                 PubSub.trigger("user:logout");
                 this.setPreferredAccount(null);
             },
@@ -170,7 +166,7 @@ function(
              * @param {String} [accountName=preferredAccount] The account name to grab
              * @returns {Object} Returns the account object
              */
-            getAccount: function(accountName) {
+            getAccount: function (accountName) {
                 return this.accounts[accountName || this.preferredAccount];
             },
 
@@ -179,7 +175,7 @@ function(
              * @param accountName
              * @returns {Deferred}
              */
-            getUserInfo: function(accountName) {
+            getUserInfo: function (accountName) {
                 return this._askAccount('getUserInfo', accountName);
             },
 
@@ -188,14 +184,14 @@ function(
              * @param {String} [accountName=preferredAccount] Account to use for core user info login
              * @returns {Deferred} promise object that resolves when the core information is fetched successfully
              */
-            getCoreUserInfo: function(accountName) {
+            getCoreUserInfo: function (accountName) {
                 return this._askAccount('getCoreUserInfo', accountName);
             },
 
             /**
              Reset manager to a valid state
-            */
-            resetManager: function() {
+             */
+            resetManager: function () {
                 this.accounts = {};
                 this.preferredAccount = this.getPreferredAccount();
             },
@@ -209,7 +205,7 @@ function(
              * @returns {*}
              * @private
              */
-            _askAccount: function(methodName, accountName) {
+            _askAccount: function (methodName, accountName) {
                 var account = this.getAccount(accountName);
                 if (account) {
                     if (account[methodName]) {
@@ -225,4 +221,4 @@ function(
         };
         return new UserManager();
 
-});
+    });
