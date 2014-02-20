@@ -1250,7 +1250,7 @@
         },
 
         /**
-         * 
+         *
          */
         any: nativeCall(arrayProto.any) || function(arr, cb, ctx) {
             var isTrue = false;
