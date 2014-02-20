@@ -34,9 +34,14 @@
       <file leaf-file-name="jsa.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/jsa.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="545" column="33" selection-start="16322" selection-end="16330" vertical-scroll-proportion="0.010850943" vertical-offset="10336" max-vertical-offset="59964">
+            <state line="2387" column="64" selection-start="73784" selection-end="73784" vertical-scroll-proportion="0.7465258" vertical-offset="29684" max-vertical-offset="46018">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
+                <element signature="e#41898#46131#0" expanded="false" />
+                <element signature="e#46247#54477#0" expanded="false" />
+                <element signature="e#55644#62587#0" expanded="false" />
+                <element signature="e#62627#65290#0" expanded="false" />
+                <element signature="e#71676#73708#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -244,9 +249,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/jsa.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="545" column="33" selection-start="16322" selection-end="16330" vertical-scroll-proportion="0.010850943" vertical-offset="10336" max-vertical-offset="59964">
+        <state line="2387" column="64" selection-start="73784" selection-end="73784" vertical-scroll-proportion="0.7465258" vertical-offset="29684" max-vertical-offset="46018">
           <folding>
             <element signature="n#!!doc" expanded="true" />
+            <element signature="e#41898#46131#0" expanded="false" />
+            <element signature="e#46247#54477#0" expanded="false" />
+            <element signature="e#55644#62587#0" expanded="false" />
+            <element signature="e#62627#65290#0" expanded="false" />
+            <element signature="e#71676#73708#0" expanded="false" />
           </folding>
         </state>
       </provider>

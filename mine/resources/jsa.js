@@ -2385,6 +2385,32 @@
     });
 
     /**
+     * el, 40, 50, top: function(f, t){ return 300-f*5 + 'px'; }
+     */
+    _core.addon('animate', function(el, frames, timePerFrame, animation, whendone) {
+       var frame = 0,
+           time = 0,
+           intervalId = setInterval(displayNextFrame, timePerFrame);
+
+        function displayNextFrame () {
+            if (frame >= frames) {
+                clearInterval(intervalId);
+                if (whendone) {
+                    whendone(el);
+                }
+
+                each(animation, function(cssprop) {
+                    try {
+                        el.style[ cssprop ] = animation[ cssprop ](frame, time);
+                    } catch(e){}
+                });
+                frame += 1;
+                time += timePerFrame;
+            }
+        }
+    }, false);
+
+    /**
      * @namespace
      * @name _core.util
      */
