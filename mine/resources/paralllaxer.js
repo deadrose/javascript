@@ -2,7 +2,6 @@
  * Parallax Scroller
  * 
  * @author 김승일
- * @author 김왕기
  * @version 1.0(2013-03-11) 최초 생성
  */
 (function( $ ) {
