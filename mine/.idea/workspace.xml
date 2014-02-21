@@ -34,14 +34,10 @@
       <file leaf-file-name="jsa.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/jsa.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2387" column="64" selection-start="73784" selection-end="73784" vertical-scroll-proportion="0.7465258" vertical-offset="29684" max-vertical-offset="46018">
+            <state line="2752" column="63" selection-start="88458" selection-end="88458" vertical-scroll-proportion="0.5248027" vertical-offset="47348" max-vertical-offset="59299">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
-                <element signature="e#41898#46131#0" expanded="false" />
-                <element signature="e#46247#54477#0" expanded="false" />
-                <element signature="e#55644#62587#0" expanded="false" />
-                <element signature="e#62627#65290#0" expanded="false" />
-                <element signature="e#71676#73708#0" expanded="false" />
+                <element signature="e#76564#85405#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -249,14 +245,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/jsa.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2387" column="64" selection-start="73784" selection-end="73784" vertical-scroll-proportion="0.7465258" vertical-offset="29684" max-vertical-offset="46018">
+        <state line="2752" column="63" selection-start="88458" selection-end="88458" vertical-scroll-proportion="0.5248027" vertical-offset="47348" max-vertical-offset="59299">
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#41898#46131#0" expanded="false" />
-            <element signature="e#46247#54477#0" expanded="false" />
-            <element signature="e#55644#62587#0" expanded="false" />
-            <element signature="e#62627#65290#0" expanded="false" />
-            <element signature="e#71676#73708#0" expanded="false" />
+            <element signature="e#76564#85405#0" expanded="false" />
           </folding>
         </state>
       </provider>

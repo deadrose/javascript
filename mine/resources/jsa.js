@@ -43,19 +43,19 @@
         tmpNode = doc.createElement('div'),
         emptyFn = function () {},
         each = function (obj, cb, ctx) {
-            if(!obj){ return obj; }
+            if (!obj) { return obj; }
             var i;
-            if(obj && obj.push) {
-               if(obj.forEach) {
-                   if(obj.forEach(cb, ctx) === false){ return; }
+            if (obj && obj.push) {
+               if (obj.forEach) {
+                   if (obj.forEach(cb, ctx) === false) { return; }
                } else {
                    for (i = 0; i < obj.length; i++) {
-                       if(cb.call(ctx || obj, obj[i], i, obj) === false) { return; }
+                       if (cb.call(ctx || obj, obj[i], i, obj) === false) { return; }
                    }
                }
             } else {
                 for(i in obj) {
-                    if(hasOwn.call(obj, i)) {
+                    if (hasOwn.call(obj, i)) {
                         if (cb.call(obj, obj[i], i, obj) === false) { return; }
                     }
                 }
@@ -80,7 +80,7 @@
          * @param {Object} context 컨텍스트
          * @param {Mixed} ... 두번째 인자부터는 실제로 싱행될 함수로 전달된다.
          * @example
-         * function Test(){
+         * function Test() {
 		 *		alert(this.name);
 		 * }.bind({name: 'axl rose'});
          *
@@ -130,11 +130,11 @@
         var supportPlaceholder = ('placeholder' in tmpInput);
 
         return supportPlaceholder ? function(value) {
-            if(arguments.length === 0) { return $.trim(this.val()); }
+            if (arguments.length === 0) { return $.trim(this.val()); }
             else { return this.val($.trim(value)); }
         } : function(value) {
             if (arguments.length === 0) {
-                if(this.val() === this.attr('placeholder')) {
+                if (this.val() === this.attr('placeholder')) {
                     return '';
                 }
                 return $.trim(this.val());
@@ -155,14 +155,14 @@
      * @fires $#changed
      * @example
      * // 먼저 changed 이벤트 바인딩
-     * $('input:checkbox').on('changed', function(e, isChecked){ $(this).parent()[isChecked?'addClass':'removeClass']('on'); });
+     * $('input:checkbox').on('changed', function(e, isChecked) { $(this).parent()[isChecked?'addClass':'removeClass']('on'); });
      * ..
      * // checked 값을 변경
      * $('input:checkbox').checked(true); // 해당체크박스의 부모에 on클래스가 추가된다.
      */
     $.fn.checked = function(checked, isBubble) {
         return this.each(function() {
-            if(this.type !== 'checkbox' && this.type !== 'radio'){ return; }
+            if (this.type !== 'checkbox' && this.type !== 'radio') { return; }
             /**
              * @event $#changed
              * @type {object}
@@ -211,7 +211,7 @@
             }
 
             $this[trigger](evt = $.Event('layerbeforeshow'));
-            if (evt.isDefaultPrevented()){ return; }
+            if (evt.isDefaultPrevented()) { return; }
 
             // 표시될 때 d_open 클래스 추가
             $this.addClass('d-open').show()[trigger]('layershow');
@@ -239,7 +239,7 @@
             options.onHide.call($this[0]);
 
             // 숨겨진 후에 열었던 원래버튼에 포커스를 강제로 준다.
-            if($this.data('opener')){
+            if ($this.data('opener')) {
                 var $btn = $( $this.data('opener') );
                 $btn.attr({'aria-pressed': 'false', 'aria-expand': 'false'});
                 if (options.focusOpener === true) {
@@ -256,7 +256,7 @@
      * @example
      * $(this)[ isDone ? 'show' : 'noop' ](); // isDone이 true에 show하되 false일때는 아무것도 안함.
      */
-    $.fn.noop = function(){
+    $.fn.noop = function() {
         return this;
     };
 
@@ -269,7 +269,7 @@
     $.fn.checkedValues = function() {
         var results = [];
         this.each(function() {
-            if((this.type === 'checkbox' || this.type === 'radio') && this.checked === true) {
+            if ((this.type === 'checkbox' || this.type === 'radio') && this.checked === true) {
                 results.push(this.value);
             }
         });
@@ -302,13 +302,13 @@
      * ...
      * _core.timeEnd('animate'); -> animate: 10203ms
      */
-    _core.timeStart = function(name, reset){
-        if(!name) { return; }
+    _core.timeStart = function(name, reset) {
+        if (!name) { return; }
         var time = +new Date,
             key = "KEY" + name.toString();
 
         this.timeCounters || (this.timeCounters = {});
-        if(!reset && this.timeCounters[key]) { return; }
+        if (!reset && this.timeCounters[key]) { return; }
         this.timeCounters[key] = time;
     };
 
@@ -326,15 +326,15 @@
      * ...
      * _core.timeEnd('animate'); -> animate: 10203ms
      */
-    _core.timeEnd = function(name){
-        if(!this.timeCounters) { return null; }
+    _core.timeEnd = function(name) {
+        if (!this.timeCounters) { return null; }
 
         var time = +new Date,
             key = "KEY" + name.toString(),
             timeCounter = this.timeCounters[key],
             diff, label;
 
-        if(timeCounter) {
+        if (timeCounter) {
             diff = time - timeCounter;
             label = name + ": " + diff + "ms";
             // 이 콘솔은 디버깅을 위한 것이므로 지우지 말것.
@@ -360,11 +360,11 @@
      * @example
      * _core.namesapce('_core.widget.Tabcontrol', TabControl)
      *
-     * ex) _core.namespace('_core.widget.Control', function(){}) 를 네이티브로 풀어서 작성한다면 다음과 같다.
+     * ex) _core.namespace('_core.widget.Control', function() {}) 를 네이티브로 풀어서 작성한다면 다음과 같다.
      *
      * var _core = _core || {};
      * _core.ui = _core.ui || {};
-     * _core.widget.Control = _core.widget.Control || function(){};
+     * _core.widget.Control = _core.widget.Control || function() {};
      */
     _core.namespace = function (name, obj) {
         if (typeof name !== 'string') {
@@ -376,13 +376,13 @@
             isSet = arguments.length === 2,
             i, item;
 
-        if(isSet) {
-            for(i = -1; item = names[++i]; ){
+        if (isSet) {
+            for(i = -1; item = names[++i]; ) {
                 root = root[item] || (root[item] = (i === names.length - 1 ? obj : {}));
             }
         } else { // isGet
-            for(i = -1; item = names[++i]; ){
-                if(item in root) { root = root[item] }
+            for(i = -1; item = names[++i]; ) {
+                if (item in root) { root = root[item] }
                 else { throw Error(name + '은(는) 정의되지 않은 네임스페이스입니다.'); }
             }
         }
@@ -399,7 +399,7 @@
      *
      * @param {String} name .를 구분자로 해서 common를 시작으로 하위 네임스페이스를 생성. 없으면 common에 추가된다.
      * @param {Object|Function} object
-     * @param {Boolean} isExecFn (Optional) object값이 함수형일 때 실행을 시킨 후에 설정할 것인가 여부
+     * @param {Boolean} isExecFn (Optional) object값이 함수형일 때 실행한 값을 설정할 것인가 여부
      *
      * @example
      * _core.addon('', [], {});
@@ -423,7 +423,7 @@
             root = root[names[i]] || (root[names[i]] = {});
         }
 
-        (leaf && (root[leaf] ? extend(root[leaf], object) : (root[leaf] = object))) || extend(root, object);
+        return (leaf && (root[leaf] ? extend(root[leaf], object) : (root[leaf] = object))) || extend(root, object), object;
     };
 
     /**
@@ -437,9 +437,9 @@
      * @return {Object} 함수를 실행한 결과값
      *
      * @example
-     * _core.addon('test', function(){
+     * _core.addon('test', function() {
 	*	 return {
-	*		init: function(){
+	*		init: function() {
 	*			 alert(0);
 	*		}
 	*	});
@@ -530,7 +530,7 @@
             t.isIE6 = t.isIE && /MSIE [56]/i.test(ua);
             t.isIE7 = t.isIE && /MSIE [567]/i.test(ua);
             t.isOldIE = t.isIE && /MSIE [5678]/i.test(ua);
-            t.version = parseInt(match[2], 10);		// 사용법: if(browser.isIE && browser.version > 8) { // 9이상인 ie브라우저
+            t.version = parseInt(match[2], 10);		// 사용법: if (browser.isIE && browser.version > 8) { // 9이상인 ie브라우저
 
             t.isChrome = (ua.indexOf('Chrome') !== -1);
             t.isGecko = (ua.indexOf('Firefox') !==-1);
@@ -1035,7 +1035,7 @@
             if (!query) {
                 return {};
             }
-            if (query.length > 0 && query.charAt(0) === '?'){ query = query.substr(1); }
+            if (query.length > 0 && query.charAt(0) === '?') { query = query.substr(1); }
 
             var params = (query + '').split('&'),
                 obj = {},
@@ -1081,7 +1081,7 @@
                 }
                 var m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
                     uri = {}, i = 14;
-                while (i--){ uri[o.key[i]] = m[i] || ""; }
+                while (i--) { uri[o.key[i]] = m[i] || ""; }
                 var retArr = {};
                 if (uri.protocol !== '') { retArr.scheme = uri.protocol; }
                 if (uri.host !== '') { retArr.host = uri.host; }
@@ -1191,8 +1191,8 @@
         }
     });
 
-    function nativeCall(f){
-        return f ? function(obj){
+    function nativeCall(f) {
+        return f ? function(obj) {
             return f.apply(obj, arraySlice.call(arguments, 1));
         } : false;
     }
@@ -1220,7 +1220,7 @@
          * @return {Array}
          *
          * @example
-         * _core.array.map([1, 2, 3], function(item, index){
+         * _core.array.map([1, 2, 3], function(item, index) {
 		 *		return item * 10;
 		 * });
          * => [10, 20, 30]
@@ -1242,7 +1242,7 @@
             var isTrue = true;
             if (!_core.is(arr, 'array') || !_core.is(cb, 'function')) { return isTrue; }
             each(arr, function(v, k) {
-                if(cb.call(ctx||this, v, k) !== true){
+                if (cb.call(ctx||this, v, k) !== true) {
                     return isTrue = false, false;
                 }
             });
@@ -1256,7 +1256,7 @@
             var isTrue = false;
             if (!_core.is(arr, 'array') || !_core.is(cb, 'function')) { return isTrue; }
             each(arr, function(v, k) {
-                if(cb.call(ctx||this, v, k) === true){
+                if (cb.call(ctx||this, v, k) === true) {
                     return isTrue = true, false;
                 }
             });
@@ -1291,7 +1291,7 @@
          * @return {Array}
          *
          * @example
-         * _core.array.filter([1, '일', 2, '이', 3, '삼'], function(item, index){
+         * _core.array.filter([1, '일', 2, '이', 3, '삼'], function(item, index) {
 		 *		return typeof item === 'string';
 		 * });
          * => ['일','이','삼']
@@ -1331,7 +1331,7 @@
          */
         indexOf: nativeCall(arrayProto.indexOf) || function (arr, value, b) {
             for (var i = 0, len = arr.length; i < len; i++) {
-                if( (b !== false && arr[i] === value) || (b === false && arr[i] == value) ) { return i; }
+                if ( (b !== false && arr[i] === value) || (b === false && arr[i] == value) ) { return i; }
             }
             return -1;
         },
@@ -1354,7 +1354,7 @@
          * @param {Array} array 배열
          * @return {Mix}
          */
-        max: function( array ){
+        max: function( array ) {
             return Math.max.apply( Math, array );
         },
 
@@ -1364,7 +1364,7 @@
          * @param {Array} array 배열
          * @return {Mix}
          */
-        min: function( array ){
+        min: function( array ) {
             return Math.min.apply( Math, array );
         }
     });
@@ -1418,13 +1418,13 @@
          * @return {JSON}
          *
          * @example
-         * _core.object.map({1; 'one', 2: 'two', 3: 'three'}, function(item, key){
+         * _core.object.map({1; 'one', 2: 'two', 3: 'three'}, function(item, key) {
 		 *		return item + '__';
 		 * });
          * => {1: 'one__', 2: 'two__', 3: 'three__'}
          */
         map: function(obj, cb) {
-            if (!_core.is(obj, 'object') || !_core.is(cb, 'function')){ return obj; }
+            if (!_core.is(obj, 'object') || !_core.is(cb, 'function')) { return obj; }
             var results = {};
             each(obj, function(v, k) {
                 results[k] = cb(obj[k], k, obj);
@@ -1610,12 +1610,12 @@
              * @param {Date} date2 날짜2
              * @return {Boolean}
              */
-            equalsYMH: function(a, b){
+            equalsYMH: function(a, b) {
                 var ret = true;
-                if(!a || !a.getDate || !b || !b.getDate) { return false; }
-                each(['getFullYear', 'getMonth', 'getDate'], function(fn){
+                if (!a || !a.getDate || !b || !b.getDate) { return false; }
+                each(['getFullYear', 'getMonth', 'getDate'], function(fn) {
                     ret = ret && (a[fn]() === b[fn]());
-                    if(!ret){ return false; }
+                    if (!ret) { return false; }
                 });
                 return ret;
             },
@@ -1654,7 +1654,7 @@
                 return function (dateStringInRange) {
                     var date, month, parts;
 
-                    if (dateStringInRange instanceof Date){
+                    if (dateStringInRange instanceof Date) {
                         return dateStringInRange;
                     }
 
@@ -1667,13 +1667,13 @@
                     date = new Date(NaN);
                     parts = isoExp.exec(dateStringInRange);
 
-                    if(parts) {
+                    if (parts) {
                         month = +parts[2];
                         date.setFullYear(parts[1]|0, month - 1, parts[3]|0);
                         date.setHours(parts[4]|0);
                         date.setMinutes(parts[5]|0);
                         date.setSeconds(parts[6]|0);
-                        if(month != date.getMonth() + 1) {
+                        if (month != date.getMonth() + 1) {
                             date.setTime(NaN);
                         }
                     }
@@ -1779,10 +1779,10 @@
 	*	initialize: function(name) {
 	*		this.name = name;
 	*	},
-	*	say: function(job){
+	*	say: function(job) {
 	*		alert("I'm Person: " + job);
 	*	},
-	*	run: function(){
+	*	run: function() {
 	*		alert("i'm running...");
 	*	}
 	*`});
@@ -1929,7 +1929,7 @@
              * @param {function} function 함수
              * @return {Function}
              * @example
-             * function test(){
+             * function test() {
 			 *		alert(this.name);
 			 * }
              * var Person = Class({
@@ -1955,10 +1955,10 @@
              * @param {function} o 객체
              * @example
              * var A = Class({
-			 *		funcA: function(){ ... }
+			 *		funcA: function() { ... }
 			 * });
              * var B = Class({
-			 *		funcB: function(){ ... }
+			 *		funcB: function() { ... }
 			 * });
              * var Person = Class({
 			 *		initialize: function() {
@@ -2034,7 +2034,7 @@
             Class.statics.call(Class, supr);
             statics && Class.statics.call(Class, statics);
 
-            if(hooks || (hooks = Parent.prototype.$hooks)) {
+            if (hooks || (hooks = Parent.prototype.$hooks)) {
                 hooks.onClassCreate && hooks.onClassCreate(Class);
             }
 
@@ -2106,20 +2106,20 @@
          */
         template: function (str, data) {
             var m,
-                src = 'var __src = [], escapeHTML=_core.string.escapeHTML; with(value||{}){ __src.push("';
+                src = 'var __src = [], escapeHTML=_core.string.escapeHTML; with(value||{}) { __src.push("';
             str = $.trim(str);
             src += str.replace(/\r|\n|\t/g, " ")
-                .replace(/<%(.*?)%>/g, function(a, b){ return '<%' + b.replace(/"/g, '\t') + '%>'; })
+                .replace(/<%(.*?)%>/g, function(a, b) { return '<%' + b.replace(/"/g, '\t') + '%>'; })
                 .replace(/"/g, '\\"')
-                .replace(/<%(.*?)%>/g, function(a, b){ return '<%' + b.replace(/\t/g, '"') + '%>'; })
+                .replace(/<%(.*?)%>/g, function(a, b) { return '<%' + b.replace(/\t/g, '"') + '%>'; })
                 .replace(/<%=(.+?)%>/g, '", $1, "')
                 .replace(/<%-(.+?)%>/g, '", escapeHTML($1), "')
-                .replace(/(<%|%>)/g, function(a, b){ return b === '<%' ? '");' : '__src.push("'});
+                .replace(/(<%|%>)/g, function(a, b) { return b === '<%' ? '");' : '__src.push("'});
 
             src+='"); }; return __src.join("")';
 
             var f = new Function('value', 'data', src);
-            if( data ) {
+            if ( data ) {
                 return f( data );
             }
             return f;
@@ -2293,7 +2293,7 @@
                 for (var i = 0; i < 12; i++) { sum += (buf[i] *= multipliers[i]); }
 
                 sum = 11 - (sum % 11);
-                if (sum >= 10){ sum -= 10; }
+                if (sum >= 10) { sum -= 10; }
 
                 sum += 2;
                 if (sum >= 10) { sum -= 10; }
@@ -2319,11 +2319,12 @@
      * @name _core.css
      * @description 벤더별 css명칭 생성
      */
-    _core.addon('css', function(){
+    _core.addon('css', function() {
 
         var _tmpDiv = _core.tmpNode,
             _prefixes = ['Webkit', 'Moz', 'O', 'ms', 'Khtml'],
             _style = _tmpDiv.style,
+            _noReg = /^([0-9]+)[px]+$/,
             _vendor = (function () {
                 var vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'],
                     transform,
@@ -2380,20 +2381,58 @@
              * @example
              * _core.css.prefixStyle('transition'); // => webkitTransition
              */
-            prefixStyle: prefixStyle
+            prefixStyle: prefixStyle,
+            get: function(el, style) {
+                if (!el || !_core.is(el, 'element')) { return null; }
+                var value;
+                if (el.currentStyle) {
+                    value = el.currentStyle[ string.camelize(style) ];
+                } else {
+                    value = window.getComputedStyle(el, null)[ string.camelize(style) ];
+                }
+                if(_noReg.test(value)) {
+                    return parseInt(RegExp.$1, 10);
+                }
+                return value;
+            }
         };
+    });
+    
+    _core.addon('class', {
+        has: function(el, c) {
+            if (!el || !_core.is(el, 'element')) { return false; }
+            var classes = el.className;
+            if (!classes) { return false; }
+            if (classes == c){ return true; }
+            return classes.search("\\b" + c + "\\b") !== -1;
+        },
+        add: function(el, c) {
+            if (!el || !_core.is(el, 'element')) { return; }
+            if (this.has(el, c)) { return; }
+            if (el.className) { c = " " + c; }
+            return el.className += c, this;
+        },
+        remove: function(el, c) {
+            if (!el || !_core.is(el, 'element')) { return; }
+            return el.className = el.className.replace(new RegExp("\\b" + c + "\\b\\s*", "g"), ""), this;
+        },
+        replace: function(el, c, n) {
+            if (!el || !_core.is(el, 'element')) { return null; }
+            return this.remove(el, c), this.add(el, n), this;
+        }
     });
 
     /**
-     * el, 40, 50, top: function(f, t){ return 300-f*5 + 'px'; }
+     * el, 40, 50, top: function(f, t) { return 300-f*5 + 'px'; }
      */
     _core.addon('animate', function(el, frames, timePerFrame, animation, whendone) {
        var frame = 0,
            time = 0,
+           isPause = false,
            intervalId = setInterval(displayNextFrame, timePerFrame);
 
         function displayNextFrame () {
-            if (frame >= frames) {
+            if (!isPause && frame >= frames) {
                 clearInterval(intervalId);
                 if (whendone) {
                     whendone(el);
@@ -2402,10 +2441,22 @@
                 each(animation, function(cssprop) {
                     try {
                         el.style[ cssprop ] = animation[ cssprop ](frame, time);
-                    } catch(e){}
+                    } catch(e) {}
                 });
                 frame += 1;
                 time += timePerFrame;
+            }
+        }
+
+        return {
+            stop: function() {
+                clearInterval(intervalId), intervalId = null;
+            },
+            pause: function() {
+                isPause = true;
+            },
+            resume: function() {
+                isPause = false;
             }
         }
     }, false);
@@ -2414,7 +2465,7 @@
      * @namespace
      * @name _core.util
      */
-    _core.addon('util', function(){
+    _core.addon('util', function() {
 
         return /** @lends _core.util */{
             /**
@@ -2509,7 +2560,7 @@
              * 팝업의 사이즈를 $el 사이즈에 맞게 조절
              */
             resizePopup: function($el) {
-                if(!($el instanceof jQuery)) { $el = $($el); }
+                if (!($el instanceof jQuery)) { $el = $($el); }
                 window.resizeTo($el.width(), $el.height());
             },
 
@@ -2551,9 +2602,9 @@
                     // 이미지가 로드되면, 실제 사이즈를 체크해서 가로이미지인지 세로이미지인지에 따라 기준이 되는 width, height에 지정한다.
                     $img.one('load', function() {
                         $img.removeAttr('width height').css({'width':'auto', 'height':'auto'});
-                        if($img.attr('data-no-height') === 'true' && this.width > wrapWidth) {
+                        if ($img.attr('data-no-height') === 'true' && this.width > wrapWidth) {
                             $img.css('width', wrapWidth);
-                        } else if($img.attr('data-no-width') === 'true' && this.height > wrapHeight) {
+                        } else if ($img.attr('data-no-width') === 'true' && this.height > wrapHeight) {
                             $img.css('height', wrapWidth);
                         } else {
                             var isHoriz = this.width > this.height;
@@ -2643,6 +2694,112 @@
         numberUtil = _core.number,
         View;		// ui.View
 
+    _core.addon('Handler', function(){
+
+        return Class({
+            initialize: function(el) {
+                if (!_core.is(el, 'element')) { return null; }
+
+                this.el = el;
+            },
+            on: document.addEventListener ? function(eventType, handler) {
+                this.el.addEventListener(eventType, handler, false);
+            } : function(eventType, handler) {
+                if(this._find(eventType, handler) != -1) { return; }
+
+                var elemement = this.el;
+                var wrappedHandler = function(e) {
+                    e = e || window.event;
+
+                    var event = {
+                        originalEvent: e,
+                        type: e.type,
+                        target: e.srcElement,
+                        currentTarget: this.el,
+                        relatedTarget: e.fromElement ? e.fromElement : e.toElement,
+                        eventPhase: (e.srcElement == this.el) ? 2 : 3,
+                        clientX: e.clientX, clientY: e.clientY,
+                        screenX: e.screenX, screenY: e.screenY,
+                        altKey: e.altKey, ctrlKey: e.ctrlKey,
+                        shiftKey: e.shiftKey, charCode: e.keyCode, which: e.keyCode,
+                        stopPropagation: function(){ this.originalEvent.cancelBubble = true; },
+                        preventDefault: function(){ this.originalEvent.returnValue = false;},
+                        isDefaultPrevented: function(){ return this.originalEvent.returnValue == false; }
+                    };
+                    if (Function.prototype.bind) {
+                        handler.call(this.el, event);
+                    } else {
+                        this.el._currentHandler = handler;
+                        this.el._currentHandler(event);
+                        this.el._currentHandler = null, delete el._currentHandler;
+                    }
+                };
+                this.el.attachEvent("on" + eventType, wrappedHandler);
+
+                var h = {
+                    element: this.el,
+                    eventType: eventType,
+                    handler:handler,
+                    wrappedHandler: wrappedHandler
+                };
+                var d = elemement.document || elemement;
+                var w = d.parentWindow;
+                var id = this.cid;
+
+                (w._allHandlers || (w._allHandlers = {}))[id] = h;
+                (elemement._handlers || (elemement._handlers = [])).push(id);
+                if (!w._onunlodHandlerRegistered) {
+                    w._onunloadHandlerRegistered = true;
+                    w.attachEvent('onunload', this._removeAllHandlers);
+                }
+            },
+
+            off: function(eventType, handler) {
+                var i = this._find(eventType, handler);
+                if (i === -1) { return; }
+
+                var element = this.el,
+                    d = element.document || element,
+                    w = d.parentWindow,
+                    handlerId = element._handlers[i],
+                    h = w._allHandlers[handlerId];
+
+                element.detachEvent("on" + eventType, h.wrappedHandler);
+                element._handlers.splice(i, 1);
+                delete  w._allHandlers[handlerId];
+            },
+
+            _find: function(eventType, handler) {
+                var element = this.el,
+                    handlers = element._handlers,
+                    d, w;
+                if(!handlers) { return -1; }
+
+                d = element.document || element;
+                w = d.parentWindow;
+
+                for(var i = handlers.length - 1; i >= 0; i--) {
+                    var handlerId = handlers[i];
+                    var h = w._allHandlers[handlerId];
+                    if (h.eventType == eventType && h.handler == handler) {
+                        return i;
+                    }
+                }
+                return -1;
+            },
+
+            _removeAllHandlers: function() {
+                var w = this;
+                for(var id in w._allHandlers) {
+                    var h = w._allHandlers[id];
+                    h.element.detachEvent("on" + h.eventType, h.wrappedHandler);
+                    delete w._allHandlers[id];
+                }
+            }
+
+        });
+    });
+
     /*
      * @namespace
      * @name _core.EVENTS
@@ -2689,7 +2846,7 @@
                         methodValue,
                         instance;
 
-                    if( !(instance = $this.data(name)) || (a.length === 1 && typeof options !== 'string')) {
+                    if ( !(instance = $this.data(name)) || (a.length === 1 && typeof options !== 'string')) {
                         instance && (instance.destroy(), instance = null);
                         $this.data(name, (instance = new Klass(this, extend({}, $this.data(), options), me)));
                     }
@@ -2788,7 +2945,7 @@
      * 하도록 하는 객체이다.
      * @example
      * // 옵저버 등록
-     * _core.PubSub.on('customevent', function(){
+     * _core.PubSub.on('customevent', function() {
 	 *	 alert('안녕하세요');
 	 * });
      *
@@ -2822,7 +2979,7 @@
         });
 
          _core.addon('views.' + name, (Klass = _core.Class(attr)));
-        if(bindName) {
+        if (bindName) {
             _core.bindjQuery(Klass, bindName);
         }
         return Klass;
@@ -2890,7 +3047,7 @@
                     eventPattern = /^([a-z]+) ?([^$]*)$/i,
                     moduleName, superClass;
 
-                if (!me.name){
+                if (!me.name) {
                     throw new Error('클래스의 이름이 없습니다');
                 }
 
@@ -2898,8 +3055,8 @@
                 me.$el = el instanceof jQuery ? el : $(el);
 
                 // 강제로 리빌드 시킬 것인가 /////////////////////////////////////////////////////////////////////////////////////////////////
-                if(options.rebuild === true) {
-                    try { me.$el.data(moduleName).destroy(); } catch(e){}
+                if (options.rebuild === true) {
+                    try { me.$el.data(moduleName).destroy(); } catch(e) {}
                     me.$el.removeData(moduleName);
                 } else {
                     // 이미 빌드된거면 false 반환 - 중복 빌드 방지
@@ -3004,7 +3161,7 @@
 
                 // me.subviews에 등록된 자식들의 파괴자 호출
                 _core.each(me.subViews, function(item, key) {
-                    if(key.substr(0, 1) === '$') {
+                    if (key.substr(0, 1) === '$') {
                         item.off(me._eventNamespace);
                     } else {
                         item.destroy && item.destroy();
@@ -3064,7 +3221,7 @@
 
                 var me = this,
                     m = (eventNames || "").split( /\s/ );
-                if(!m || !m.length) {
+                if (!m || !m.length) {
                     return eventNames;
                 }
 
@@ -3151,7 +3308,7 @@
              * 해당 클래스의 소속 엘리먼트를 반환
              * @return {jQuery}
              */
-            getElement: function(){
+            getElement: function() {
                 return this.$el;
             }
         });
