@@ -3,7 +3,12 @@ tbl: {
     name: 'axl rose'
   },
   target: '#box',
-  html: '<p>{name}</p>'
+  html: '<p>{getDetail(name)}</p>',
+  funcs: {
+    getDetail: function(item) {
+      return '...';
+    }
+  }
 }
 
 
