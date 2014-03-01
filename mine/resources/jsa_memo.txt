@@ -7,3 +7,11 @@ tbl: {
 }
 
 
+me.trigger('click', {
+  preventDefault: true,
+  stopPropagation: true
+});
+
+or
+
+me.triggerBubble('click');
