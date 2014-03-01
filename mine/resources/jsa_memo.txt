@@ -1,0 +1,9 @@
+tbl: {
+  data: {
+    name: 'axl rose'
+  },
+  target: '#box',
+  html: '<p>{name}</p>'
+}
+
+
