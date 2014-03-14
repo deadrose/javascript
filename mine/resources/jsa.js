@@ -1,7 +1,7 @@
 /*!
  * @author 김승일
- * @email odyseek@vi-nyl.com
- * @description 현대자동차 통합 브랜드 프레임웍
+ * @email comahead@vi-nyl.com
+ * @description 라이브러리
  */
 (function (context, $, undefined) {
     "use strict";
@@ -513,34 +513,35 @@
          * _core.browser.isIETri4 // IE엔진
          */
         browser: (function () {
-            var t = {},
+            var detect = {},
                 win = context,
                 na = win.navigator,
                 ua = na.userAgent,
                 match;
 
-            t.isMobile = typeof orientation !== 'undefined';
-            t.isRetina = 'devicePixelRatio' in window && window.devicePixelRatio > 1;
-            t.isAndroid = ua.indexOf('android') !== -1;
-            t.isOpera = win.opera && win.opera.buildNumber;
-            t.isWebKit = /WebKit/.test(ua);
+            detect.isMobile = typeof orientation !== 'undefined';
+            detect.isRetina = 'devicePixelRatio' in window && window.devicePixelRatio > 1;
+            detect.isAndroid = ua.indexOf('android') !== -1;
+            detect.isOpera = win.opera && win.opera.buildNumber;
+            detect.isWebKit = /WebKit/.test(ua);
+            detect.isTouch = !!('ontouchstart' in window);
 
             match = /(msie) ([\w.]+)/.exec(ua.toLowerCase()) || /(trident)(?:.*rv.?([\w.]+))?/.exec(ua.toLowerCase()) || ['',null,-1];
-            t.isIE = !t.isWebKit && !t.isOpera && match[1] !== null;		//(/MSIE/gi).test(ua) && (/Explorer/gi).test(na.appName);
-            t.isIE6 = t.isIE && /MSIE [56]/i.test(ua);
-            t.isIE7 = t.isIE && /MSIE [567]/i.test(ua);
-            t.isOldIE = t.isIE && /MSIE [5678]/i.test(ua);
-            t.version = parseInt(match[2], 10);		// 사용법: if (browser.isIE && browser.version > 8) { // 9이상인 ie브라우저
+            detect.isIE = !detect.isWebKit && !detect.isOpera && match[1] !== null;		//(/MSIE/gi).test(ua) && (/Explorer/gi).test(na.appName);
+            detect.isIE6 = detect.isIE && /MSIE [56]/i.test(ua);
+            detect.isIE7 = detect.isIE && /MSIE [567]/i.test(ua);
+            detect.isOldIE = detect.isIE && /MSIE [5678]/i.test(ua);
+            detect.version = parseInt(match[2], 10);		// 사용법: if (browser.isIE && browser.version > 8) { // 9이상인 ie브라우저
 
-            t.isChrome = (ua.indexOf('Chrome') !== -1);
-            t.isGecko = (ua.indexOf('Firefox') !==-1);
-            t.isMac = (ua.indexOf('Mac') !== -1);
-            t.isAir = ((/adobeair/i).test(ua));
-            t.isIDevice = /(iPad|iPhone)/.test(ua);
-            t.isSafari = (/Safari/).test(ua);
-            t.isIETri4 = (t.isIE && ua.indexOf('Trident/4.0') !== -1);
+            detect.isChrome = (ua.indexOf('Chrome') !== -1);
+            detect.isGecko = (ua.indexOf('Firefox') !==-1);
+            detect.isMac = (ua.indexOf('Mac') !== -1);
+            detect.isAir = ((/adobeair/i).test(ua));
+            detect.isIDevice = /(iPad|iPhone)/.test(ua);
+            detect.isSafari = (/Safari/).test(ua);
+            detect.isIETri4 = (detect.isIE && ua.indexOf('Trident/4.0') !== -1);
 
-            return t;
+            return detect;
         }()),
 
         is: function (o, typeName) {
@@ -1082,16 +1083,7 @@
                 var m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
                     uri = {}, i = 14;
                 while (i--) { uri[o.key[i]] = m[i] || ""; }
-                var retArr = {};
-                if (uri.protocol !== '') { retArr.scheme = uri.protocol; }
-                if (uri.host !== '') { retArr.host = uri.host; }
-                if (uri.port !== '') { retArr.port = uri.port; }
-                if (uri.user !== '') { retArr.user = uri.user; }
-                if (uri.password !== '') { retArr.pass = uri.password; }
-                if (uri.path !== '') { retArr.path = uri.path; }
-                if (uri.query !== '') { retArr.query = uri.query; }
-                if (uri.anchor !== '') { retArr.fragment = uri.anchor; }
-                return retArr;
+                return uri;
             };
         })(),
 
@@ -2033,10 +2025,6 @@
             };
             Class.statics.call(Class, supr);
             statics && Class.statics.call(Class, statics);
-
-            if (hooks || (hooks = Parent.prototype.$hooks)) {
-                hooks.onClassCreate && hooks.onClassCreate(Class);
-            }
 
             return Class;
         };
