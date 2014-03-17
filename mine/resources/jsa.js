@@ -1,58 +1,61 @@
 /*!
  * @author 김승일
- * @email odyseek@vi-nyl.com
- * @description 현대자동차 통합 브랜드 프레임웍
+ * @email comahead@vi-nyl.com
+ * @description 라이브러리
  */
 (function (context, $, undefined) {
     "use strict";
     /* jshint expr: true, validthis: true */
-    /* global jsa, alert, escape, unescape */
+    /* global _core, alert, escape, unescape */
 
+    var frameworkName = 'jsa';
     var $root = $(document.documentElement).addClass('js');
     ('ontouchstart' in context) && $root.addClass('touch');
     ('orientation' in context) && $root.addClass('mobile');
 
     /**
      * @namespace
-     * @name jsa
+     * @name _core
      * @description root namespace of hib site
      */
 
 
     /**
      * @namespace
-     * @name jsa
+     * @name _core
      * @description 현대자동차 통합 브랜드 웹 공통 기능 스크립트
      */
 
     /**
      * @namespace
-     * @name jsa
-     * @description jsa 단축명
+     * @name _core
+     * @description _core 단축명
      */
-    var jsa = context.jsa || (context.jsa = {});
+    var _core = context[ frameworkName ] || (context[ frameworkName ] = {});
 
-    var toString = Object.prototype.toString,
-        hasOwn = Object.prototype.hasOwnProperty,
-        arraySlice = Array.prototype.slice,
+    var arrayProto = Array.prototype,
+        objectProto = Object.prototype,
+        toString = objectProto.toString,
+        hasOwn = objectProto.hasOwnProperty,
+        arraySlice = arrayProto.slice,
         doc = context.document,
         tmpInput = doc.createElement('input'),
         tmpNode = doc.createElement('div'),
         emptyFn = function () {},
         each = function (obj, cb, ctx) {
-            if(!obj){ return obj; }
+            if (!obj) { return obj; }
             var i;
-            if(obj && obj.push) {
-               if(obj.forEach) {
-                   obj.forEach(cb, ctx);
+            if (obj && obj.push) {
+               if (obj.forEach) {
+                   if (obj.forEach(cb, ctx) === false) { return; }
                } else {
                    for (i = 0; i < obj.length; i++) {
-                       if(cb.call(ctx || obj, obj[i], i, obj) === false) { return; }
+                       if (cb.call(ctx || obj, obj[i], i, obj) === false) { return; }
                    }
                }
             } else {
                 for(i in obj) {
-                    if(hasOwn.call(obj, i)) {
+                    if (hasOwn.call(obj, i)) {
                         if (cb.call(obj, obj[i], i, obj) === false) { return; }
                     }
                 }
@@ -68,8 +71,8 @@
             return obj;
         };
 
-    jsa.each = each;
-    jsa.extend = extend;
+    _core.each = each;
+    _core.extend = extend;
 
     if (typeof Function.prototype.bind === 'undefined') {
         /**
@@ -77,7 +80,7 @@
          * @param {Object} context 컨텍스트
          * @param {Mixed} ... 두번째 인자부터는 실제로 싱행될 함수로 전달된다.
          * @example
-         * function Test(){
+         * function Test() {
 		 *		alert(this.name);
 		 * }.bind({name: 'axl rose'});
          *
@@ -127,11 +130,11 @@
         var supportPlaceholder = ('placeholder' in tmpInput);
 
         return supportPlaceholder ? function(value) {
-            if(arguments.length === 0) { return $.trim(this.val()); }
+            if (arguments.length === 0) { return $.trim(this.val()); }
             else { return this.val($.trim(value)); }
         } : function(value) {
             if (arguments.length === 0) {
-                if(this.val() === this.attr('placeholder')) {
+                if (this.val() === this.attr('placeholder')) {
                     return '';
                 }
                 return $.trim(this.val());
@@ -152,14 +155,14 @@
      * @fires $#changed
      * @example
      * // 먼저 changed 이벤트 바인딩
-     * $('input:checkbox').on('changed', function(e, isChecked){ $(this).parent()[isChecked?'addClass':'removeClass']('on'); });
+     * $('input:checkbox').on('changed', function(e, isChecked) { $(this).parent()[isChecked?'addClass':'removeClass']('on'); });
      * ..
      * // checked 값을 변경
      * $('input:checkbox').checked(true); // 해당체크박스의 부모에 on클래스가 추가된다.
      */
     $.fn.checked = function(checked, isBubble) {
         return this.each(function() {
-            if(this.type !== 'checkbox' && this.type !== 'radio'){ return; }
+            if (this.type !== 'checkbox' && this.type !== 'radio') { return; }
             /**
              * @event $#changed
              * @type {object}
@@ -194,7 +197,7 @@
      */
     $.fn.showLayer = function(options, isBubble) {
         options = extend({
-            onShow: jsa.emptyFn,
+            onShow: _core.emptyFn,
             opener: null
         }, options);
 
@@ -208,7 +211,7 @@
             }
 
             $this[trigger](evt = $.Event('layerbeforeshow'));
-            if (evt.isDefaultPrevented()){ return; }
+            if (evt.isDefaultPrevented()) { return; }
 
             // 표시될 때 d_open 클래스 추가
             $this.addClass('d-open').show()[trigger]('layershow');
@@ -226,7 +229,7 @@
      */
     $.fn.hideLayer = function(options, isBubble) {
         options = extend({
-            onHide: jsa.emptyFn,
+            onHide: _core.emptyFn,
             focusOpener: false
         }, options);
 
@@ -236,7 +239,7 @@
             options.onHide.call($this[0]);
 
             // 숨겨진 후에 열었던 원래버튼에 포커스를 강제로 준다.
-            if($this.data('opener')){
+            if ($this.data('opener')) {
                 var $btn = $( $this.data('opener') );
                 $btn.attr({'aria-pressed': 'false', 'aria-expand': 'false'});
                 if (options.focusOpener === true) {
@@ -253,7 +256,7 @@
      * @example
      * $(this)[ isDone ? 'show' : 'noop' ](); // isDone이 true에 show하되 false일때는 아무것도 안함.
      */
-    $.fn.noop = function(){
+    $.fn.noop = function() {
         return this;
     };
 
@@ -266,7 +269,7 @@
     $.fn.checkedValues = function() {
         var results = [];
         this.each(function() {
-            if((this.type === 'checkbox' || this.type === 'radio') && this.checked === true) {
+            if ((this.type === 'checkbox' || this.type === 'radio') && this.checked === true) {
                 results.push(this.value);
             }
         });
@@ -287,7 +290,7 @@
 
     /**
      * timeStart("name")로 name값을 키로하는 타이머가 시작되며, timeEnd("name")로 해당 name값의 지난 시간을 로그에 출력해준다.
-     * @memberOf jsa
+     * @memberOf _core
      * @name timeStart
      * @function
      *
@@ -295,23 +298,23 @@
      * @param {Boolean} reset 리셋(초기화) 여부
      *
      * @example
-     * jsa.timeStart('animate');
+     * _core.timeStart('animate');
      * ...
-     * jsa.timeEnd('animate'); -> animate: 10203ms
+     * _core.timeEnd('animate'); -> animate: 10203ms
      */
-    jsa.timeStart = function(name, reset){
-        if(!name) { return; }
+    _core.timeStart = function(name, reset) {
+        if (!name) { return; }
         var time = +new Date,
             key = "KEY" + name.toString();
 
         this.timeCounters || (this.timeCounters = {});
-        if(!reset && this.timeCounters[key]) { return; }
+        if (!reset && this.timeCounters[key]) { return; }
         this.timeCounters[key] = time;
     };
 
     /**
      * timeStart("name")에서 지정한 해당 name값의 지난 시간을 로그에 출력해준다.
-     * @memberOf jsa
+     * @memberOf _core
      * @name timeEnd
      * @function
      *
@@ -319,19 +322,19 @@
      * @return {Number} 걸린 시간
      *
      * @example
-     * jsa.timeStart('animate');
+     * _core.timeStart('animate');
      * ...
-     * jsa.timeEnd('animate'); -> animate: 10203ms
+     * _core.timeEnd('animate'); -> animate: 10203ms
      */
-    jsa.timeEnd = function(name){
-        if(!this.timeCounters) { return null; }
+    _core.timeEnd = function(name) {
+        if (!this.timeCounters) { return null; }
 
         var time = +new Date,
             key = "KEY" + name.toString(),
             timeCounter = this.timeCounters[key],
             diff, label;
 
-        if(timeCounter) {
+        if (timeCounter) {
             diff = time - timeCounter;
             label = name + ": " + diff + "ms";
             // 이 콘솔은 디버깅을 위한 것이므로 지우지 말것.
@@ -347,7 +350,7 @@
      * 객체리터럴을 이용하여 여타 컴파일 언어의 네임스페이스처럼 쓸 수 있다.
      *
      * @function
-     * @memberOf jsa
+     * @memberOf _core
      * @name namespace
      *
      * @param {String} name 네임스페이스명
@@ -355,15 +358,15 @@
      * @return {Object} 생성된 네임스페이스
      *
      * @example
-     * jsa.namesapce('jsa.widget.Tabcontrol', TabControl)
+     * _core.namesapce('_core.widget.Tabcontrol', TabControl)
      *
-     * ex) jsa.namespace('jsa.widget.Control', function(){}) 를 네이티브로 풀어서 작성한다면 다음과 같다.
+     * ex) _core.namespace('_core.widget.Control', function() {}) 를 네이티브로 풀어서 작성한다면 다음과 같다.
      *
-     * var jsa = jsa || {};
-     * jsa.ui = jsa.ui || {};
-     * jsa.widget.Control = jsa.widget.Control || function(){};
+     * var _core = _core || {};
+     * _core.ui = _core.ui || {};
+     * _core.widget.Control = _core.widget.Control || function() {};
      */
-    jsa.namespace = function (name, obj) {
+    _core.namespace = function (name, obj) {
         if (typeof name !== 'string') {
             obj && (name = obj);
             return name;
@@ -373,13 +376,13 @@
             isSet = arguments.length === 2,
             i, item;
 
-        if(isSet) {
-            for(i = -1; item = names[++i]; ){
+        if (isSet) {
+            for(i = -1; item = names[++i]; ) {
                 root = root[item] || (root[item] = (i === names.length - 1 ? obj : {}));
             }
         } else { // isGet
-            for(i = -1; item = names[++i]; ){
-                if(item in root) { root = root[item] }
+            for(i = -1; item = names[++i]; ) {
+                if (item in root) { root = root[item] }
                 else { throw Error(name + '은(는) 정의되지 않은 네임스페이스입니다.'); }
             }
         }
@@ -391,24 +394,24 @@
      * common를 루트로 하여 네임스페이스를 생성하여 새로운 속성을 추가하는 함수
      *
      * @function
-     * @memberOf jsa
-     * @name define
+     * @memberOf _core
+     * @name addon
      *
      * @param {String} name .를 구분자로 해서 common를 시작으로 하위 네임스페이스를 생성. 없으면 common에 추가된다.
      * @param {Object|Function} object
-     * @param {Boolean} isExecFn (Optional) object값이 함수형일 때 실행을 시킨 후에 설정할 것인가 여부
+     * @param {Boolean} isExecFn (Optional) object값이 함수형일 때 실행한 값을 설정할 것인가 여부
      *
      * @example
-     * jsa.define('', [], {});
-     * jsa.
+     * _core.addon('', [], {});
+     * _core.
      */
-    jsa.define = function (name, object, isExecFn) {
+    _core.addon = function (name, object, isExecFn) {
         if (typeof name !== 'string') {
             object = name; name = '';
         }
 
-        var root = jsa,
-            names = name ? name.replace(/^jsa\.?/, '').split('.') : [],
+        var root = _core,
+            names = name ? name.replace(/^_core\.?/, '').split('.') : [],
             ln = names.length - 1,
             leaf = names[ln];
 
@@ -420,32 +423,32 @@
             root = root[names[i]] || (root[names[i]] = {});
         }
 
-        (leaf && (root[leaf] ? extend(root[leaf], object) : (root[leaf] = object))) || extend(root, object);
+        return (leaf && (root[leaf] ? extend(root[leaf], object) : (root[leaf] = object))) || extend(root, object), object;
     };
 
     /**
-     * jsa.define 를 통해 정의된 모듈을 변수에 담아서 사용하고자 할 경우
+     * _core.addon 를 통해 정의된 모듈을 변수에 담아서 사용하고자 할 경우
      *
      * @function
-     * @memberOf jsa
+     * @memberOf _core
      * @name use
      *
      * @param {String} name 네임스페이스
      * @return {Object} 함수를 실행한 결과값
      *
      * @example
-     * jsa.define('test', function(){
+     * _core.addon('test', function() {
 	*	 return {
-	*		init: function(){
+	*		init: function() {
 	*			 alert(0);
 	*		}
 	*	});
-	 * var test = jsa.use('test'); 
+	 * var test = _core.use('test'); 
 	 * test.init()	=> alert(0)
 	 */
-    jsa._prefix = 'jsa.';
+    _core._prefix = '_core.';
 
-    jsa.define(/** @lends jsa */ {
+    _core.addon(/** @lends _core */ {
         /**
          * document jQuery wrapper
          */
@@ -458,7 +461,7 @@
          * 빈 함수
          * @function
          * @example
-         * var func = jsa.emptyFn
+         * var func = _core.emptyFn
          */
         emptyFn: emptyFn,
 
@@ -470,7 +473,7 @@
         /**
          * html5 속성의 지원여부를 체크할 때 사용
          * @example
-         * is = 'placeholder' in jsa.tmpInput;  // placeholder를 지원하는가
+         * is = 'placeholder' in _core.tmpInput;  // placeholder를 지원하는가
          */
         tmpInput: tmpInput,
 
@@ -494,51 +497,76 @@
          * 브라우저의 Detect 정보: 되도록이면 Modernizr 라이브러리를 사용할 것을 권함
          *
          * @example
-         * jsa.browser.isOpera // 오페라
-         * jsa.browser.isWebKit // 웹킷
-         * jsa.browser.isIE // IE
-         * jsa.browser.isIE6 // IE56
-         * jsa.browser.isIE7 // IE567
-         * jsa.browser.isOldIE // IE5678
-         * jsa.browser.version // IE의 브라우저
-         * jsa.browser.isChrome // 크롬
-         * jsa.browser.isGecko // 파이어폭스
-         * jsa.browser.isMac // 맥OS
-         * jsa.browser.isAir // 어도비 에어
-         * jsa.browser.isIDevice // 아이폰, 아이패드
-         * jsa.browser.isSafari // 사파리
-         * jsa.browser.isIETri4 // IE엔진
+         * _core.browser.isOpera // 오페라
+         * _core.browser.isWebKit // 웹킷
+         * _core.browser.isIE // IE
+         * _core.browser.isIE6 // IE56
+         * _core.browser.isIE7 // IE567
+         * _core.browser.isOldIE // IE5678
+         * _core.browser.version // IE의 브라우저
+         * _core.browser.isChrome // 크롬
+         * _core.browser.isGecko // 파이어폭스
+         * _core.browser.isMac // 맥OS
+         * _core.browser.isAir // 어도비 에어
+         * _core.browser.isIDevice // 아이폰, 아이패드
+         * _core.browser.isSafari // 사파리
+         * _core.browser.isIETri4 // IE엔진
          */
         browser: (function () {
-            var t = {},
+            var detect = {},
                 win = context,
                 na = win.navigator,
                 ua = na.userAgent,
                 match;
 
-            t.isMobile = typeof orientation !== 'undefined';
-            t.isRetina = 'devicePixelRatio' in window && window.devicePixelRatio > 1;
-            t.isAndroid = ua.indexOf('android') !== -1;
-            t.isOpera = win.opera && win.opera.buildNumber;
-            t.isWebKit = /WebKit/.test(ua);
+            detect.isMobile = typeof orientation !== 'undefined';
+            detect.isRetina = 'devicePixelRatio' in window && window.devicePixelRatio > 1;
+            detect.isAndroid = ua.indexOf('android') !== -1;
+            detect.isOpera = win.opera && win.opera.buildNumber;
+            detect.isWebKit = /WebKit/.test(ua);
+            detect.isTouch = !!('ontouchstart' in window);
 
             match = /(msie) ([\w.]+)/.exec(ua.toLowerCase()) || /(trident)(?:.*rv.?([\w.]+))?/.exec(ua.toLowerCase()) || ['',null,-1];
-            t.isIE = !t.isWebKit && !t.isOpera && match[1] !== null;		//(/MSIE/gi).test(ua) && (/Explorer/gi).test(na.appName);
-            t.isIE6 = t.isIE && /MSIE [56]/i.test(ua);
-            t.isIE7 = t.isIE && /MSIE [567]/i.test(ua);
-            t.isOldIE = t.isIE && /MSIE [5678]/i.test(ua);
-            t.version = parseInt(match[2], 10);		// 사용법: if(browser.isIE && browser.version > 8) { // 9이상인 ie브라우저
+            detect.isIE = !detect.isWebKit && !detect.isOpera && match[1] !== null;		//(/MSIE/gi).test(ua) && (/Explorer/gi).test(na.appName);
+            detect.isIE6 = detect.isIE && /MSIE [56]/i.test(ua);
+            detect.isIE7 = detect.isIE && /MSIE [567]/i.test(ua);
+            detect.isOldIE = detect.isIE && /MSIE [5678]/i.test(ua);
+            detect.version = parseInt(match[2], 10);		// 사용법: if (browser.isIE && browser.version > 8) { // 9이상인 ie브라우저
 
-            t.isChrome = (ua.indexOf('Chrome') !== -1);
-            t.isGecko = (ua.indexOf('Firefox') !==-1);
-            t.isMac = (ua.indexOf('Mac') !== -1);
-            t.isAir = ((/adobeair/i).test(ua));
-            t.isIDevice = /(iPad|iPhone)/.test(ua);
-            t.isSafari = (/Safari/).test(ua);
-            t.isIETri4 = (t.isIE && ua.indexOf('Trident/4.0') !== -1);
+            detect.isChrome = (ua.indexOf('Chrome') !== -1);
+            detect.isGecko = (ua.indexOf('Firefox') !==-1);
+            detect.isMac = (ua.indexOf('Mac') !== -1);
+            detect.isAir = ((/adobeair/i).test(ua));
+            detect.isIDevice = /(iPad|iPhone)/.test(ua);
+            detect.isSafari = (/Safari/).test(ua);
+            detect.isIETri4 = (detect.isIE && ua.indexOf('Trident/4.0') !== -1);
 
-            return t;
+            return detect;
         }()),
+
+        is: function (o, typeName) {
+            if (o === null) {
+                return typeName === 'null';
+            }
+
+            if (o && (o.nodeType === 1 || o.nodeType === 9)) {
+                return typeName === 'element';
+            }
+
+            var s = toString.call(o),
+                type = s.match(/\[object (.*?)\]/)[1].toLowerCase();
+
+            if (type === 'number') {
+                if (isNaN(o)) {
+                    return typeName === 'nan';
+                }
+                if (!isFinite(o)) {
+                    return typeName === 'infinity';
+                }
+            }
+
+            return type === typeName;
+        },
 
         /**
          * 주어진 인자가 빈값인지 체크
@@ -548,7 +576,7 @@
          * @return {Boolean}
          */
         isEmpty: function (value, allowEmptyString) {
-            return (value === null) || (value === undefined) || (!allowEmptyString ? value === '' : false) || (this.isArray(value) && value.length === 0);
+            return (value === null) || (value === undefined) || (!allowEmptyString ? value === '' : false) || (this.is(value, 'array') && value.length === 0);
         },
 
         /**
@@ -668,8 +696,8 @@
          * @return {Array}
          *
          * @example
-         * jsa.toArray('abcd"); => ["a", "b", "c", "d"]
-         * jsa.toArray(arguments);  => arguments를 객체를 array로 변환하여 Array에서 지원하는 유틸함수(slice, reverse ...)를 쓸수 있다.
+         * _core.toArray('abcd"); => ["a", "b", "c", "d"]
+         * _core.toArray(arguments);  => arguments를 객체를 array로 변환하여 Array에서 지원하는 유틸함수(slice, reverse ...)를 쓸수 있다.
          */
         toArray: function (value) {
             return arraySlice.apply(value, arraySlice.call(arguments, 1));
@@ -707,10 +735,10 @@
      * 문자열 관련 유틸 함수 모음
      *
      * @namespace
-     * @name jsa.string
+     * @name _core.string
      * @description
      */
-    jsa.define('string', function () {
+    _core.addon('string', function () {
         var escapeChars = {
                 '&': '&amp;',
                 '>': '&gt;',
@@ -730,7 +758,7 @@
             tagRegexp = /<\/?[^>]+>/gi,
             scriptRegexp = /<script[^>]*>([\\S\\s]*?)<\/script>/img;
 
-        return /** @lends jsa.string */{
+        return /** @lends _core.string */{
         	trim: function(value) {
         		return value ? value.replace(/^\s+|\s+$/g, "") : value;
         	},
@@ -743,7 +771,7 @@
              * @return {String} 대체된 결과 문자열
              *
              * @example
-             * jsa.replaceAll("a1b2c3d", /[0-9]/g, ''); => "abcd"
+             * _core.replaceAll("a1b2c3d", /[0-9]/g, ''); => "abcd"
              */
             replaceAll: function (value, find, rep) {
                 if (find.constructor === RegExp) {
@@ -759,7 +787,7 @@
              * @return {Number}
              *
              * @example
-             * jsa.byteLength("동해물과"); => 8
+             * _core.byteLength("동해물과"); => 8
              */
             byteLength: function (value) {
                 var l = 0;
@@ -778,7 +806,7 @@
              * @return {String} 결과 문자열
              *
              * @example
-             * jsa.string.cutByByte("동해물과", 3, "..."); => "동..."
+             * _core.string.cutByByte("동해물과", 3, "..."); => "동..."
              */
             cutByByte: function (value, length, truncation) {
                 var str = value,
@@ -815,7 +843,7 @@
              * @return {String} 결과 문자열
              *
              * @example
-             * jsa.string.capitalize("abCdEfg"); => "Abcdefg"
+             * _core.string.capitalize("abCdEfg"); => "Abcdefg"
              */
             capitalize: function (value) {
                 return value ? value.charAt(0).toUpperCase() + value.substring(1) : value;
@@ -828,7 +856,7 @@
              * @return {String} 결과 문자열
              *
              * @example
-             * jsa.string.capitalize("ab-cd-efg"); => "abCdEfg"
+             * _core.string.capitalize("ab-cd-efg"); => "abCdEfg"
              */
             camelize: function (value) {
                 return value ? value.replace(/(\-|_|\s)+(.)?/g, function(a, b, c) {
@@ -843,7 +871,7 @@
              * @return {String} 결과 문자열
              *
              * @example
-             * jsa.string.dasherize("abCdEfg"); => "ab-cd-efg"
+             * _core.string.dasherize("abCdEfg"); => "ab-cd-efg"
              */
             dasherize: function (value) {
                 return value ? value.replace(/[_\s]+/g, '-').replace(/([A-Z])/g, '-$1').replace(/-+/g, '-').toLowerCase() : value;
@@ -866,7 +894,7 @@
              * @return {String} 결과 문자열
              *
              * @example
-             * jsa.string.repeat("ab", 4); => "abababab"
+             * _core.string.repeat("ab", 4); => "abababab"
              */
             repeat: function (value, cnt, sep) {
                 sep || (sep = '');
@@ -885,7 +913,7 @@
              * @return {String} 결과 문자열
              *
              * @example
-             * jsa.string.escapeHTML('<div><a href="#">링크</a></div>'); => "&lt;div&gt;&lt;a href=&quot;#&quot;&gt;링크&lt;/a&gt;&lt;/div&gt;"
+             * _core.string.escapeHTML('<div><a href="#">링크</a></div>'); => "&lt;div&gt;&lt;a href=&quot;#&quot;&gt;링크&lt;/a&gt;&lt;/div&gt;"
              */
             escapeHTML: function (value) {
                 return value ? (value+"").replace(escapeRegexp, function (m) {
@@ -900,7 +928,7 @@
              * @return {String} 결과 문자열
              *
              * @example
-             * jsa.string.unescapeHTML('&lt;div&gt;&lt;a href=&quot;#&quot;&gt;링크&lt;/a&gt;&lt;/div&gt;');  => '<div><a href="#">링크</a></div>'
+             * _core.string.unescapeHTML('&lt;div&gt;&lt;a href=&quot;#&quot;&gt;링크&lt;/a&gt;&lt;/div&gt;');  => '<div><a href="#">링크</a></div>'
              */
             unescapeHTML: function (value) {
                 return value ? (value+"").replace(unescapeRegexp, function (m) {
@@ -917,8 +945,8 @@
              * @return {String}
              *
              * @example
-             * jsa.string.toggle('ASC", "ASC", "DESC"); => "DESC"
-             * jsa.string.toggle('DESC", "ASC", "DESC"); => "ASC"
+             * _core.string.toggle('ASC", "ASC", "DESC"); => "DESC"
+             * _core.string.toggle('DESC", "ASC", "DESC"); => "ASC"
              */
             toggle: function (value, these, other) {
                 return these === value ? other : value;
@@ -932,10 +960,10 @@
              * @return {String} 결과 문자열
              *
              * @example
-             * jsa.string.format("{0}:{1}:{2} {0}", "a", "b", "c");  => "a:b:c a"
+             * _core.string.format("{0}:{1}:{2} {0}", "a", "b", "c");  => "a:b:c a"
              */
             format: function (format) {
-                var args = jsa.toArray(arguments).slice(1);
+                var args = _core.toArray(arguments).slice(1);
 
                 return format.replace(/{([0-9]+)}/g, function (m, i) {
                     return args[i];
@@ -968,10 +996,10 @@
 
     /**
      * @namespace
-     * @name jsa.uri
+     * @name _core.uri
      * @description
      */
-    jsa.define('uri', /** @lends jsa.uri */{
+    _core.addon('uri', /** @lends _core.uri */{
 
         /**
          * 주어진 url에 쿼리스츠링을 조합
@@ -981,14 +1009,14 @@
          * @return {String}
          *
          * @example
-         * jsa.uri.urlAppend("board.do", {"a":1, "b": 2, "c": {"d": 4}}); => "board.do?a=1&b=2&c[d]=4"
-         * jsa.uri.urlAppend("board.do?id=123", {"a":1, "b": 2, "c": {"d": 4}}); => "board.do?id=123&a=1&b=2&c[d]=4"
+         * _core.uri.urlAppend("board.do", {"a":1, "b": 2, "c": {"d": 4}}); => "board.do?a=1&b=2&c[d]=4"
+         * _core.uri.urlAppend("board.do?id=123", {"a":1, "b": 2, "c": {"d": 4}}); => "board.do?id=123&a=1&b=2&c[d]=4"
          */
         addToQueryString: function (url, string) {
-            if (jsa.isObject(string)) {
-                string = jsa.object.toQueryString(string);
+            if (_core.is(string, 'object')) {
+                string = _core.object.toQueryString(string);
             }
-            if (!jsa.isEmpty(string)) {
+            if (!_core.isEmpty(string)) {
                 return url + (url.indexOf('?') === -1 ? '?' : '&') + string;
             }
 
@@ -1002,13 +1030,13 @@
          * @return {Object}
          *
          * @example
-         * jsa.uri.parseQuery("a=1&b=2"); => {"a": 1, "b": 2}
+         * _core.uri.parseQuery("a=1&b=2"); => {"a": 1, "b": 2}
          */
         parseQuery: function (query) {
             if (!query) {
                 return {};
             }
-            if (query.length > 0 && query.charAt(0) === '?'){ query = query.substr(1); }
+            if (query.length > 0 && query.charAt(0) === '?') { query = query.substr(1); }
 
             var params = (query + '').split('&'),
                 obj = {},
@@ -1031,8 +1059,8 @@
          * @return {Object}
          *
          * @example
-         * jsa.uri.parseUrl("http://www.jsa.com:8080/list.do?a=1&b=2#comment");
-         * => {scheme: "http", host: "www.jsa.com", port: "8080", path: "/list.do", query: "a=1&b=2"…}
+         * _core.uri.parseUrl("http://www._core.com:8080/list.do?a=1&b=2#comment");
+         * => {scheme: "http", host: "www._core.com", port: "8080", path: "/list.do", query: "a=1&b=2"…}
          */
         parseUrl: (function() {
             var o = {
@@ -1054,17 +1082,8 @@
                 }
                 var m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
                     uri = {}, i = 14;
-                while (i--){ uri[o.key[i]] = m[i] || ""; }
-                var retArr = {};
-                if (uri.protocol !== '') { retArr.scheme = uri.protocol; }
-                if (uri.host !== '') { retArr.host = uri.host; }
-                if (uri.port !== '') { retArr.port = uri.port; }
-                if (uri.user !== '') { retArr.user = uri.user; }
-                if (uri.password !== '') { retArr.pass = uri.password; }
-                if (uri.path !== '') { retArr.path = uri.path; }
-                if (uri.query !== '') { retArr.query = uri.query; }
-                if (uri.anchor !== '') { retArr.fragment = uri.anchor; }
-                return retArr;
+                while (i--) { uri[o.key[i]] = m[i] || ""; }
+                return uri;
             };
         })(),
 
@@ -1075,7 +1094,7 @@
          * @return {String} 결과 문자열
          *
          * @example
-         * jsa.uri.removeHash("list.do#comment"); => "list.do"
+         * _core.uri.removeHash("list.do#comment"); => "list.do"
          */
         removeHash: function (url) {
             return url ? url.replace(/.*(?=#[^\s]+$)/, '') : url;
@@ -1086,10 +1105,10 @@
      * 숫자관련 유틸함수 모음
      *
      * @namespace
-     * @name jsa.number
+     * @name _core.number
      * @description
      */
-    jsa.define('number', /** @lends jsa.number */{
+    _core.addon('number', /** @lends _core.number */{
         /**
          * 주어진 수를 자릿수만큼 앞자리에 0을 채워서 반환
          *
@@ -1099,7 +1118,7 @@
          * @return {String}
          *
          * @example
-         * jsa.number.zeroPad(2, 3); => "002"
+         * _core.number.zeroPad(2, 3); => "002"
          */
         zeroPad: function (value, size, character) {
             var result = String(value);
@@ -1119,7 +1138,7 @@
          * @return {String}
          *
          * @example
-         * jsa.number.addComma(21342); => "21,342"
+         * _core.number.addComma(21342); => "21,342"
          */
         addComma: function (value) {
             value += '';
@@ -1164,16 +1183,24 @@
         }
     });
 
-
+    function nativeCall(f) {
+        return f ? function(obj) {
+            return f.apply(obj, arraySlice.call(arguments, 1));
+        } : false;
+    }
     /**
      * 배열관련 유틸함수
      * @namespace
-     * @name jsa.array
+     * @name _core.array
      */
-    jsa.define('array', /** @lends jsa.array */{
+    _core.addon('array', /** @lends _core.array */{
+        /**
+         *
+         * @returns {*}
+         */
     	append: function () {
-    		var args = [].slice.call(arguments);
-    		Array.prototype.push.apply.apply(args);
+    		var args = arraySlice.call(arguments);
+    		arrayProto.push.apply.apply(args);
     		return args[0];
     	},
         /**
@@ -1181,22 +1208,51 @@
          *
          * @param {Array} obj 배열
          * @param {Function} cb 콜백함수
+         * @param {Object} (optional) 컨텍스트
          * @return {Array}
          *
          * @example
-         * jsa.array.map([1, 2, 3], function(item, index){
+         * _core.array.map([1, 2, 3], function(item, index) {
 		 *		return item * 10;
 		 * });
          * => [10, 20, 30]
          */
-        map: function (obj, cb) {
+        map: nativeCall(arrayProto.map) || function (obj, cb, ctx) {
             var results = [];
-            if (!jsa.isArray(obj) || !jsa.isFunction(cb)) { return results; }
-
+            if (!_core.is(obj, 'array') || !_core.is(cb, 'function')) { return results; }
+            // vanilla js~
             for(var i =0, len = obj.length; i < len; i++) {
-                results[results.length] = cb(obj[i], i, obj);
+                results[results.length] = cb.call(ctx||obj, obj[i], i, obj);
             }
             return results;
+        },
+
+        /**
+         *
+         */
+        every: nativeCall(arrayProto.every) || function(arr, cb, ctx) {
+            var isTrue = true;
+            if (!_core.is(arr, 'array') || !_core.is(cb, 'function')) { return isTrue; }
+            each(arr, function(v, k) {
+                if (cb.call(ctx||this, v, k) !== true) {
+                    return isTrue = false, false;
+                }
+            });
+            return isTrue;
+        },
+
+        /**
+         *
+         */
+        any: nativeCall(arrayProto.any) || function(arr, cb, ctx) {
+            var isTrue = false;
+            if (!_core.is(arr, 'array') || !_core.is(cb, 'function')) { return isTrue; }
+            each(arr, function(v, k) {
+                if (cb.call(ctx||this, v, k) === true) {
+                    return isTrue = true, false;
+                }
+            });
+            return isTrue;
         },
 
         /**
@@ -1209,7 +1265,7 @@
             var rand,
                 index = 0,
                 shuffled = [],
-                number = jsa.number;
+                number = _core.number;
 
             each(obj, function (value, k) {
                 rand = number.random(index++);
@@ -1223,19 +1279,20 @@
          *
          * @param {Array} obj 배열
          * @param {Function} cb 콜백함수
+         * @param {Object} (optional) 컨텍스트
          * @return {Array}
          *
          * @example
-         * jsa.array.filter([1, '일', 2, '이', 3, '삼'], function(item, index){
+         * _core.array.filter([1, '일', 2, '이', 3, '삼'], function(item, index) {
 		 *		return typeof item === 'string';
 		 * });
          * => ['일','이','삼']
          */
-        filter: function (obj, cb) {
+        filter: nativeCall(arrayProto.filter) || function (obj, cb, ctx) {
             var results = [];
-            if (!jsa.isArray(obj) || !jsa.isFunction(cb)) { return results; }
+            if (!_core.is(obj, 'array') || !_core.is(cb, 'function')) { return results; }
             for(var i =0, len = obj.length; i < len; i++) {
-                cb(obj[i], i, obj) && (results[results.length] = obj[i]);
+                cb.call(ctx||obj, obj[i], i, obj) && (results[results.length] = obj[i]);
             }
             return results;
         },
@@ -1248,10 +1305,10 @@
          * @return {Array}
          *
          * @example
-         * jsa.array.include([1, '일', 2, '이', 3, '삼'], '삼');  => true
+         * _core.array.include([1, '일', 2, '이', 3, '삼'], '삼');  => true
          */
         include: function (arr, value, b) {
-            return jsa.array.indexOf(arr, value, b) > -1;
+            return _core.array.indexOf(arr, value, b) > -1;
         },
 
         /**
@@ -1262,11 +1319,11 @@
          * @return {Array}
          *
          * @example
-         * jsa.array.indexOf([1, '일', 2, '이', 3, '삼'], '일');  => 1
+         * _core.array.indexOf([1, '일', 2, '이', 3, '삼'], '일');  => 1
          */
-        indexOf: function (arr, value, b) {
+        indexOf: nativeCall(arrayProto.indexOf) || function (arr, value, b) {
             for (var i = 0, len = arr.length; i < len; i++) {
-                if( (b !== false && arr[i] === value) || (b === false && arr[i] == value) ) { return i; }
+                if ( (b !== false && arr[i] === value) || (b === false && arr[i] == value) ) { return i; }
             }
             return -1;
         },
@@ -1279,7 +1336,7 @@
          * @return {Array} 지정한 요소가 삭제된 배열
          */
         remove: function (value, index) {
-            if (!jsa.isArray(value)) { return value; }
+            if (!_core.is(value, 'array')) { return value; }
             return value.slice(index, 1);
         },
 
@@ -1289,7 +1346,7 @@
          * @param {Array} array 배열
          * @return {Mix}
          */
-        max: function( array ){
+        max: function( array ) {
             return Math.max.apply( Math, array );
         },
 
@@ -1299,7 +1356,7 @@
          * @param {Array} array 배열
          * @return {Mix}
          */
-        min: function( array ){
+        min: function( array ) {
             return Math.min.apply( Math, array );
         }
     });
@@ -1307,9 +1364,9 @@
     /**
      * JSON객체 관련 유틸함수
      * @namespace
-     * @name jsa.object
+     * @name _core.object
      */
-    jsa.define('object', /** @lends jsa.object */{
+    _core.addon('object', /** @lends _core.object */{
 
         /**
          * 개체의 열거가능한 속성 및 메서드 이름을 배열로 반환
@@ -1318,7 +1375,7 @@
          * @return {Array} 객체의 열거가능한 속성의 이름이 포함된 배열
          *
          * @example
-         * jsa.object.keys({"name": "Axl rose", "age": 50}); => ["name", "age"]
+         * _core.object.keys({"name": "Axl rose", "age": 50}); => ["name", "age"]
          */
         keys: function (obj) {
             var results = [];
@@ -1335,7 +1392,7 @@
          * @return {Array} 객체의 열거가능한 속성의 값들이 포함된 배열
          *
          * @example
-         * jsa.object.values({"name": "Axl rose", "age": 50}); => ["Axl rose", 50]
+         * _core.object.values({"name": "Axl rose", "age": 50}); => ["Axl rose", 50]
          */
         values: function (obj) {
             var results = [];
@@ -1353,13 +1410,13 @@
          * @return {JSON}
          *
          * @example
-         * jsa.object.map({1; 'one', 2: 'two', 3: 'three'}, function(item, key){
+         * _core.object.map({1; 'one', 2: 'two', 3: 'three'}, function(item, key) {
 		 *		return item + '__';
 		 * });
          * => {1: 'one__', 2: 'two__', 3: 'three__'}
          */
         map: function(obj, cb) {
-            if (!jsa.isObject(obj) || !jsa.isFunction(cb)){ return obj; }
+            if (!_core.is(obj, 'object') || !_core.is(cb, 'function')) { return obj; }
             var results = {};
             each(obj, function(v, k) {
                 results[k] = cb(obj[k], k, obj);
@@ -1375,7 +1432,7 @@
          * @return {Boolean} 요소가 하나라도 있는지 여부
          */
         hasItems: function (obj) {
-            if (!jsa.isObject(obj)) {
+            if (!_core.is(obj, 'object')) {
                 return false;
             }
 
@@ -1395,7 +1452,7 @@
          * @return {String} 결과 문자열
          *
          * @example
-         * jsa.object.toQueryString({"a":1, "b": 2, "c": {"d": 4}}); => "a=1&b=2&c[d]=4"
+         * _core.object.toQueryString({"a":1, "b": 2, "c": {"d": 4}}); => "a=1&b=2&c[d]=4"
          */
         toQueryString: function (params, isEncode) {
             if (typeof params === 'string') {
@@ -1431,7 +1488,7 @@
          * @return {Object}
          *
          * @example
-         * jsa.object.travere({1:a, 2:b, 3:c, 4:d]);
+         * _core.object.travere({1:a, 2:b, 3:c, 4:d]);
 		 * => {a:1, b:2, c:3, d:4}
 		 */
         traverse: function (obj) {
@@ -1450,7 +1507,7 @@
          * @return 지정한 요소가 삭제된 리터럴
          */
         remove: function (value, key) {
-            if (!jsa.isObject(value)) { return value; }
+            if (!_core.is(value, 'object')) { return value; }
             value[key] = null;
             delete value[key];
             return value;
@@ -1461,9 +1518,9 @@
     /**
      * 날짜관련 유틸함수
      * @namespace
-     * @name jsa.date
+     * @name _core.date
      */
-    jsa.define('date', function () {
+    _core.addon('date', function () {
         var months = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec".split(","),
             fullMonths = "January,Febrary,March,April,May,June,July,Augst,September,October,November,December".split(",");
 
@@ -1472,7 +1529,7 @@
             return d1.getTime() > d2.getTime() ? -1 : (d1.getTime() === d2.getTime() ? 0 : 1);
         }
 
-        return /** @lends jsa.date */{
+        return /** @lends _core.date */{
             MONTHS_NAME: months,
             MONTHS_FULLNAME: fullMonths,
 
@@ -1484,7 +1541,7 @@
              * @return {String} 결과 문자열
              *
              * @example
-             * jsa.date.format(new Date(), "yy:MM:dd");
+             * _core.date.format(new Date(), "yy:MM:dd");
              * =>
              */
             format: function (formatDate, formatString) {
@@ -1545,12 +1602,12 @@
              * @param {Date} date2 날짜2
              * @return {Boolean}
              */
-            equalsYMH: function(a, b){
+            equalsYMH: function(a, b) {
                 var ret = true;
-                if(!a || !a.getDate || !b || !b.getDate) { return false; }
-                each(['getFullYear', 'getMonth', 'getDate'], function(fn){
+                if (!a || !a.getDate || !b || !b.getDate) { return false; }
+                each(['getFullYear', 'getMonth', 'getDate'], function(fn) {
                     ret = ret && (a[fn]() === b[fn]());
-                    if(!ret){ return false; }
+                    if (!ret) { return false; }
                 });
                 return ret;
             },
@@ -1589,7 +1646,7 @@
                 return function (dateStringInRange) {
                     var date, month, parts;
 
-                    if (dateStringInRange instanceof Date){
+                    if (dateStringInRange instanceof Date) {
                         return dateStringInRange;
                     }
 
@@ -1602,13 +1659,13 @@
                     date = new Date(NaN);
                     parts = isoExp.exec(dateStringInRange);
 
-                    if(parts) {
+                    if (parts) {
                         month = +parts[2];
                         date.setFullYear(parts[1]|0, month - 1, parts[3]|0);
                         date.setHours(parts[4]|0);
                         date.setMinutes(parts[5]|0);
                         date.setSeconds(parts[6]|0);
-                        if(month != date.getMonth() + 1) {
+                        if (month != date.getMonth() + 1) {
                             date.setTime(NaN);
                         }
                     }
@@ -1636,7 +1693,7 @@
              * @return {String}
              *
              * @example
-             * jsa.date.prettyTimeDiff(new Date() - 51811); -> "52초 이전"
+             * _core.date.prettyTimeDiff(new Date() - 51811); -> "52초 이전"
              */
             prettyTimeDiff: (function() {
                 var ints = {
@@ -1675,10 +1732,10 @@
              * @return {String}
              *
              * @example
-             * jsa.date.timeDiff(new Date() - 51811); -> "00:00:52"
+             * _core.date.timeDiff(new Date() - 51811); -> "00:00:52"
              */
             timeDiff: function(t1, t2) {
-                var zeroPad = jsa.number.zeroPad;
+                var zeroPad = _core.number.zeroPad;
                 var amount = (t1.getTime() - t2.getTime()) / 1000,
                     days = 0,
                     hours = 0,
@@ -1702,7 +1759,7 @@
     /**
      * prototype 을 이용한 클래스 생성
      * @namespace
-     * @name jsa.Class
+     * @name _core.Class
      * @example
      * var Person = Class({
 	*	$extend: Object, // 상속받을 부모클래스
@@ -1714,10 +1771,10 @@
 	*	initialize: function(name) {
 	*		this.name = name;
 	*	},
-	*	say: function(job){
+	*	say: function(job) {
 	*		alert("I'm Person: " + job);
 	*	},
-	*	run: function(){
+	*	run: function() {
 	*		alert("i'm running...");
 	*	}
 	*`});
@@ -1741,10 +1798,10 @@
      */
 
 
-    jsa.define('Class', function () {
-        var isFn = jsa.isFunction,
-            emptyFn = jsa.emptyFn,
-            include = jsa.array.include,
+    _core.addon('Class', function () {
+        var isFn = _core.isFunction,
+            emptyFn = _core.emptyFn,
+            include = _core.array.include,
             ignoreNames = ['superclass', 'members', 'statics'];
 
 
@@ -1774,7 +1831,7 @@
         /**
          * 클래스 정의
          *
-         * @memberOf jsa.Class
+         * @memberOf _core.Class
          *
          * @param {String} ns (Optional) 네임스페이스
          * @param {Object} attr 속성
@@ -1794,7 +1851,7 @@
                 } else {
                     instance = this;
                 }
-                var args = arraySlice.call(args);
+                var args = arraySlice.call(arguments);
 
                 if (this.initialize) {
                     this.initialize.apply(this, args);
@@ -1821,7 +1878,7 @@
 
             /**
              * 메소드 내에서 부모클래스에 접근할 때 사용
-             * @memberOf jsa.Class
+             * @memberOf _core.Class
              * @property
              */
             Class.superclass = supr.prototype;
@@ -1830,7 +1887,7 @@
             if (singleton) {
                 /**
                  * 싱글톤 클래스일 경우 싱글톤 인스턴스를 반환
-                 * @memberOf jsa.Class
+                 * @memberOf _core.Class
                  * @property
                  */
                 Class.getInstance = function () {
@@ -1843,7 +1900,7 @@
 
             /**
              * 부모클래스의 메소드를 호출할 수 있는 래핑함수
-             * @memberOf jsa.Class
+             * @memberOf _core.Class
              * @name suprMethod
              * @function
              * @param {String} name 호출하고자 하는 부모함수명
@@ -1858,13 +1915,13 @@
 
             /**
              * func의 컨텍스트를 this로 지정
-             * @memberOf jsa.Class
+             * @memberOf _core.Class
              * @name proxy
              * @function
              * @param {function} function 함수
              * @return {Function}
              * @example
-             * function test(){
+             * function test() {
 			 *		alert(this.name);
 			 * }
              * var Person = Class({
@@ -1884,16 +1941,16 @@
 
             /**
              * 여러 클래스를 mixins방식으로 merge
-             * @memberOf jsa.Class
+             * @memberOf _core.Class
              * @name mixins
              * @function
              * @param {function} o 객체
              * @example
              * var A = Class({
-			 *		funcA: function(){ ... }
+			 *		funcA: function() { ... }
 			 * });
              * var B = Class({
-			 *		funcB: function(){ ... }
+			 *		funcB: function() { ... }
 			 * });
              * var Person = Class({
 			 *		initialize: function() {
@@ -1919,7 +1976,7 @@
 
             /**
              * 클래스에 메소드  추가
-             * @memberOf jsa.Class
+             * @memberOf _core.Class
              * @name members
              * @function
              * @param {function} o 객체
@@ -1942,7 +1999,7 @@
 
             /*
              * 클래스함수 추가함수
-             * @memberOf jsa.Class
+             * @memberOf _core.Class
              * @name statics
              * @function
              * @param {function} o 객체
@@ -1969,19 +2026,11 @@
             Class.statics.call(Class, supr);
             statics && Class.statics.call(Class, statics);
 
-            if(hooks || (hooks = Parent.prototype.$hooks)) {
-                hooks.onClassCreate && hooks.onClassCreate(Class);
-            }
-
             return Class;
         };
     });
 
-    ea
-
-
-
-    jsa.define( /** @lends jsa */{
+    _core.addon( /** @lends _core */{
         /**
          * 설정 값들이 들어갈 리터럴
          *
@@ -1998,7 +2047,7 @@
          * @return {Object} 설정값
          */
         getConfig: function (name, def) {
-            var root = jsa.configs,
+            var root = _core.configs,
                 names = name.split('.'),
                 pair = root;
 
@@ -2018,7 +2067,7 @@
          * @return {Object} 설정값
          */
         setConfig: function (name, value) {
-            var root = jsa.configs,
+            var root = _core.configs,
                 names = name.split('.'),
                 len = names.length,
                 last = len - 1,
@@ -2039,26 +2088,26 @@
          * @return tempalte 함수
          *
          * @example
-         * var tmpl = jsa.template('&lt;span>&lt;%=name%>&lt;/span>');
+         * var tmpl = _core.template('&lt;span>&lt;%=name%>&lt;/span>');
          * var html = tmpl({name: 'Axl rose'}); => &lt;span>Axl rose&lt;/span>
          * $('div').html(html);
          */
         template: function (str, data) {
             var m,
-                src = 'var __src = [], escapeHTML=jsa.string.escapeHTML; with(value||{}){ __src.push("';
+                src = 'var __src = [], escapeHTML=_core.string.escapeHTML; with(value||{}) { __src.push("';
             str = $.trim(str);
             src += str.replace(/\r|\n|\t/g, " ")
-                .replace(/<%(.*?)%>/g, function(a, b){ return '<%' + b.replace(/"/g, '\t') + '%>'; })
+                .replace(/<%(.*?)%>/g, function(a, b) { return '<%' + b.replace(/"/g, '\t') + '%>'; })
                 .replace(/"/g, '\\"')
-                .replace(/<%(.*?)%>/g, function(a, b){ return '<%' + b.replace(/\t/g, '"') + '%>'; })
+                .replace(/<%(.*?)%>/g, function(a, b) { return '<%' + b.replace(/\t/g, '"') + '%>'; })
                 .replace(/<%=(.+?)%>/g, '", $1, "')
                 .replace(/<%-(.+?)%>/g, '", escapeHTML($1), "')
-                .replace(/(<%|%>)/g, function(a, b){ return b === '<%' ? '");' : '__src.push("'});
+                .replace(/(<%|%>)/g, function(a, b) { return b === '<%' ? '");' : '__src.push("'});
 
             src+='"); }; return __src.join("")';
 
             var f = new Function('value', 'data', src);
-            if( data ) {
+            if ( data ) {
                 return f( data );
             }
             return f;
@@ -2068,17 +2117,17 @@
 
     /**
      * @namespace
-     * @name jsa.valid
+     * @name _core.valid
      * @description 밸리데이션 함수 모음
      */
-    jsa.define('valid', function () {
+    _core.addon('valid', function () {
         var trim = $.trim,
-            isString = jsa.isString,
-            isNumber = jsa.isNumber,
-            isElement = jsa.isElement;
+            isString = _core.isString,
+            isNumber = _core.isNumber,
+            isElement = _core.isElement;
 
-        return /** @lends jsa.valid */{
-            empty: jsa.isEmpty,
+        return /** @lends _core.valid */{
+            empty: _core.isEmpty,
             /**
              * 필수입력 체크
              *
@@ -2222,7 +2271,7 @@
                 if (!pattern.test(num)) { return false; }
                 num = RegExp.$1 + RegExp.$2;
 
-                buf = jsa.toArray(num);
+                buf = _core.toArray(num);
                 odd = buf[7] * 10 + buf[8];
 
                 if (odd % 2 !== 0) { return false; }
@@ -2232,7 +2281,7 @@
                 for (var i = 0; i < 12; i++) { sum += (buf[i] *= multipliers[i]); }
 
                 sum = 11 - (sum % 11);
-                if (sum >= 10){ sum -= 10; }
+                if (sum >= 10) { sum -= 10; }
 
                 sum += 2;
                 if (sum >= 10) { sum -= 10; }
@@ -2255,14 +2304,15 @@
 
     /**
      * @namespace
-     * @name jsa.css
+     * @name _core.css
      * @description 벤더별 css명칭 생성
      */
-    jsa.define('css', function(){
+    _core.addon('css', function() {
 
-        var _tmpDiv = jsa.tmpNode,
+        var _tmpDiv = _core.tmpNode,
             _prefixes = ['Webkit', 'Moz', 'O', 'ms', 'Khtml'],
             _style = _tmpDiv.style,
+            _noReg = /^([0-9]+)[px]+$/,
             _vendor = (function () {
                 var vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'],
                     transform,
@@ -2276,7 +2326,7 @@
 
                 return false;
             })(),
-            string  = jsa.string;
+            string  = _core.string;
 
         function prefixStyle(name) {
             if ( _vendor === false ) return false;
@@ -2284,7 +2334,7 @@
             return _vendor + string.capitalize(name);
         }
 
-        return /** @lends jsa.css */{
+        return /** @lends _core.css */{
             supportTransition: _vendor !== false,
             /**
              * 현재 브라우저의 css prefix명 (webkit or Moz or ms or O)
@@ -2317,19 +2367,95 @@
              * @param {String} cssName css명
              * @return {String}
              * @example
-             * jsa.css.prefixStyle('transition'); // => webkitTransition
+             * _core.css.prefixStyle('transition'); // => webkitTransition
              */
-            prefixStyle: prefixStyle
+            prefixStyle: prefixStyle,
+            get: function(el, style) {
+                if (!el || !_core.is(el, 'element')) { return null; }
+                var value;
+                if (el.currentStyle) {
+                    value = el.currentStyle[ string.camelize(style) ];
+                } else {
+                    value = window.getComputedStyle(el, null)[ string.camelize(style) ];
+                }
+                if(_noReg.test(value)) {
+                    return parseInt(RegExp.$1, 10);
+                }
+                return value;
+            }
         };
+    });
+    
+    _core.addon('class', {
+        has: function(el, c) {
+            if (!el || !_core.is(el, 'element')) { return false; }
+            var classes = el.className;
+            if (!classes) { return false; }
+            if (classes == c){ return true; }
+            return classes.search("\\b" + c + "\\b") !== -1;
+        },
+        add: function(el, c) {
+            if (!el || !_core.is(el, 'element')) { return; }
+            if (this.has(el, c)) { return; }
+            if (el.className) { c = " " + c; }
+            return el.className += c, this;
+        },
+        remove: function(el, c) {
+            if (!el || !_core.is(el, 'element')) { return; }
+            return el.className = el.className.replace(new RegExp("\\b" + c + "\\b\\s*", "g"), ""), this;
+        },
+        replace: function(el, c, n) {
+            if (!el || !_core.is(el, 'element')) { return null; }
+            return this.remove(el, c), this.add(el, n), this;
+        }
     });
 
     /**
-     * @namespace
-     * @name jsa.util
+     * el, 40, 50, top: function(f, t) { return 300-f*5 + 'px'; }
      */
-    jsa.define('util', function(){
+    _core.addon('animate', function(el, frames, timePerFrame, animation, whendone) {
+       var frame = 0,
+           time = 0,
+           isPause = false,
+           intervalId = setInterval(displayNextFrame, timePerFrame);
 
-        return /** @lends jsa.util */{
+        function displayNextFrame () {
+            if (!isPause && frame >= frames) {
+                clearInterval(intervalId);
+                if (whendone) {
+                    whendone(el);
+                }
+
+                each(animation, function(cssprop) {
+                    try {
+                        el.style[ cssprop ] = animation[ cssprop ](frame, time);
+                    } catch(e) {}
+                });
+                frame += 1;
+                time += timePerFrame;
+            }
+        }
+
+        return {
+            stop: function() {
+                clearInterval(intervalId), intervalId = null;
+            },
+            pause: function() {
+                isPause = true;
+            },
+            resume: function() {
+                isPause = false;
+            }
+        }
+    }, false);
+
+    /**
+     * @namespace
+     * @name _core.util
+     */
+    _core.addon('util', function() {
+
+        return /** @lends _core.util */{
             /**
              * png Fix
              */
@@ -2337,7 +2463,7 @@
                 var s, bg;
                 $('img[@src*=".png"]', document.body).each(function () {
                     this.css('filter', 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + this.src + '\', sizingMethod=\'\')');
-                    this.src = jsa.getSite() + jsa.Urls.getBlankImage() || '/resource/images/jsa/blank.gif';
+                    this.src = _core.getSite() + _core.Urls.getBlankImage() || '/resource/images/_core/blank.gif';
                 });
                 $('.pngfix', document.body).each(function () {
                     var $this = $(this);
@@ -2384,7 +2510,7 @@
             },
 
             /**
-             * 팝업. (jsa.openPopup으로도 사용가능)
+             * 팝업. (_core.openPopup으로도 사용가능)
              * @param {string} url 주소
              * @param {number=} width 너비.
              * @param {number=} height 높이.
@@ -2396,7 +2522,7 @@
                 }, opts);
                 width = width || 600;
                 height = height || 400;
-                //var winCoords = jsa.util.popupCoords(width, height),
+                //var winCoords = _core.util.popupCoords(width, height),
                 var target = opts.target || '',
                     feature = 'app_, ',
                     tmp = [];
@@ -2405,7 +2531,7 @@
                 for(var key in opts) {
                     tmp.push(key + '=' + opts[ key ]);
                 }
-                jsa.browser.isSafari && tmp.push('location=yes');
+                _core.browser.isSafari && tmp.push('location=yes');
                 tmp.push('height='+height);
                 tmp.push('width='+width);
                 /* + ', top=' + winCoords.top + ', left=' + winCoords.left;*/
@@ -2422,7 +2548,7 @@
              * 팝업의 사이즈를 $el 사이즈에 맞게 조절
              */
             resizePopup: function($el) {
-                if(!($el instanceof jQuery)) { $el = $($el); }
+                if (!($el instanceof jQuery)) { $el = $($el); }
                 window.resizeTo($el.width(), $el.height());
             },
 
@@ -2464,9 +2590,9 @@
                     // 이미지가 로드되면, 실제 사이즈를 체크해서 가로이미지인지 세로이미지인지에 따라 기준이 되는 width, height에 지정한다.
                     $img.one('load', function() {
                         $img.removeAttr('width height').css({'width':'auto', 'height':'auto'});
-                        if($img.attr('data-no-height') === 'true' && this.width > wrapWidth) {
+                        if ($img.attr('data-no-height') === 'true' && this.width > wrapWidth) {
                             $img.css('width', wrapWidth);
-                        } else if($img.attr('data-no-width') === 'true' && this.height > wrapHeight) {
+                        } else if ($img.attr('data-no-width') === 'true' && this.height > wrapHeight) {
                             $img.css('height', wrapWidth);
                         } else {
                             var isHoriz = this.width > this.height;
@@ -2545,30 +2671,128 @@
             }
         };
     });
+    _core.openPopup = _core.util.openPopup;
 
-    jsa.openPopup = jsa.util.openPopup;
-
-})(window, jQuery);
-
-
-(function (context, $, jsa) {
-    "use strict";
-    /* jshint expr: true, validthis: true */
-
-    var $win = jsa.$win,
-        $doc = jsa.$doc,
-        Class = jsa.Class,
-        dateUtil = jsa.date,
-        stringUtil = jsa.string,
-        numberUtil = jsa.number,
-        arraySlice = [].slice,
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    var $win = _core.$win,
+        $doc = _core.$doc,
+        Class = _core.Class,
+        dateUtil = _core.date,
+        stringUtil = _core.string,
+        numberUtil = _core.number,
         View;		// ui.View
+
+    _core.addon('Handler', function(){
+
+        return Class({
+            initialize: function(el) {
+                if (!_core.is(el, 'element')) { return null; }
+
+                this.el = el;
+            },
+            on: document.addEventListener ? function(eventType, handler) {
+                this.el.addEventListener(eventType, handler, false);
+            } : function(eventType, handler) {
+                if(this._find(eventType, handler) != -1) { return; }
+
+                var elemement = this.el;
+                var wrappedHandler = function(e) {
+                    e = e || window.event;
+
+                    var event = {
+                        originalEvent: e,
+                        type: e.type,
+                        target: e.srcElement,
+                        currentTarget: this.el,
+                        relatedTarget: e.fromElement ? e.fromElement : e.toElement,
+                        eventPhase: (e.srcElement == this.el) ? 2 : 3,
+                        clientX: e.clientX, clientY: e.clientY,
+                        screenX: e.screenX, screenY: e.screenY,
+                        altKey: e.altKey, ctrlKey: e.ctrlKey,
+                        shiftKey: e.shiftKey, charCode: e.keyCode, which: e.keyCode,
+                        stopPropagation: function(){ this.originalEvent.cancelBubble = true; },
+                        preventDefault: function(){ this.originalEvent.returnValue = false;},
+                        isDefaultPrevented: function(){ return this.originalEvent.returnValue == false; }
+                    };
+                    if (Function.prototype.bind) {
+                        handler.call(this.el, event);
+                    } else {
+                        this.el._currentHandler = handler;
+                        this.el._currentHandler(event);
+                        this.el._currentHandler = null, delete el._currentHandler;
+                    }
+                };
+                this.el.attachEvent("on" + eventType, wrappedHandler);
+
+                var h = {
+                    element: this.el,
+                    eventType: eventType,
+                    handler:handler,
+                    wrappedHandler: wrappedHandler
+                };
+                var d = elemement.document || elemement;
+                var w = d.parentWindow;
+                var id = this.cid;
+
+                (w._allHandlers || (w._allHandlers = {}))[id] = h;
+                (elemement._handlers || (elemement._handlers = [])).push(id);
+                if (!w._onunlodHandlerRegistered) {
+                    w._onunloadHandlerRegistered = true;
+                    w.attachEvent('onunload', this._removeAllHandlers);
+                }
+            },
+
+            off: function(eventType, handler) {
+                var i = this._find(eventType, handler);
+                if (i === -1) { return; }
+
+                var element = this.el,
+                    d = element.document || element,
+                    w = d.parentWindow,
+                    handlerId = element._handlers[i],
+                    h = w._allHandlers[handlerId];
+
+                element.detachEvent("on" + eventType, h.wrappedHandler);
+                element._handlers.splice(i, 1);
+                delete  w._allHandlers[handlerId];
+            },
+
+            _find: function(eventType, handler) {
+                var element = this.el,
+                    handlers = element._handlers,
+                    d, w;
+                if(!handlers) { return -1; }
+
+                d = element.document || element;
+                w = d.parentWindow;
+
+                for(var i = handlers.length - 1; i >= 0; i--) {
+                    var handlerId = handlers[i];
+                    var h = w._allHandlers[handlerId];
+                    if (h.eventType == eventType && h.handler == handler) {
+                        return i;
+                    }
+                }
+                return -1;
+            },
+
+            _removeAllHandlers: function() {
+                var w = this;
+                for(var id in w._allHandlers) {
+                    var h = w._allHandlers[id];
+                    h.element.detachEvent("on" + h.eventType, h.wrappedHandler);
+                    delete w._allHandlers[id];
+                }
+            }
+
+        });
+    });
 
     /*
      * @namespace
-     * @name jsa.EVENTS
+     * @name _core.EVENTS
      */
-    jsa.define('EVENTS', {
+    _core.addon('EVENTS', {
         ON_BEFORE_SHOW: 'beforeshow',
         ON_SHOW: 'show',
         ON_BEFORE_HIDE: 'beforehide',
@@ -2576,7 +2800,7 @@
     });
 
 
-    jsa.define( /** @lends jsa */{
+    _core.addon( /** @lends _core */{
         /**
          * 작성된 클래스를 jQuery의 플러그인으로 사용할 수 있도록 바인딩시켜 주는 함수
          *
@@ -2585,13 +2809,14 @@
          *
          * @example
          * // 클래스 정의
-         * var Slider = jsa.Class({
-		 *   initialize: function(el, options) { // 생성자의 형식을 반드시 지킬 것..(첫번째 인수: 대상 엘리먼트, 두번째 인수: 옵션값들)
+         * var Slider = _core.Class({
+		 *   initialize: function(el, options) { // 생성자의 형식을 반드시 지킬 것..(첫번째 인수: 대상 엘리먼트, 두번째
+		 *   인수: 옵션값들)
 		 *   ...
 		 *   },
 		 *   ...
 		 * });
-         * jsa.bindjQuery(Slider, 'hibSlider');
+         * _core.bindjQuery(Slider, 'hibSlider');
          * // 실제 사용시
          * $('#slider').hibSlider({count: 10});
          */
@@ -2609,12 +2834,12 @@
                         methodValue,
                         instance;
 
-                    if( !(instance = $this.data(name)) || (a.length === 1 && typeof options !== 'string')) {
+                    if ( !(instance = $this.data(name)) || (a.length === 1 && typeof options !== 'string')) {
                         instance && (instance.destroy(), instance = null);
                         $this.data(name, (instance = new Klass(this, extend({}, $this.data(), options), me)));
                     }
 
-                    if (typeof options === 'string' && jsa.isFunction(instance[options])) {
+                    if (typeof options === 'string' && _core.is(instance[options], 'function')) {
                         try {
                             methodValue = instance[options].apply(instance, args);
                         } catch(e) {
@@ -2639,13 +2864,13 @@
     });
 
 
-    jsa.define('Listener', function () {
+    _core.addon('Listener', function () {
         /**
          * 이벤트 리스너
          * @class
-         * @name jsa.Listener
+         * @name _core.Listener
          */
-        var Listener = Class( /** @lends jsa.Listener# */ {
+        var Listener = Class( /** @lends _core.Listener# */ {
             /**
              * 생성자
              */
@@ -2703,21 +2928,21 @@
 
     /**
      * @namespace
-     * @name jsa.PubSub
+     * @name _core.PubSub
      * @description 발행/구독 객체: 상태변화를 관찰하는 옵저버(핸들러)를 등록하여, 상태변화가 있을 때마다 옵저버를 발행(실행)
      * 하도록 하는 객체이다.
      * @example
      * // 옵저버 등록
-     * jsa.PubSub.on('customevent', function(){
+     * _core.PubSub.on('customevent', function() {
 	 *	 alert('안녕하세요');
 	 * });
      *
      * // 등록된 옵저버 실행
-     * jsa.PubSub.trigger('customevent');
+     * _core.PubSub.trigger('customevent');
      */
-    jsa.define('PubSub', function () {
+    _core.addon('PubSub', function () {
 
-        var PubSub = new jsa.Listener();
+        var PubSub = new _core.Listener();
         PubSub.attach = PubSub.on;
         PubSub.unattach = PubSub.off;
 
@@ -2730,20 +2955,20 @@
      * @param attr
      * @returns {*}
      */
-    jsa.ui = function(/*String*/name, /*Object*/attr) {
+    _core.ui = function(/*String*/name, /*Object*/attr) {
         var bindName = attr.bindjQuery,
             Klass;
 
         delete attr.bindjQuery;
 
-        jsa.extend(attr, {
-            $extend: jsa.ui.View,
+        _core.extend(attr, {
+            $extend: _core.ui.View,
             name: name
         });
 
-         jsa.define('views.' + name, (Klass = jsa.Class(attr)));
-        if(bindName) {
-            jsa.bindjQuery(Klass, bindName);
+         _core.addon('views.' + name, (Klass = _core.Class(attr)));
+        if (bindName) {
+            _core.bindjQuery(Klass, bindName);
         }
         return Klass;
     };
@@ -2751,10 +2976,10 @@
 
     /**
      * @namespace
-     * @name jsa.ui
+     * @name _core.ui
      */
-    View = jsa.define('ui.View', function () {
-        var isFn = jsa.isFunction,
+    View = _core.addon('ui.View', function () {
+        var isFn = _core.isFunction,
             execObject = function(obj, ctx) {
                 return isFn(obj) ? obj.call(ctx) : obj;
             };
@@ -2762,12 +2987,12 @@
         /**
          * 모든 UI요소 클래스의 최상위 클래스로써, UI클래스를 작성함에 있어서 편리한 기능을 제공해준다.
          * @class
-         * @name jsa.ui.View
+         * @name _core.ui.View
          *
          * @example
          *
          * var Slider = Class({
-		 *		$extend: jsa.ui.View,
+		 *		$extend: _core.ui.View,
 		 *		// 기능1) events 속성을 통해 이벤트핸들러를 일괄 등록할 수 있다. ('이벤트명 selector': '핸들러함수명')
 		 *	events: {
 		 *		click ul>li.item': 'onItemClick',		// this.$el.on('click', 'ul>li.item', this.onItemClick.bind(this)); 를 자동 수행
@@ -2791,9 +3016,9 @@
 		 *	}
 		 * });
          *
-         * new jsa.ui.Slider('#slider', {count: 10});
+         * new _core.ui.Slider('#slider', {count: 10});
          */
-        var View = Class(/** @lends jsa.ui.View# */{
+        var View = Class(/** @lends _core.ui.View# */{
             $statics: {
                 _instances: [] // 모든 인스턴스를 갖고 있는다..
             },
@@ -2810,16 +3035,16 @@
                     eventPattern = /^([a-z]+) ?([^$]*)$/i,
                     moduleName, superClass;
 
-                if (!me.name){
+                if (!me.name) {
                     throw new Error('클래스의 이름이 없습니다');
                 }
 
-                moduleName = me.moduleName = jsa.string.toFirstLower(me.name);
+                moduleName = me.moduleName = _core.string.toFirstLower(me.name);
                 me.$el = el instanceof jQuery ? el : $(el);
 
                 // 강제로 리빌드 시킬 것인가 /////////////////////////////////////////////////////////////////////////////////////////////////
-                if(options.rebuild === true) {
-                    try { me.$el.data(moduleName).destroy(); } catch(e){}
+                if (options.rebuild === true) {
+                    try { me.$el.data(moduleName).destroy(); } catch(e) {}
                     me.$el.removeData(moduleName);
                 } else {
                     // 이미 빌드된거면 false 반환 - 중복 빌드 방지
@@ -2838,8 +3063,8 @@
                 View._instances.push(me);
                 superClass = me.constructor.superclass;
                 me.el = me.$el[0];													// 원래 엘리먼트도 변수에 설정
-                me.options = jsa.extend({}, superClass.defaults, me.defaults, options);			// 옵션 병합
-                me.cid = me.moduleName + '_' + jsa.nextSeq();					// 객체 고유 키
+                me.options = _core.extend({}, superClass.defaults, me.defaults, options);			// 옵션 병합
+                me.cid = me.moduleName + '_' + _core.nextSeq();					// 객체 고유 키
                 me.subViews = {};														// 하위 컨트롤를 관리하기 위함
                 me._eventNamespace = '.' + me.cid;	// 객체 고유 이벤트 네임스페이스명
 
@@ -2849,16 +3074,16 @@
                 // events: {
                 //	'click ul>li.item': 'onItemClick', //=> this.$el.on('click', 'ul>li.item', this.onItemClick); 으로 변환
                 // }
-                me.options.events = jsa.extend({},
+                me.options.events = _core.extend({},
                     execObject(me.events, me),
                     execObject(me.options.events, me));
-                jsa.each(me.options.events, function (value, key) {
+                _core.each(me.options.events, function (value, key) {
                     if (!eventPattern.test(key)) { return false; }
 
                     var name = RegExp.$1,
                         selector = RegExp.$2,
                         args = [name],
-                        func = isFn(value) ? value : (isFn(me[value]) ? me[value] : jsa.emptyFn);
+                        func = isFn(value) ? value : (isFn(me[value]) ? me[value] : _core.emptyFn);
 
                     if (selector) { args[args.length] = $.trim(selector); }
 
@@ -2869,7 +3094,7 @@
                 });
 
                 // options.on에 지정한 이벤트들을 클래스에 바인딩
-                jsa.each(me.options.on || {}, function (value, key) {
+                _core.each(me.options.on || {}, function (value, key) {
                     me.on(key, value);
                 });
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2878,7 +3103,7 @@
 
             /**
              * this.selectors를 기반으로 엘리먼트를 조회해서 멤버변수에 겍팅
-             * @returns {jsa.ui.View}
+             * @returns {_core.ui.View}
              */
             updateSelectors: function () {
                 var me = this;
@@ -2887,11 +3112,11 @@
                 //  box: 'ul',			// => this.$box = this.$el.find('ul');
                 //  items: 'ul>li.item'  // => this.$items = this.$el.find('ul>li.item');
                 // }
-                me.options.selectors = jsa.extend({},
+                me.options.selectors = _core.extend({},
                     execObject(me.constructor.superclass.selectors, me),
                     execObject(me.selectors, me),
                     execObject(me.options.selectors, me));
-                jsa.each(me.options.selectors, function (value, key) {
+                _core.each(me.options.selectors, function (value, key) {
                     if (typeof value === 'string') {
                         me['$' + key] = me.$el.find(value);
                     } else if (value instanceof jQuery) {
@@ -2923,8 +3148,8 @@
                 me.$el.off(me._eventNamespace);
 
                 // me.subviews에 등록된 자식들의 파괴자 호출
-                jsa.each(me.subViews, function(item, key) {
-                    if(key.substr(0, 1) === '$') {
+                _core.each(me.subViews, function(item, key) {
+                    if (key.substr(0, 1) === '$') {
                         item.off(me._eventNamespace);
                     } else {
                         item.destroy && item.destroy();
@@ -2984,7 +3209,7 @@
 
                 var me = this,
                     m = (eventNames || "").split( /\s/ );
-                if(!m || !m.length) {
+                if (!m || !m.length) {
                     return eventNames;
                 }
 
@@ -3071,7 +3296,7 @@
              * 해당 클래스의 소속 엘리먼트를 반환
              * @return {jQuery}
              */
-            getElement: function(){
+            getElement: function() {
                 return this.$el;
             }
         });
@@ -3080,10 +3305,10 @@
     });
 
 
-})(window, jQuery, jsa);
+})(window, jQuery, window.jsa);
 
 (function($, jsa, ui, undefined) {
     var $win = jsa.$win,
         $doc = jsa.$doc;
 
-})(jQuery, jsa, jsa.ui);	
+})(jQuery, window.jsa, window.jsa.ui);

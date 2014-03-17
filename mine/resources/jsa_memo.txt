@@ -1,0 +1,22 @@
+tbl: {
+  data: {
+    name: 'axl rose'
+  },
+  target: '#box',
+  html: '<p>{getDetail(name)}</p>',
+  funcs: {
+    getDetail: function(item) {
+      return '...';
+    }
+  }
+}
+
+
+me.trigger('click', {
+  preventDefault: true,
+  stopPropagation: true
+});
+
+or
+
+me.triggerBubble('click');

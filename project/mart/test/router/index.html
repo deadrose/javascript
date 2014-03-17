@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="../../resource/script/jquery-latest.js"></script>
+    <script src="../../resource/script/lodash.js"></script>
+    <script src="../../resource/script/backbone.js"></script>
+</head>
+<body>
+<script type="text/template" id="search_template">
+    <label><%= search_label %></label>
+    <input type="text" id="search_input" />
+    <input type="button" id="search_button" value="Search" />
+</script>
+
+<div id="search_container"></div>
+
+<script type="text/javascript">
+    SearchView = Backbone.View.extend({
+        initialize: function(){
+            this.render();
+        },
+        render: function(){
+            //Pass variables in using Underscore.js Template
+            var variables = { search_label: "My Search" };
+            // Compile the template using underscore
+            var template = _.template( $("#search_template").html(), variables );
+            // Load the compiled HTML into the Backbone "el"
+            this.$el.html( template );
+        },
+        events: {
+            "click input[type=button]": "doSearch"
+        },
+        doSearch: function( event ){
+            // Button clicked, you can access the element that was clicked with event.currentTarget
+            alert( "Search for " + $("#search_input").val() );
+        }
+    });
+
+    $('#search_container').addBack()
+
+
+    var search_view = new SearchView({ el: $("#search_container") });
+</script>
+</body>
+</html>
