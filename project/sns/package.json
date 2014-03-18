@@ -1,0 +1,17 @@
+{
+    "name": "SocialNode",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node app"
+    },
+    "dependencies": {
+        "express": "3.1.0",
+        "ejs": "*",
+        "socket.io": "0.9.13",
+        "mongojs": "0.7.1",
+        "redis": "0.8.2",
+        "everyauth": "0.3.1",
+        "nconf": "0.6.7"
+    }
+}
