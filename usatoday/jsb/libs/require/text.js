@@ -8,7 +8,7 @@
  define: false, window: false, process: false, Packages: false,
  java: false, location: false */
 
-define(['module'], function (module) {
+define(['modules'], function (module) {
     'use strict';
 
     var text, fs,
@@ -76,7 +76,7 @@ define(['module'], function (module) {
 
         /**
          * Parses a resource name into its component parts. Resource names
-         * look like: module/name.ext!strip, where the !strip part is
+         * look like: modules/name.ext!strip, where the !strip part is
          * optional.
          * @param {String} name the resource name
          * @returns {Object} with properties "moduleName", "ext" and "strip"
@@ -139,7 +139,7 @@ define(['module'], function (module) {
         },
 
         load: function (name, req, onLoad, config) {
-            //Name has format: some.module.filext!strip
+            //Name has format: some.modules.filext!strip
             //The strip part is optional.
             //if strip is present, then that means only get the string contents
             //inside a body tag in an HTML string. For XML/SVG content it means
@@ -172,8 +172,8 @@ define(['module'], function (module) {
                 });
             } else {
                 //Need to fetch the resource across domains. Assume
-                //the resource has been optimized into a JS module. Fetch
-                //by the module name + extension, but do not include the
+                //the resource has been optimized into a JS modules. Fetch
+                //by the modules name + extension, but do not include the
                 //!strip part to avoid file system issues.
                 req([nonStripName], function (content) {
                     text.finishLoad(parsed.moduleName + '.' + parsed.ext,
@@ -204,7 +204,7 @@ define(['module'], function (module) {
             //write out values that do not have the strip argument,
             //to avoid any potential issues with ! in file names.
             text.load(nonStripName, req, function (value) {
-                //Use own write() method to construct full module value.
+                //Use own write() method to construct full modules value.
                 //But need to create shell that translates writeFile's
                 //write() to the right interface.
                 var textWrite = function (contents) {

@@ -48,7 +48,7 @@ define([
                         this.onHideSidebarAd();
                     }
 
-                    this.$twitterTabs = $('.sports-twitter-module .front-gallery-item, .sports-twitter-data');
+                    this.$twitterTabs = $('.sports-twitter-modules .front-gallery-item, .sports-twitter-data');
                     
                     _.bindAll(this, 'createTweetsHTML', 'loadTweets', 'twitterTabClicked');
                     this.twitter_el = this.$('.tweet-list');
@@ -61,9 +61,9 @@ define([
                     this.twitter_cache = this.twitter_el.attr('data-twitter-cache-ttl') || options.twitter_cache;
                     this.selectedTab = 1;
 
-                    this.$primary = $('.sports-twitter-module .sports-twitter-primary');
-                    this.$suspender = $('.sports-twitter-module .sports-twitter-suspender');
-                    this.$viewport = $('.sports-twitter-module .twitter-scroll-content');
+                    this.$primary = $('.sports-twitter-modules .sports-twitter-primary');
+                    this.$suspender = $('.sports-twitter-modules .sports-twitter-suspender');
+                    this.$viewport = $('.sports-twitter-modules .twitter-scroll-content');
 
 
                     //          Check if the JSON user attr is there otherwise use current section feed.
@@ -94,7 +94,7 @@ define([
                     this.handles = targetLink.attr('tab-target-handles');
                     this.hashtags = targetLink.attr('tab-target-hashtags');
                     this.twitter_el.html("");
-                    $('.sports-twitter-module .scrollable-content').outerHeight($('.tweet-list')[0].scrollHeight);
+                    $('.sports-twitter-modules .scrollable-content').outerHeight($('.tweet-list')[0].scrollHeight);
                     this.update = false;
                     this.refreshScrollbar();
                     this.$viewport.addClass('loading');
@@ -174,10 +174,10 @@ define([
                             }
     
                             if (change) {
-                                $('.sports-twitter-module .scrollable-content').outerHeight(0);
+                                $('.sports-twitter-modules .scrollable-content').outerHeight(0);
                                 this.refreshScrollbar();
                                 this.twitter_el.html(tweets);
-                                $('.sports-twitter-module .scrollable-content').outerHeight($('.tweet-list')[0].scrollHeight - 150);
+                                $('.sports-twitter-modules .scrollable-content').outerHeight($('.tweet-list')[0].scrollHeight - 150);
                                 this.refreshScrollbar();
                             }
     
@@ -187,7 +187,7 @@ define([
                             });
     
                         } else {
-                            $('.sports-twitter-module .scrollable-content').outerHeight(0);
+                            $('.sports-twitter-modules .scrollable-content').outerHeight(0);
                             this.refreshScrollbar();
                             this.twitter_el.html("<div id='sports-no-tweets'>No tweets available.</div>");
                         }
@@ -204,7 +204,7 @@ define([
                  */
                 addscrollBar: function(){
                     this.scrollbar = new SidebarScroll({  
-                        el: $('.sports-twitter-module .twitter-scroll-content'),
+                        el: $('.sports-twitter-modules .twitter-scroll-content'),
                         color: 'dark',
                         padding: 2,
                         lockPageScroll: true,

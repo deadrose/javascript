@@ -293,7 +293,7 @@ define(['jquery', 'underscore', 'backbone', 'utils', 'pubsub', 'state', 'global/
             },
 
             /**
-             * Given a list of modules which contain a module name, optional selector, position, layoutType, and options, will construct them
+             * Given a list of modules which contain a modules name, optional selector, position, layoutType, and options, will construct them
              * @param {Array} modules
              * @return {Deferred} resolves when the modules are fetched and inited
              */
@@ -314,7 +314,7 @@ define(['jquery', 'underscore', 'backbone', 'utils', 'pubsub', 'state', 'global/
                     var selector = module.selector,
                         instance = this.seenModules[module.name] || 0;
                     if (module.position) {
-                        selector = '#module-position-' + module.position + selector + ',#module-position-' + module.position + ' ' + selector;
+                        selector = '#modules-position-' + module.position + selector + ',#modules-position-' + module.position + ' ' + selector;
                     }
                     this.$(selector).each(_.bind(function(idx, el) {
                         var options = $.extend(true, {}, module.options);
@@ -323,7 +323,7 @@ define(['jquery', 'underscore', 'backbone', 'utils', 'pubsub', 'state', 'global/
                         try {
                             this.subviews[module.name + instance] = new module.ModuleClass(options);
                         } catch (ex) {
-                            console.error('failed loading module ' + module.name, (ex.stack || ex.stacktrace || ex.message));
+                            console.error('failed loading modules ' + module.name, (ex.stack || ex.stacktrace || ex.message));
                         }
                         instance = instance + 1;
                     }, this));

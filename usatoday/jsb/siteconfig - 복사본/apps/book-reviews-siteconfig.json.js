@@ -33,7 +33,7 @@
         },
         "booksthreeup": {
             "path": "modules/book-reviews/books-three-up",
-            "selector": ".module-books-three-up"
+            "selector": ".modules-books-three-up"
         },
         "booksAssetView": {
             "path": "apps/overlay/pages/book-reviews-overlay",

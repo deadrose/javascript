@@ -13,7 +13,7 @@ define([
     'site-manager',
     'third-party-apis/firefly/firefly',
     'user-manager',
-    'modules/stories/utility-bar-module-popups'
+    'modules/stories/utility-bar-modules-popups'
 ],
 function (
     $,
@@ -79,7 +79,7 @@ function (
         },
 
         setupFireflyout: function() {
-            this.$fireflyModule = this.$('.util-bar-module-firefly');
+            this.$fireflyModule = this.$('.util-bar-modules-firefly');
             this.$fireflyBtn = this.$('.util-bar-btn-firefly');
 
             if (this.$fireflyModule.length) {
@@ -103,17 +103,17 @@ function (
 
             // When logged in but not subscribed, don't show the login button anymore.
             if (loginStatus === 'loggedIn') {
-                this.$fireflyModule.addClass('util-bar-module-firefly-authenticated');
+                this.$fireflyModule.addClass('util-bar-modules-firefly-authenticated');
             } else if (loginStatus !== 'loggingIn') {
-                this.$fireflyModule.removeClass('util-bar-module-firefly-authenticated');                
+                this.$fireflyModule.removeClass('util-bar-modules-firefly-authenticated');
             }
 
             var protectedState = StateManager.getActivePageInfo().content_protection_state;
             var isContentFree = !protectedState || protectedState === 'free';
             if ((loginStatus === 'loggedIn' && userData && userData.hasMarketAccess) || isContentFree) {
-                this.$fireflyModule.removeClass('util-bar-module-firefly-visible');
+                this.$fireflyModule.removeClass('util-bar-modules-firefly-visible');
             } else if (loginStatus !== 'loggingIn') {
-                this.$fireflyModule.addClass('util-bar-module-firefly-visible');
+                this.$fireflyModule.addClass('util-bar-modules-firefly-visible');
 
                 // Firefly cookie check for auto-opening Fireflyout.
                 var viewsCookie = Firefly.getFireflyViewsCookie();
@@ -150,11 +150,11 @@ function (
                 var popupCallback = $btn.data('popup-callback');
                 UtilityBarModulePopups[popupCallback]();
 
-            // Init util-bar-module
+            // Init util-bar-modules
             } else if ($btn.prop('tagName') !== 'A') {
                 e.preventDefault();
-                var moduleName = $btn.data('module-name');
-                var moduleSection = $btn.data('module-section') || '';
+                var moduleName = $btn.data('modules-name');
+                var moduleSection = $btn.data('modules-section') || '';
                 if (this.subviews[moduleName]) {
                     if (moduleSection && moduleSection !== this.subviews[moduleName].activeSection) {
                         this.subviews[moduleName].open(moduleSection);
@@ -180,7 +180,7 @@ function (
                             }
                         }
                     }, this)).fail(function(){
-                        console.error('Failed to load utility bar module: ' + moduleName + '.js');
+                        console.error('Failed to load utility bar modules: ' + moduleName + '.js');
                     });
                 }
             }

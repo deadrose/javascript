@@ -82,7 +82,7 @@ function(
         },
         
         /**
-         * Sets up module
+         * Sets up modules
          */
         createPlayer: function( videoid ) {
           //apply video player options and create the player

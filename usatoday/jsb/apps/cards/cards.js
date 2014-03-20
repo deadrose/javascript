@@ -511,14 +511,14 @@ function(
                 fadeout: true,
                 onScroll: this.onSideBarScroll
             });
-            // restore module header
+            // restore modules header
             if (window.Modernizr.touch) {
                 this.revertStaticHeader();
             }
         },
 
         /*
-            Remove static header and restore module header
+            Remove static header and restore modules header
          */
         revertStaticHeader: function() {
             this.$('.sidebar-static-title-wrapper').hide();

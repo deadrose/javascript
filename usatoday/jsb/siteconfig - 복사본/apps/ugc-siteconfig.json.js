@@ -130,14 +130,14 @@
         }
     ],
     "siteModules": {
-        "utility-bar-module-ugc": {
-            "path": "modules/stories/utility-bar-module-ugc",
-            "selector": ".util-bar-module-ugc",
+        "utility-bar-modules-ugc": {
+            "path": "modules/stories/utility-bar-modules-ugc",
+            "selector": ".util-bar-modules-ugc",
             "css": "ugc/utility-bar"
         },
         "ugc-featured-content": {
             "path": "modules/fronts/featured-content",
-            "selector": ".ugc-featured-content-module",
+            "selector": ".ugc-featured-content-modules",
             "css": "modules/ugc-featured-content/ugc-featured-content"
         },
         "ugc-headline-grid": {

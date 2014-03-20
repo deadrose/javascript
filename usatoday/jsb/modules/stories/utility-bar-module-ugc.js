@@ -31,7 +31,7 @@ function(
 
         /**
          * Initialize view.
-         * @param {Object} options Share module init options.
+         * @param {Object} options Share modules init options.
          */
         initialize: function(options) {
 

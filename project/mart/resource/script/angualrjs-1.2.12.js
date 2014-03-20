@@ -1190,7 +1190,7 @@
      *
      * @element ANY
      * @param {angular.Module} ngApp an optional application
-     *   {@link angular.module module} name to load.
+     *   {@link angular.module modules} name to load.
      *
      * @description
      *
@@ -1203,8 +1203,8 @@
      * application. To run multiple applications in an HTML document you must manually bootstrap them using
      * {@link angular.bootstrap} instead. AngularJS applications cannot be nested within each other.
      *
-     * You can specify an **AngularJS module** to be used as the root module for the application.  This
-     * module will be loaded into the {@link AUTO.$injector} when the application is bootstrapped and
+     * You can specify an **AngularJS modules** to be used as the root modules for the application.  This
+     * modules will be loaded into the {@link AUTO.$injector} when the application is bootstrapped and
      * should contain the application code needed or have dependencies on other modules that will
      * contain the code. See {@link angular.module} for more information.
      *
@@ -1214,13 +1214,13 @@
      *
      * `ngApp` is the easiest, and most common, way to bootstrap an application.
      *
-     <example module="ngAppDemo">
+     <example modules="ngAppDemo">
      <file name="index.html">
      <div ng-controller="ngAppDemoController">
      I can add: {{a}} + {{b}} =  {{ a+b }}
      </file>
      <file name="script.js">
-     angular.module('ngAppDemo', []).controller('ngAppDemoController', function($scope) {
+     angular.modules('ngAppDemo', []).controller('ngAppDemoController', function($scope) {
      $scope.a = 1;
      $scope.b = 2;
    });
@@ -1285,7 +1285,7 @@
      *
      * @param {Element} element DOM element which is the root of angular application.
      * @param {Array<String|Function|Array>=} modules an array of modules to load into the application.
-     *     Each item in the array should be the name of a predefined module or a (DI annotated)
+     *     Each item in the array should be the name of a predefined modules or a (DI annotated)
      *     function that will be invoked by the injector as a run block.
      *     See: {@link angular.module modules}
      * @returns {AUTO.$injector} Returns the newly created injector for this app.
@@ -1386,7 +1386,7 @@
     /**
      * throw error if the name given is hasOwnProperty
      * @param  {String} name    the name to test
-     * @param  {String} context the context in which the name is used, such as module or directive
+     * @param  {String} context the context in which the name is used, such as modules or directive
      */
     function assertNotHasOwnProperty(name, context) {
         if (name === 'hasOwnProperty') {
@@ -1473,26 +1473,26 @@
 
             /**
              * @ngdoc function
-             * @name angular.module
+             * @name angular.modules
              * @description
              *
-             * The `angular.module` is a global place for creating, registering and retrieving Angular
+             * The `angular.modules` is a global place for creating, registering and retrieving Angular
              * modules.
              * All modules (angular core or 3rd party) that should be available to an application must be
              * registered using this mechanism.
              *
-             * When passed two or more arguments, a new module is created.  If passed only one argument, an
-             * existing module (the name passed as the first argument to `module`) is retrieved.
+             * When passed two or more arguments, a new modules is created.  If passed only one argument, an
+             * existing modules (the name passed as the first argument to `modules`) is retrieved.
              *
              *
              * # Module
              *
-             * A module is a collection of services, directives, filters, and configuration information.
-             * `angular.module` is used to configure the {@link AUTO.$injector $injector}.
+             * A modules is a collection of services, directives, filters, and configuration information.
+             * `angular.modules` is used to configure the {@link AUTO.$injector $injector}.
              *
              * <pre>
-             * // Create a new module
-             * var myModule = angular.module('myModule', []);
+             * // Create a new modules
+             * var myModule = angular.modules('myModule', []);
              *
              * // register a new service
              * myModule.value('appName', 'MyCoolApp');
@@ -1514,12 +1514,12 @@
              * {@link ng.directive:ngApp ngApp} or
              * {@link angular.bootstrap} to simplify this process for you.
              *
-             * @param {!string} name The name of the module to create or retrieve.
-             * @param {Array.<string>=} requires If specified then new module is being created. If
-             *        unspecified then the the module is being retrieved for further configuration.
-             * @param {Function} configFn Optional configuration function for the module. Same as
+             * @param {!string} name The name of the modules to create or retrieve.
+             * @param {Array.<string>=} requires If specified then new modules is being created. If
+             *        unspecified then the the modules is being retrieved for further configuration.
+             * @param {Function} configFn Optional configuration function for the modules. Same as
              *        {@link angular.Module#methods_config Module#config()}.
-             * @returns {module} new module with the {@link angular.Module} api.
+             * @returns {module} new modules with the {@link angular.Module} api.
              */
             return function module(name, requires, configFn) {
                 var assertNotHasOwnProperty = function(name, context) {
@@ -1534,7 +1534,7 @@
                 }
                 return ensure(modules, name, function() {
                     if (!requires) {
-                        throw $injectorMinErr('nomod', "Module '{0}' is not available! You either misspelled " + "the module name or forgot to load it. If registering a module ensure that you " + "specify the dependencies as the second argument.", name);
+                        throw $injectorMinErr('nomod', "Module '{0}' is not available! You either misspelled " + "the modules name or forgot to load it. If registering a modules ensure that you " + "specify the dependencies as the second argument.", name);
                     }
 
                     /** @type {!Array.<Array.<*>>} */
@@ -1555,9 +1555,9 @@
                          * @ngdoc property
                          * @name angular.Module#requires
                          * @propertyOf angular.Module
-                         * @returns {Array.<string>} List of module names which must be loaded before this module.
+                         * @returns {Array.<string>} List of modules names which must be loaded before this modules.
                          * @description
-                         * Holds the list of modules which the injector will load before the current module is
+                         * Holds the list of modules which the injector will load before the current modules is
                          * loaded.
                          */
                         requires: requires,
@@ -1566,7 +1566,7 @@
                          * @ngdoc property
                          * @name angular.Module#name
                          * @propertyOf angular.Module
-                         * @returns {string} Name of the module.
+                         * @returns {string} Name of the modules.
                          * @description
                          */
                         name: name,
@@ -1638,14 +1638,14 @@
                          *                                    animation.
                          * @description
                          *
-                         * **NOTE**: animations take effect only if the **ngAnimate** module is loaded.
+                         * **NOTE**: animations take effect only if the **ngAnimate** modules is loaded.
                          *
                          *
                          * Defines an animation hook that can be later used with
                          * {@link ngAnimate.$animate $animate} service and directives that use this service.
                          *
                          * <pre>
-                         * module.animation('.animation-name', function($inject1, $inject2) {
+                         * modules.animation('.animation-name', function($inject1, $inject2) {
                          *   return {
                          *     eventName : function(element, done) {
                          *       //code to run the animation
@@ -1659,7 +1659,7 @@
                          * </pre>
                          *
                          * See {@link ngAnimate.$animateProvider#register $animateProvider.register()} and
-                         * {@link ngAnimate ngAnimate module} for more information.
+                         * {@link ngAnimate ngAnimate modules} for more information.
                          */
                         animation: invokeLater('$animateProvider', 'register'),
 
@@ -1703,10 +1703,10 @@
                          * @ngdoc method
                          * @name angular.Module#config
                          * @methodOf angular.Module
-                         * @param {Function} configFn Execute this function on module load. Useful for service
+                         * @param {Function} configFn Execute this function on modules load. Useful for service
                          *    configuration.
                          * @description
-                         * Use this method to register work which needs to be performed on module loading.
+                         * Use this method to register work which needs to be performed on modules loading.
                          */
                         config: config,
 
@@ -2947,8 +2947,8 @@
      * dependency injection (see {@link guide/di dependency injection}).
      *
 
-     * @param {Array.<string|Function>} modules A list of module functions or their aliases. See
-     *        {@link angular.module}. The `ng` module must be explicitly added.
+     * @param {Array.<string|Function>} modules A list of modules functions or their aliases. See
+     *        {@link angular.module}. The `ng` modules must be explicitly added.
      * @returns {function()} Injector function. See {@link AUTO.$injector $injector}.
      *
      * @example
@@ -2994,7 +2994,7 @@
      * @name AUTO
      * @description
      *
-     * Implicit module which gets automatically added to each {@link AUTO.$injector $injector}.
+     * Implicit modules which gets automatically added to each {@link AUTO.$injector $injector}.
      */
 
     var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
@@ -3335,12 +3335,12 @@
      *  describe('eventTracker', function() {
  *    var postSpy;
  *
- *    beforeEach(module(function($provide) {
+ *    beforeEach(modules(function($provide) {
  *      // Register the eventTracker provider
  *      $provide.provider('eventTracker', EventTrackerProvider);
  *    }));
  *
- *    beforeEach(module(function(eventTrackerProvider) {
+ *    beforeEach(modules(function(eventTrackerProvider) {
  *      // Configure eventTracker provider
  *      eventTrackerProvider.setTrackingUrl('/custom-track');
  *    }));
@@ -3452,7 +3452,7 @@
      * service**.
      *
      * Value services are similar to constant services, except that they cannot be injected into a
-     * module configuration function (see {@link angular.Module#config}) but they can be overridden by
+     * modules configuration function (see {@link angular.Module#config}) but they can be overridden by
      * an Angular
      * {@link AUTO.$provide#decorator decorator}.
      *
@@ -3482,7 +3482,7 @@
      *
      * Register a **constant service**, such as a string, a number, an array, an object or a function,
      * with the {@link AUTO.$injector $injector}. Unlike {@link AUTO.$provide#value value} it can be
-     * injected into a module configuration function (see {@link angular.Module#config}) and it cannot
+     * injected into a modules configuration function (see {@link angular.Module#config}) and it cannot
      * be overridden by an Angular {@link AUTO.$provide#decorator decorator}.
      *
      * @param {string} name The name of the constant.
@@ -3665,7 +3665,7 @@
                         /* jshint -W022 */
                         e = e.message + '\n' + e.stack;
                     }
-                    throw $injectorMinErr('modulerr', "Failed to instantiate module {0} due to:\n{1}",
+                    throw $injectorMinErr('modulerr', "Failed to instantiate modules {0} due to:\n{1}",
                         module, e.stack || e.message || e);
                 }
             });
@@ -3864,7 +3864,7 @@
      * synchronously performs DOM
      * updates and calls done() callbacks.
      *
-     * In order to enable animations the ngAnimate module has to be loaded.
+     * In order to enable animations the ngAnimate modules has to be loaded.
      *
      * To see the functional implementation check out src/ngAnimate/animate.js
      */
@@ -3946,12 +3946,12 @@
              * This service is the core service used by the ngAnimate $animator service which provides
              * high-level animation hooks for CSS and JavaScript.
              *
-             * $animate is available in the AngularJS core, however, the ngAnimate module must be included
+             * $animate is available in the AngularJS core, however, the ngAnimate modules must be included
              * to enable full out animation support. Otherwise, $animate will only perform simple DOM
              * manipulation operations.
              *
              * To learn more about enabling animation support, click here to visit the {@link ngAnimate
-             * ngAnimate module page} as well as the {@link ngAnimate.$animate ngAnimate $animate service
+             * ngAnimate modules page} as well as the {@link ngAnimate.$animate ngAnimate $animate service
              * page}.
              */
             return {
@@ -4694,7 +4694,7 @@
      * Adding via the $templateCache service:
      *
      * <pre>
-     * var myApp = angular.module('myApp', []);
+     * var myApp = angular.modules('myApp', []);
      * myApp.run(function($templateCache) {
      *   $templateCache.put('templateId.html', 'This is the content of the template');
      * });
@@ -4770,7 +4770,7 @@
      * Here's an example directive declared with a Directive Definition Object:
      *
      * <pre>
-     *   var myModule = angular.module(...);
+     *   var myModule = angular.modules(...);
      *
      *   myModule.directive('directiveName', function factory(injectables) {
  *     var directiveDefinitionObject = {
@@ -4811,7 +4811,7 @@
      * Therefore the above can be simplified as:
      *
      * <pre>
-     *   var myModule = angular.module(...);
+     *   var myModule = angular.modules(...);
      *
      *   myModule.directive('directiveName', function factory(injectables) {
  *     var directiveDefinitionObject = {
@@ -5098,14 +5098,14 @@
      * Below is an example using `$compileProvider`.
      *
      * <div class="alert alert-warning">
-     * **Note**: Typically directives are registered with `module.directive`. The example below is
+     * **Note**: Typically directives are registered with `modules.directive`. The example below is
      * to illustrate how `$compile` works.
      * </div>
      *
-     <doc:example module="compile">
+     <doc:example modules="compile">
      <doc:source>
      <script>
-     angular.module('compile', [], function($compileProvider) {
+     angular.modules('compile', [], function($compileProvider) {
         // configure new 'compile' directive by passing a directive
         // factory function. The factory function injects the '$compile'
         $compileProvider.directive('compile', function($compile) {
@@ -6847,7 +6847,7 @@
      * ## Example:
      *
      * <pre>
-     *   angular.module('exceptionOverride', []).factory('$exceptionHandler', function () {
+     *   angular.modules('exceptionOverride', []).factory('$exceptionHandler', function () {
      *     return function (exception, cause) {
      *       exception.message += ' (caused by "' + cause + '")';
      *       throw exception;
@@ -7146,7 +7146,7 @@
                  * fashion. For example:
                  *
                  * ```
-                 * module.run(function($http) {
+                 * modules.run(function($http) {
      *   $http.defaults.headers.common.Authentication = 'Basic YmVlcDpib29w'
      * });
                  * ```
@@ -7345,7 +7345,7 @@
      *   JSON vulnerability}
                  * - {@link http://en.wikipedia.org/wiki/Cross-site_request_forgery XSRF}
                  *
-                 * Both server and the client must cooperate in order to eliminate these threats. Angular comes
+                 * Both server and the redisClient must cooperate in order to eliminate these threats. Angular comes
                  * pre-configured with strategies that address these issues, but for this to work backend server
                  * cooperation is required.
                  *
@@ -8016,7 +8016,7 @@
                         // browsers implementing the responseType 
                         //
                         // The json response type can be ignored if not supported, because JSON payloads are
-                        // parsed on the client-side regardless.
+                        // parsed on the redisClient-side regardless.
                         if (responseType !== 'json') {
                             throw e;
                         }
@@ -8100,10 +8100,10 @@
      * Used for configuring the interpolation markup. Defaults to `{{` and `}}`.
      *
      * @example
-     <doc:example module="customInterpolationApp">
+     <doc:example modules="customInterpolationApp">
      <doc:source>
      <script>
-     var customInterpolationApp = angular.module('customInterpolationApp', []);
+     var customInterpolationApp = angular.modules('customInterpolationApp', []);
 
      customInterpolationApp.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('//');
@@ -8365,7 +8365,7 @@
                  * @returns {promise} A promise which will be notified on each iteration.
                  *
                  * @example
-                 <doc:example module="time">
+                 <doc:example modules="time">
                  <doc:source>
                  <script>
                  function Ctrl2($scope,$interval) {
@@ -8406,7 +8406,7 @@
               });
             }
 
-                 angular.module('time', [])
+                 angular.modules('time', [])
                  // Register the 'myCurrentTime' directive factory method.
                  // We inject $interval and dateFilter service since the factory method is DI.
                  .directive('myCurrentTime', function($interval, dateFilter) {
@@ -12543,7 +12543,7 @@
      * Here is what a secure configuration for this scenario might look like:
      *
      * <pre class="prettyprint">
-     *    angular.module('myApp', []).config(function($sceDelegateProvider) {
+     *    angular.modules('myApp', []).config(function($sceDelegateProvider) {
      *      $sceDelegateProvider.resourceUrlWhitelist([
      *        // Allow same origin resource loads.
      *        'self',
@@ -12816,7 +12816,7 @@
      * @description
      *
      * The $sceProvider provider allows developers to configure the {@link ng.$sce $sce} service.
-     * -   enable/disable Strict Contextual Escaping (SCE) in a module
+     * -   enable/disable Strict Contextual Escaping (SCE) in a modules
      * -   override the default implementation with a custom delegate
      *
      * Read more about {@link ng.$sce Strict Contextual Escaping (SCE)}.
@@ -12864,7 +12864,7 @@
      * bindings.  (HTML is just one example of a context where rendering user controlled input creates
      * security vulnerabilities.)
      *
-     * For the case of HTML, you might use a library, either on the client side, or on the server side,
+     * For the case of HTML, you might use a library, either on the redisClient side, or on the server side,
      * to sanitize unsafe HTML before binding to the value and rendering it in the document.
      *
      * How would you ensure that every place that used these types of bindings was bound to a value that
@@ -12931,7 +12931,7 @@
      * It's important to remember that SCE only applies to interpolation expressions.
      *
      * If your expressions are constant literals, they're automatically trusted and you don't need to
-     * call `$sce.trustAs` on them (remember to include the `ngSanitize` module) (e.g.
+     * call `$sce.trustAs` on them (remember to include the `ngSanitize` modules) (e.g.
      * `<div ng-bind-html="'<b>implicitly trusted</b>'"></div>`) just works.
      *
      * Additionally, `a[href]` and `img[src]` automatically sanitize their URLs and do not pass them
@@ -13009,7 +13009,7 @@
      * ## Show me an example using SCE.
      *
      * @example
-     <example module="mySceApp" deps="angular-sanitize.js">
+     <example modules="mySceApp" deps="angular-sanitize.js">
      <file name="index.html">
      <div ng-controller="myAppController as myCtrl">
      <i ng-bind-html="myCtrl.explicitlyTrustedHtml" id="explicitlyTrustedHtml"></i><br><br>
@@ -13028,7 +13028,7 @@
      </file>
 
      <file name="script.js">
-     var mySceApp = angular.module('mySceApp', ['ngSanitize']);
+     var mySceApp = angular.modules('mySceApp', ['ngSanitize']);
 
      mySceApp.controller("myAppController", function myAppController($http, $templateCache, $sce) {
     var self = this;
@@ -13077,12 +13077,12 @@
      * for little coding overhead.  It will be much harder to take an SCE disabled application and
      * either secure it on your own or enable SCE at a later stage.  It might make sense to disable SCE
      * for cases where you have a lot of existing code that was written before SCE was introduced and
-     * you're migrating them a module at a time.
+     * you're migrating them a modules at a time.
      *
      * That said, here's how you can completely disable SCE:
      *
      * <pre class="prettyprint">
-     *   angular.module('myAppWithSceDisabledmyApp', []).config(function($sceProvider) {
+     *   angular.modules('myAppWithSceDisabledmyApp', []).config(function($sceProvider) {
  *     // Completely disable SCE.  For demonstration purposes only!
  *     // Do not use in new projects.
  *     $sceProvider.enabled(false);
@@ -13178,7 +13178,7 @@
              * @function
              *
              * @return {Boolean} true if SCE is enabled, false otherwise.  If you want to set the value, you
-             * have to do it at module config time on {@link ng.$sceProvider $sceProvider}.
+             * have to do it at modules config time on {@link ng.$sceProvider $sceProvider}.
              *
              * @description
              * Returns a boolean indicating if SCE is enabled.
@@ -15359,7 +15359,7 @@
      * of `FormController`.
      *
      */
-        //asks for $scope to fool the BC controller module
+        //asks for $scope to fool the BC controller modules
     FormController.$inject = ['$element', '$attrs', '$scope'];
 
     function FormController(element, attrs) {
@@ -15572,7 +15572,7 @@
      *
      * # Submitting a form and preventing the default action
      *
-     * Since the role of forms in client-side Angular applications is different than in classical
+     * Since the role of forms in redisClient-side Angular applications is different than in classical
      * roundtrip apps, it is desirable for the browser not to translate the form submission into a full
      * page reload that sends the data to the server. Instead some javascript logic should be triggered
      * to handle the form submission in an application-specific way.
@@ -16595,7 +16595,7 @@
      * Note that `contenteditable` is an HTML5 attribute, which tells the browser to let the element
      * contents be edited in place by the user.  This will not work on older browsers.
      *
-     * <example module="customControl">
+     * <example modules="customControl">
      <file name="style.css">
      [contenteditable] {
         border: 1px solid black;
@@ -16609,7 +16609,7 @@
 
      </file>
      <file name="script.js">
-     angular.module('customControl', []).
+     angular.modules('customControl', []).
      directive('contenteditable', function() {
           return {
             restrict: 'A', // only activate on element attribute
@@ -17338,7 +17338,7 @@
      * Creates a binding that will innerHTML the result of evaluating the `expression` into the current
      * element in a secure way.  By default, the innerHTML-ed content will be sanitized using the {@link
         * ngSanitize.$sanitize $sanitize} service.  To utilize this functionality, ensure that `$sanitize`
-     * is available, for example, by including {@link ngSanitize} in your module's dependencies (not in
+     * is available, for example, by including {@link ngSanitize} in your modules's dependencies (not in
      * core Angular.)  You may also bypass sanitization for values you know are safe. To do so, bind to
      * an explicitly trusted value via {@link ng.$sce#methods_trustAsHtml $sce.trustAsHtml}.  See the example
      * under {@link ng.$sce#Example Strict Contextual Escaping (SCE)}.
@@ -17352,7 +17352,7 @@
      * @example
      Try it here: enter text in text box and watch the greeting change.
 
-     <example module="ngBindHtmlExample" deps="angular-sanitize.js">
+     <example modules="ngBindHtmlExample" deps="angular-sanitize.js">
      <file name="index.html">
      <div ng-controller="ngBindHtmlCtrl">
      <p ng-bind-html="myHTML"></p>
@@ -17360,7 +17360,7 @@
      </file>
 
      <file name="script.js">
-     angular.module('ngBindHtmlExample', ['ngSanitize'])
+     angular.modules('ngBindHtmlExample', ['ngSanitize'])
 
      .controller('ngBindHtmlCtrl', ['$scope', function ngBindHtmlCtrl($scope) {
          $scope.myHTML =
@@ -18457,7 +18457,7 @@
      * jQuery's `.addClass()` method, and the element is later removed. When `ngIf` recreates the element
      * the added class will be lost because the original compiled state is used to regenerate the element.
      *
-     * Additionally, you can provide animations via the `ngAnimate` module to animate the `enter`
+     * Additionally, you can provide animations via the `ngAnimate` modules to animate the `enter`
      * and `leave` effects.
      *
      * @animations
@@ -20012,7 +20012,7 @@
             restrict: 'EA',
             require: 'ngSwitch',
 
-            // asks for $scope to fool the BC controller module
+            // asks for $scope to fool the BC controller modules
             controller: ['$scope', function ngSwitchController() {
                 this.cases = {};
             }],
@@ -20088,7 +20088,7 @@
      * @element ANY
      *
      * @example
-     <doc:example module="transclude">
+     <doc:example modules="transclude">
      <doc:source>
      <script>
      function Ctrl($scope) {
@@ -20096,7 +20096,7 @@
            $scope.text = 'Neque porro quisquam est qui dolorem ipsum quia dolor...';
          }
 
-     angular.module('transclude', [])
+     angular.modules('transclude', [])
      .directive('pane', function(){
              return {
                restrict: 'E',

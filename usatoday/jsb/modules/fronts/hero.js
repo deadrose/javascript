@@ -91,7 +91,7 @@ function(
                 }
                 this.adShowing = false;
 
-                // Initialize the hero module's carousel when needed.
+                // Initialize the hero modules's carousel when needed.
                 if (this.$el.hasClass('carousel')) {
                     this.subviews.heroCarousel = new Carousel({
                         el : this.$el,
@@ -151,7 +151,7 @@ function(
             },
             renderCardInfo: function(currentCardInfo) {
                 if (StateManager.getActivePageInfo().cardHeadlineGridAd){
-                    this.belowHeroModule = this.$el.next('.below-hero-ad-module');
+                    this.belowHeroModule = this.$el.next('.below-hero-ad-modules');
                     if (this.belowHeroModule.length) {
                         if (!currentCardInfo.belowHeroAd) {
                             // clear out the width/height/display if we're coming back from an overlay to the card and the width has changed

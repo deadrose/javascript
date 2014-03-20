@@ -24,7 +24,7 @@ define([
              */
 
             /**
-             * @classdesc UI Tooltip module.
+             * @classdesc UI Tooltip modules.
              * @author Mark Kennedy <mdkennedy@gannett.com>
              * @constructs ui/tooltip
              * @param {Object} options backbone options object

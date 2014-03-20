@@ -1,6 +1,6 @@
 
 /**
- * @fileoverview Car search module.
+ * @fileoverview Car search modules.
  * @author mdkennedy@gannett.com (Mark Kennedy)
  *
  */

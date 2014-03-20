@@ -21,7 +21,7 @@
     "siteModules": {
         "lottery": {
             "path": "modules/fronts/lottery",
-            "selector": ".lottery-module-content"
+            "selector": ".lottery-modules-content"
         }
     }
 }

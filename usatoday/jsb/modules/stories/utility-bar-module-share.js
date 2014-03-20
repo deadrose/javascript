@@ -33,7 +33,7 @@ function(
 
         /**
          * Initialize view.
-         * @param {Object} options Share module init options.
+         * @param {Object} options Share modules init options.
          */
         initialize: function(options) {
             _.bindAll(this, 'onClickFlyoutNavBtn');      
@@ -53,7 +53,7 @@ function(
             }
             var shareModule = _.find(utilityBarModules,
                 function(module){
-                    return module.name === 'utility-bar-module-share';
+                    return module.name === 'utility-bar-modules-share';
                 }
             );
             if (shareModule && shareModule.options && shareModule.options.submodules) {
@@ -84,9 +84,9 @@ function(
         },
 
         /**
-         * Shows a specific section of the utility bar module
+         * Shows a specific section of the utility bar modules
          * (ie. facebook section vs. email section) - hides others.
-         * @param {string} sectionName Section of the utility module to show.
+         * @param {string} sectionName Section of the utility modules to show.
          */
         showSection: function(sectionName) {
             this.activeSection = sectionName;

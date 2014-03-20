@@ -15,7 +15,7 @@
             root.Backbone = factory(root, exports, _, $);
         });
 
-        // Next for Node.js or CommonJS. jQuery may not be needed as a module.
+        // Next for Node.js or CommonJS. jQuery may not be needed as a modules.
     } else if (typeof exports !== 'undefined') {
         var _ = require('underscore');
         factory(root, exports, _);
@@ -68,7 +68,7 @@
     // Backbone.Events
     // ---------------
 
-    // A module that can be mixed in to *any object* in order to provide it with
+    // A modules that can be mixed in to *any object* in order to provide it with
     // custom events. You may bind with `on` or remove with `off` callback
     // functions to an event; `trigger`-ing an event fires all callbacks in
     // succession.
@@ -263,7 +263,7 @@
     // A discrete chunk of data and a bunch of useful, related methods for
     // performing computations and transformations on that data.
 
-    // Create a new model with the specified attributes. A client id (`cid`)
+    // Create a new model with the specified attributes. A redisClient id (`cid`)
     // is automatically generated and assigned for you.
     var Model = Backbone.Model = function(attributes, options) {
         var attrs = attributes || {};
@@ -496,7 +496,7 @@
                 this.attributes = _.extend({}, attributes, attrs);
             }
 
-            // After a successful server-side save, the client is (optionally)
+            // After a successful server-side save, the redisClient is (optionally)
             // updated with the server-side state.
             if (options.parse === void 0) options.parse = true;
             var model = this;

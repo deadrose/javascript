@@ -48,7 +48,7 @@ function(
 
             this.$win = Utils.get('win');
 
-            // add event that will update the module on browser resize
+            // add event that will update the modules on browser resize
             var throttledResize = _.throttle(this.update, 1000);
             this.$win.on('resize.' + this.cid, throttledResize);
 
@@ -59,7 +59,7 @@ function(
         },
 
         /**
-         * Sets up module
+         * Sets up modules
          */
         setup: function(){
             this._addTileSpacing();
@@ -69,7 +69,7 @@ function(
         },
 
         /**
-         * Updates module contents
+         * Updates modules contents
          */
         update: function(){
             this._addTileSpacing();

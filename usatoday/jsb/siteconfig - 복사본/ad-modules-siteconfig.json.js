@@ -39,7 +39,7 @@
         "sports-pulse": {
             "path": "modules/partner/sponsor-logo-ad",
             "selector": ".sponsor-logo",
-            "css": ["modules/sports-pulse","modules/generic-static-module"]
+            "css": ["modules/sports-pulse","modules/generic-static-modules"]
         }
     }
 }

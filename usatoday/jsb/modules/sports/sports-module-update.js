@@ -65,7 +65,7 @@ function(
                 this.$el.append(markup);
                 this.loadLazyImages(markup.find('img'));
                 this.renderMoreLink();
-                PubSub.trigger('sports:module:update');
+                PubSub.trigger('sports:modules:update');
                 this.startUpdateCheck();
             },
 
@@ -82,7 +82,7 @@ function(
 
             hideBrokenHasImage: function() {
                 $(this).closest('.has-image').removeClass('has-image');
-                PubSub.trigger('sports:module:update');
+                PubSub.trigger('sports:modules:update');
             },
 
             fetchUpdate: function() {
@@ -125,7 +125,7 @@ function(
                 this.afterNewContent = setTimeout(_.bind(function() {
                     newMarkup.removeClass(this.options.newContentClass);
                 }, this), this.options.removeNewHighlight * 1000);
-                PubSub.trigger('sports:module:update');
+                PubSub.trigger('sports:modules:update');
             },
 
             startUpdateCheck: function() {

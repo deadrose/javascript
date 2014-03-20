@@ -46,7 +46,7 @@ function(
             this.$win = Utils.get('win');
             this.winHeight = this.$win.height();
             // keep track limit small for flyout, prevents users from getting trapped
-            // note this should get increased once new recommendation module is added
+            // note this should get increased once new recommendation modules is added
             this.trackLimit = 10;
             this.trendingUrl = '/feeds/recommend/trending.json';
             this.mostPopularUrl = '/feeds/recommend/most-popular.json';

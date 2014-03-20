@@ -28,7 +28,7 @@
     "siteModules": {
         "job-search": {
             "path": "modules/money/job-search",
-            "selector": ".job-search-module-wrap"
+            "selector": ".job-search-modules-wrap"
         },
         "market-symbol-search": {
             "path": "modules/money/market-symbol-search"

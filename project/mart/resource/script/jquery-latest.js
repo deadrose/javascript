@@ -18,7 +18,7 @@
         // For CommonJS and CommonJS-like environments where a proper window is present,
         // execute the factory and get jQuery
         // For environments that do not inherently posses a window with a document
-        // (such as Node.js), expose a jQuery-making factory as module.exports
+        // (such as Node.js), expose a jQuery-making factory as modules.exports
         // This accentuates the need for the creation of a real window
         // e.g. var jQuery = require("jquery")(window);
         // See ticket #14549 for more info
@@ -239,7 +239,7 @@
         // Unique for each copy of jQuery on the page
         expando: "jQuery" + (version + Math.random()).replace(/\D/g, ""),
 
-        // Assume jQuery is ready without the ready module
+        // Assume jQuery is ready without the ready modules
         isReady: true,
 
         error: function(msg) {
@@ -3473,7 +3473,7 @@
     (function() {
         var div = document.createElement("div");
 
-        // Execute the test only if not already executed in another module.
+        // Execute the test only if not already executed in another modules.
         if (support.deleteExpando == null) {
             // Support: IE<9
             support.deleteExpando = true;
@@ -4080,7 +4080,7 @@
             div.cloneNode(true).click();
         }
 
-        // Execute the test only if not already executed in another module.
+        // Execute the test only if not already executed in another modules.
         if (support.deleteExpando == null) {
             // Support: IE<9
             support.deleteExpando = true;
@@ -7947,7 +7947,7 @@
             }
         };
 
-        // Fixing value retrieval on a button requires this module
+        // Fixing value retrieval on a button requires this modules
         jQuery.valHooks.button = {
             get: function(elem, name) {
                 var ret = elem.getAttributeNode(name);
@@ -9991,7 +9991,7 @@
     // Add the top/left cssHooks using jQuery.fn.position
     // Webkit bug: https://bugs.webkit.org/show_bug.cgi?id=29084
     // getComputedStyle returns percent when specified for top/left/bottom/right
-    // rather than make the css module depend on the offset module, we just check for it here
+    // rather than make the css modules depend on the offset modules, we just check for it here
     jQuery.each(["top", "left"], function(i, prop) {
         jQuery.cssHooks[prop] = addGetHookIf(support.pixelPosition,
 
@@ -10027,19 +10027,19 @@
                         // As of 5/8/2012 this will yield incorrect results for Mobile Safari, but there
                         // isn't a whole lot we can do. See pull request at this URL for discussion:
                         // https://github.com/jquery/jquery/pull/764
-                        return elem.document.documentElement["client" + name];
+                        return elem.document.documentElement["redisClient" + name];
                     }
 
                     // Get document width or height
                     if (elem.nodeType === 9) {
                         doc = elem.documentElement;
 
-                        // Either scroll[Width/Height] or offset[Width/Height] or client[Width/Height], whichever is greatest
+                        // Either scroll[Width/Height] or offset[Width/Height] or redisClient[Width/Height], whichever is greatest
                         // unfortunately, this causes bug #3838 in IE6/8 only, but there is currently no good, small way to fix it.
                         return Math.max(
                             elem.body["scroll" + name], doc["scroll" + name],
                             elem.body["offset" + name], doc["offset" + name],
-                            doc["client" + name]);
+                            doc["redisClient" + name]);
                     }
 
                     return value === undefined ?
@@ -10064,12 +10064,12 @@
 
 
 
-    // Register as a named AMD module, since jQuery can be concatenated with other
+    // Register as a named AMD modules, since jQuery can be concatenated with other
     // files that may use define, but not via a proper concatenation script that
     // understands anonymous AMD modules. A named AMD is safest and most robust
-    // way to register. Lowercase jquery is used because AMD module names are
+    // way to register. Lowercase jquery is used because AMD modules names are
     // derived from file names, and jQuery is normally delivered in a lowercase
-    // file name. Do this after creating the global so that if an AMD module wants
+    // file name. Do this after creating the global so that if an AMD modules wants
     // to call noConflict to hide this version of jQuery, it will work.
     if (typeof define === "function" && define.amd) {
         define("jquery", [], function() {

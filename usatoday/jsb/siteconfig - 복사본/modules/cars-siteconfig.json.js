@@ -2,7 +2,7 @@
     "siteModules": {
         "car-search": {
             "path": "modules/car-search",
-            "selector": ".car-search-module-wrap"
+            "selector": ".car-search-modules-wrap"
         }
    }
 }

@@ -48,7 +48,7 @@
             "css": "modules/most-popular"
         },
         "national-news-desk": {
-            "css": ["modules/national-news-desk","modules/generic-static-module"]
+            "css": ["modules/national-news-desk","modules/generic-static-modules"]
         }
     }
 }

@@ -22,7 +22,7 @@ function(
      */
     var SnapshotsView = BaseView.extend({
 
-        el: '.front-galleries-module',
+        el: '.front-galleries-modules',
 
         // Events.
         events: {
@@ -41,7 +41,7 @@ function(
         },
 
         /**
-         * Render the module.
+         * Render the modules.
          */
         render: function() {
             //check for if snapshots already exisits

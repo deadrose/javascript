@@ -2,7 +2,7 @@
     "siteModules": {
         "snapshots": {
             "path": "modules/fronts/snapshots",
-            "selector": ".front-galleries-module",
+            "selector": ".front-galleries-modules",
             "css": "modules/snapshots"
         }
     }

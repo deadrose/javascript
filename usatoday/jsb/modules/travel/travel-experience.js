@@ -90,7 +90,7 @@ define(['jquery',
             },
 
             /*
-             * Stop the interval - primarily used when hovering the module.
+             * Stop the interval - primarily used when hovering the modules.
              */
             stoptimer: function() {
                 if (this.timer){

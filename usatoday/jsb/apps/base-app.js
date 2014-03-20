@@ -64,7 +64,7 @@ function(
              * @param {String} fromUrl path of the view going away
              * @param {String} toUrl path of the view we're going to
              * @param {Deferred} requestPromise Promise object that will resolve the ajax request is complete
-             * @param {Deferred} resourcePromise Promise object that will resolve when the module request is complete
+             * @param {Deferred} resourcePromise Promise object that will resolve when the modules request is complete
              * @param {Boolean} [paused] variable specifying if the view should load up in a paused state
              * @private
              * @return {Deferred} promise object that will resolve when reveal is complete
@@ -169,7 +169,7 @@ function(
              * @param {String} fromUrl path of the view going away
              * @param {String} toUrl path of the view we're going to
              * @param {Deferred} requestPromise Promise object that will resolve the ajax request is complete
-             * @param {Deferred} resourcePromise Promise object that will resolve when the module request is complete
+             * @param {Deferred} resourcePromise Promise object that will resolve when the modules request is complete
              * @param {Boolean} [paused] variable specifying if the view should load up in a paused state
              * @private
              * @return {Deferred} promise object that will resolve when changePage is complete
@@ -642,7 +642,7 @@ function(
 
             },
             /**
-             * Gets custom client side information from the current app
+             * Gets custom redisClient side information from the current app
              */
             getClientAdInfo: function() {
 

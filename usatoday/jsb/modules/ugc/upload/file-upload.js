@@ -43,7 +43,7 @@ function(
         },
 
         /**
-         * Initialize module.
+         * Initialize modules.
          * @param {Object} options Module options passed during init.
          */
         initialize: function(options) {
@@ -852,7 +852,7 @@ function(
     });
 
     /**
-     * Return module class.
+     * Return modules class.
      */
     return UGCFileUpload;
 });

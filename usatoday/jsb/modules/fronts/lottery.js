@@ -26,7 +26,7 @@ define([
 
             /**
              * Initialize view.
-             * @param {object} options to pass in module options
+             * @param {object} options to pass in modules options
              */
             initialize: function(options) {
 
@@ -37,9 +37,9 @@ define([
                 _.bindAll(this, 'updateLottery');
                 BaseView.prototype.initialize.call(this,options);
                 if (this.options.refresh) {
-                    this.subviews.refreshInterval = StateManager.recurringFetchHtml('/lottery/front-module', null, this.options.refreshDelay, this.updateLottery);
+                    this.subviews.refreshInterval = StateManager.recurringFetchHtml('/lottery/front-modules', null, this.options.refreshDelay, this.updateLottery);
                 } else {
-                    StateManager.fetchHtml('/lottery/front-module').done(this.updateLottery);
+                    StateManager.fetchHtml('/lottery/front-modules').done(this.updateLottery);
                 }
             },
 

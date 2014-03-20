@@ -143,10 +143,10 @@
     /** Detect free variable `exports` */
     var freeExports = objectTypes[typeof exports] && exports && !exports.nodeType && exports;
 
-    /** Detect free variable `module` */
+    /** Detect free variable `modules` */
     var freeModule = objectTypes[typeof module] && module && !module.nodeType && module;
 
-    /** Detect the popular CommonJS extension `module.exports` */
+    /** Detect the popular CommonJS extension `modules.exports` */
     var moduleExports = freeModule && freeModule.exports === freeExports && freeExports;
 
     /** Detect free variable `global` from Node.js or Browserified code and use it as `root` */
@@ -6761,8 +6761,8 @@
         // See http://requirejs.org/docs/api.html#config-shim
         root._ = _;
 
-        // define as an anonymous module so, through path mapping, it can be
-        // referenced as the "underscore" module
+        // define as an anonymous modules so, through path mapping, it can be
+        // referenced as the "underscore" modules
         define(function() {
             return _;
         });

@@ -1,6 +1,6 @@
 
 /**
- * @fileoverview Job search module.
+ * @fileoverview Job search modules.
  * @author mdkennedy@gannett.com (Mark Kennedy)
  *
  */

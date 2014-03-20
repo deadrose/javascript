@@ -21,8 +21,8 @@ function(
     var RepeatingPosterScrollAd = BaseView.extend({
         classes: {
             asset_double_wide: 'asset-double-wide',
-            poster_ad_asset_module: 'poster-ad-asset-module',
-            datasphere: 'datasphere-community-module'
+            poster_ad_asset_module: 'poster-ad-asset-modules',
+            datasphere: 'datasphere-community-modules'
         },
 
         constants:{
@@ -202,9 +202,9 @@ function(
         },
 
         overlayScrollListener: function() {
-            // first we need to find out if our ad module has shifted down because other content was
+            // first we need to find out if our ad modules has shifted down because other content was
             // ajaxed in (e.g. the top poster ad took longer than normal), subsequently pushing this
-            // module down, after this module was init-ed
+            // modules down, after this modules was init-ed
             var windowOffset = this.getScrollTop();
 
             // check the environment and reset any variables that are needed for this function to succeed

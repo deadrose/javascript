@@ -20,7 +20,7 @@ define([
              * @param {jQuery} selectedItem - the jQuery element of the selected item
              */
             /**
-             * @classdesc UI Button Toggler module.
+             * @classdesc UI Button Toggler modules.
              * @author Mark Kennedy <mdkennedy@gannett.com>
              * @constructs ui/button-toggle
              * @param {Object} options backbone options object

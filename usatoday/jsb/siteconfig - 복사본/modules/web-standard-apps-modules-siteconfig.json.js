@@ -11,10 +11,10 @@
             "selector": ".footer",
             "css": "footer"
         },
-        "site-nav-social-module": {
-            "css": "modules/header/site-nav-social-module",
-            "path": "modules/header/site-nav-social-module",
-            "selector": ".site-nav-social-module"
+        "site-nav-social-modules": {
+            "css": "modules/header/site-nav-social-modules",
+            "path": "modules/header/site-nav-social-modules",
+            "selector": ".site-nav-social-modules"
         }
     }
 }

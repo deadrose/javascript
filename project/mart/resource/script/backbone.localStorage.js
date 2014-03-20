@@ -6,7 +6,7 @@
  */
 (function (root, factory) {
     if (typeof define === "function" && define.amd) {
-        // AMD. Register as an anonymous module.
+        // AMD. Register as an anonymous modules.
         define(["underscore","backbone"], function(_, Backbone) {
             // Use global variables if the locals are undefined.
             return factory(_ || root._, Backbone || root.Backbone);
@@ -16,7 +16,7 @@
         factory(_, Backbone);
     }
 }(this, function(_, Backbone) {
-// A simple module to replace `Backbone.sync` with *localStorage*-based
+// A simple modules to replace `Backbone.sync` with *localStorage*-based
 // persistence. Models are given GUIDS, and saved into a JSON object. Simple
 // as that.
 

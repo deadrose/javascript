@@ -131,7 +131,7 @@ function(
                         }
                     }
                     if (this.player) {
-                        //make sure we have a SmartPlayer API video player module
+                        //make sure we have a SmartPlayer API video player modules
                         if (!this.modVP) {
                             this.modVP = this.player.getModule(window.brightcove.api.modules.APIModules.VIDEO_PLAYER);
                         }

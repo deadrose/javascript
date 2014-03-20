@@ -37,7 +37,7 @@ function(
 
             /**
              * Used to call our private function to destory the ad position if the sidebar opens
-             * because while the sidebar is open and the weather module is present,
+             * because while the sidebar is open and the weather modules is present,
              * we need to hide this ad. Triggered from cards.js. Only on home page and for the sponsor_logo_front.
              */
             openSideBar : function(){
@@ -48,7 +48,7 @@ function(
 
             /**
              * Used to call our private function to call the ad position if the sidebar closes
-             * because while the sidebar is closed and the weather module is not present,
+             * because while the sidebar is closed and the weather modules is not present,
              * we need to show this ad. Triggered from cards.js. Only on home page and for the sponsor_logo_front.
              */
             closeSideBar : function(){
@@ -59,7 +59,7 @@ function(
 
             /**
              * Used to call the ad position's destroy method if the sidebar opens
-             * because while the sidebar is open and the weather module is present,
+             * because while the sidebar is open and the weather modules is present,
              * we need to hide this ad
              * @private
              */

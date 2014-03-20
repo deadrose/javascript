@@ -52,14 +52,18 @@ app.use(everyauth.middleware());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ?쒕쾭瑜??ㅼ젙?⑸땲?? 媛쒕컻 紐⑤뱶
+app.configure('development', function(){
+    app.use(express.errorHandler());
+});
 
 // 소켓 서버를 생성합니다.
 var io = socket_io.listen(server);
 io.set('log level', 2);
 
-customFriend.active(app, db);
 customMain.active(app, db);
 customPost.active(app, db);
+customFriend.active(app, db);
 customReply.active(app, db, io.sockets.sockets);
 customSocket.active(io, redisClient, sessionStore);
 

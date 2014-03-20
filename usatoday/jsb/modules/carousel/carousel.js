@@ -167,7 +167,7 @@ define([
             },
 
             /*
-             * Stop the interval - primarily used when hovering the module and hero flip
+             * Stop the interval - primarily used when hovering the modules and hero flip
              */
             stoptimer: function() {
                 clearInterval(this.playTimer);

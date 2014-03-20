@@ -793,8 +793,8 @@ jQuery.extend({
 	now: Date.now,
 
 	// A method for quickly swapping in/out CSS properties to get correct calculations.
-	// Note: this method belongs to the css module but it's needed here for the support module.
-	// If support gets modularized, this method should be moved back to the css module.
+	// Note: this method belongs to the css modules but it's needed here for the support modules.
+	// If support gets modularized, this method should be moved back to the css modules.
 	swap: function( elem, options, callback, args ) {
 		var ret, name,
 			old = {};
@@ -3298,7 +3298,7 @@ jQuery.support = (function( support ) {
 	Implementation Summary
 
 	1. Enforce API surface and semantic compatibility with 1.9.x branch
-	2. Improve the module's maintainability by reducing the storage
+	2. Improve the modules's maintainability by reducing the storage
 		paths to a single mechanism.
 	3. Use the same single mechanism to support "private" and "user" data.
 	4. _Never_ expose "private" data to user code (TODO: Drop _data, _removeData)
@@ -6560,7 +6560,7 @@ jQuery(function() {
 
 	// Webkit bug: https://bugs.webkit.org/show_bug.cgi?id=29084
 	// getComputedStyle returns percent when specified for top/left/bottom/right
-	// rather than make the css module depend on the offset module, we just check for it here
+	// rather than make the css modules depend on the offset modules, we just check for it here
 	if ( !jQuery.support.pixelPosition && jQuery.fn.position ) {
 		jQuery.each( [ "top", "left" ], function( i, prop ) {
 			jQuery.cssHooks[ prop ] = {
@@ -8764,19 +8764,19 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 					// As of 5/8/2012 this will yield incorrect results for Mobile Safari, but there
 					// isn't a whole lot we can do. See pull request at this URL for discussion:
 					// https://github.com/jquery/jquery/pull/764
-					return elem.document.documentElement[ "client" + name ];
+					return elem.document.documentElement[ "redisClient" + name ];
 				}
 
 				// Get document width or height
 				if ( elem.nodeType === 9 ) {
 					doc = elem.documentElement;
 
-					// Either scroll[Width/Height] or offset[Width/Height] or client[Width/Height],
+					// Either scroll[Width/Height] or offset[Width/Height] or redisClient[Width/Height],
 					// whichever is greatest
 					return Math.max(
 						elem.body[ "scroll" + name ], doc[ "scroll" + name ],
 						elem.body[ "offset" + name ], doc[ "offset" + name ],
-						doc[ "client" + name ]
+						doc[ "redisClient" + name ]
 					);
 				}
 
@@ -8802,18 +8802,18 @@ jQuery.fn.andSelf = jQuery.fn.addBack;
 
 // })();
 if ( typeof module === "object" && module && typeof module.exports === "object" ) {
-	// Expose jQuery as module.exports in loaders that implement the Node
-	// module pattern (including browserify). Do not create the global, since
+	// Expose jQuery as modules.exports in loaders that implement the Node
+	// modules pattern (including browserify). Do not create the global, since
 	// the user will be storing it themselves locally, and globals are frowned
-	// upon in the Node module world.
+	// upon in the Node modules world.
 	module.exports = jQuery;
 } else {
-	// Register as a named AMD module, since jQuery can be concatenated with other
+	// Register as a named AMD modules, since jQuery can be concatenated with other
 	// files that may use define, but not via a proper concatenation script that
 	// understands anonymous AMD modules. A named AMD is safest and most robust
-	// way to register. Lowercase jquery is used because AMD module names are
+	// way to register. Lowercase jquery is used because AMD modules names are
 	// derived from file names, and jQuery is normally delivered in a lowercase
-	// file name. Do this after creating the global so that if an AMD module wants
+	// file name. Do this after creating the global so that if an AMD modules wants
 	// to call noConflict to hide this version of jQuery, it will work.
 	if ( typeof define === "function" && define.amd ) {
 		define( "jquery", [], function () { return jQuery; } );

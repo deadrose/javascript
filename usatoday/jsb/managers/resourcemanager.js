@@ -70,7 +70,7 @@ define(['jquery', 'underscore'],
             /**
              * Fetches javascript code and returns a promise that can be used to retrieve the class
              * Modules are bundled code that should contain the view
-             * @param {String} [requirePackage] r.js module name that contains the view
+             * @param {String} [requirePackage] r.js modules name that contains the view
              * @param {String} [view] name of the view class that should be returned by the promise
              * @param {Array} [pageModules] any modules that are needed for the page view
              * @return {Deferred} promise object
@@ -81,7 +81,7 @@ define(['jquery', 'underscore'],
                 return $.Deferred(_.bind(function (deferred) {
                     if (requirePackage && view) {
                         require([requirePackage], _.bind(function () {
-                            // the view SHOULD be included in the module, if not, something went wrong
+                            // the view SHOULD be included in the modules, if not, something went wrong
                             require([view], _.bind(function (ViewClass) {
                                 this._resolveFetchJavascript(deferred, ViewClass, pageModules);
                             }, this));
@@ -130,7 +130,7 @@ define(['jquery', 'underscore'],
                         // assume we're going to succeed, but more importantly we need to preserve the ordering
                         retrievedModules.push(pageModule);
                         this.getSiteModuleByName(pageModule.name).done(function (siteModule) {
-                            pageModule.selector = siteModule.selector || '.' + siteModule.name + '-module';
+                            pageModule.selector = siteModule.selector || '.' + siteModule.name + '-modules';
                             pageModule.ModuleClass = siteModule.ModuleClass;
                         }).fail(function () {
                                 retrievedModules = _.reject(retrievedModules, function (module) {
@@ -147,9 +147,9 @@ define(['jquery', 'underscore'],
             },
 
             /**
-             * Given a site module name, will retrieve the code for said module
+             * Given a site modules name, will retrieve the code for said modules
              * @param {String} moduleName
-             * @returns {Deferred} jQuery Promise that will resolve when the code is found, or reject if no such module exists
+             * @returns {Deferred} jQuery Promise that will resolve when the code is found, or reject if no such modules exists
              */
             getSiteModuleByName: function (moduleName) {
                 console.log(window.cidx++, '!!!ResourceManager.getSiteModuleByName(', moduleName, ')');

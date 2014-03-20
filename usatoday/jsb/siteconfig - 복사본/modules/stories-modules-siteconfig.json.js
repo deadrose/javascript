@@ -28,9 +28,9 @@
             "path": "modules/stories/utility-bar",
             "selector": ".utility-bar-wrap"
         },
-        "utility-bar-module-share": {
-            "path": "modules/stories/utility-bar-module-share",
-            "selector": ".util-bar-module-share"
+        "utility-bar-modules-share": {
+            "path": "modules/stories/utility-bar-modules-share",
+            "selector": ".util-bar-modules-share"
         },
         "share-facebook": {
             "path": "modules/stories/share-facebook",
@@ -40,17 +40,17 @@
             "path": "modules/stories/share-email",
             "selector": ".util-bar-flyout-share"
         },
-        "utility-bar-module-comments": {
-            "path": "modules/stories/utility-bar-module-comments",
-            "selector": ".util-bar-module-comments"
+        "utility-bar-modules-comments": {
+            "path": "modules/stories/utility-bar-modules-comments",
+            "selector": ".util-bar-modules-comments"
         },
-        "utility-bar-module-firefly": {
-            "path": "modules/stories/utility-bar-module-firefly",
-            "selector": ".util-bar-module-firefly"
+        "utility-bar-modules-firefly": {
+            "path": "modules/stories/utility-bar-modules-firefly",
+            "selector": ".util-bar-modules-firefly"
         },
-        "utility-bar-module-print": {
-            "path": "modules/stories/utility-bar-module-print",
-            "selector": ".util-bar-module-print"
+        "utility-bar-modules-print": {
+            "path": "modules/stories/utility-bar-modules-print",
+            "selector": ".util-bar-modules-print"
         },
         "static-story-expand-faq": {
             "path": "modules/stories/expand-faq",

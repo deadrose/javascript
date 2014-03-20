@@ -17,12 +17,12 @@ define([
         Utils
     ) {
         /**
-         * View class for the super hero module.
+         * View class for the super hero modules.
          */
         var SuperHeroModule = BaseView.extend({
 
             // View element.
-            el: '.super-hero-module-wrapper',
+            el: '.super-hero-modules-wrapper',
 
             // Events.
             events: {
@@ -30,7 +30,7 @@ define([
             },
 
             /**
-             * Open asset linked in super hero module.
+             * Open asset linked in super hero modules.
              * @param {Event} event View click event.
              */
             open: function(event) {

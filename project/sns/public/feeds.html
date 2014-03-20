@@ -1,10 +1,12 @@
 <div>
-    <h1>{{ posts[0].authorName }}</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt sodales mi nec sodales. Aenean pellentesque neque eget ligula luctus in gravida augue aliquam.</p>
+    <form ng-submit="onStatusSubmit()">
+        <textarea class="span9" placeholder="Current Status" ng-model="status"></textarea>
+        <input type="submit" class="btn btn-block btn-info" value="submit" />
+    </form>
     <hr />
 </div>
 <div ng-repeat="post in posts">
-    <h4>{{ post.authorName }}</h4>
+    <h4><a href="#/friends/{{post.authorId}}">{{ post.authorName }}</a></h4>
     <p><small>{{ post.regdate.toDate().format() }}</small></p>
     <p>{{ post.status }}</p>
     <div class="well">

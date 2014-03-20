@@ -4,8 +4,12 @@
 
 exports.active = function(app, db) {
     app.get('/', function (request, response) {
-        isLogin(request, response, function(user) {
-
-        })
-    })
+        if(request.user) {
+            response.render('index', {
+                user: request.user
+            });
+        } else {
+            response.redirect('/login');
+        }
+    });
 };

@@ -31,7 +31,7 @@ function(
             this.viewport = this.$('.sp-team-leaders-viewport');
             this.slider = this.$('.sp-team-leaders-slider');
             this.views = this.$('.sp-team-leaders-wrap');
-            //For Team statistics module
+            //For Team statistics modules
             this.charts = this.$('.sports-team-statistics-charts');
             this.animateGraphs(this.charts.eq(0));
         },
@@ -39,7 +39,7 @@ function(
         onSuspenderItemClick: function(e){
             var clickedItem = $(e.currentTarget),
                 id = clickedItem.data('id'),
-                module_name = clickedItem.data('module-name'),
+                module_name = clickedItem.data('modules-name'),
                 selectedClass = 'selected';
             e.preventDefault();
             this.links.parent().removeClass(selectedClass);

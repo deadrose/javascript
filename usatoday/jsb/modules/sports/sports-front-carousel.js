@@ -34,7 +34,7 @@ function(
 
         initialize: function(options) {
             this.$primary = $('.sports-front-galleries-primary');
-            this.$module = $('.sports-front-galleries-module');
+            this.$module = $('.sports-front-galleries-modules');
             this.$closer = $('.gallery-sidebar-close');
             this.$sidebar = $('.gallery-sidebar-ad');
             this.$counter = $('.gallery-count');

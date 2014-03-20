@@ -30,7 +30,7 @@ function(
             },
 
             /**
-             * Gets the location of the user's client (their computer).
+             * Gets the location of the user's redisClient (their computer).
              * @returns {*}
              */
             getClientLocation: function() {

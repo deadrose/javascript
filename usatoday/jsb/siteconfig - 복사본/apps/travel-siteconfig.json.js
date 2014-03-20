@@ -20,8 +20,8 @@
             "selector": ".hotelme-wrapper"
         },
         "kayak-widget": {
-            "path": "modules/travel/kayak-module",
-            "css": "modules/travel/kayak-module"
+            "path": "modules/travel/kayak-modules",
+            "css": "modules/travel/kayak-modules"
         },
         "travel-experience": {
             "path": "modules/travel/travel-experience",

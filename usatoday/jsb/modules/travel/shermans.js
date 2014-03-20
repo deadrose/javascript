@@ -24,7 +24,7 @@ function(
 
             /**
              * Initialize view.
-             * @param {object} options to pass in module options
+             * @param {object} options to pass in modules options
              */
             initialize: function(options) { 
 

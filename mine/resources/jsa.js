@@ -71,6 +71,7 @@
             return obj;
         };
 
+    _core.name = frameworkName;
     _core.each = each;
     _core.extend = extend;
 

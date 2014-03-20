@@ -28,7 +28,7 @@ function(
         },
 
         initialize: function() {
-            this.$dropdown = this.$('.site-nav-social-module-dropdown');
+            this.$dropdown = this.$('.site-nav-social-modules-dropdown');
             this.$navItem = this.$('.site-nav-social-span');
 
             this.initSocialShareButtons();

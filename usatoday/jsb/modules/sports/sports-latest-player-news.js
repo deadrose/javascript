@@ -6,7 +6,7 @@ define([
     'underscore',
     'backbone',
     'base-app',
-    'modules/sports/sports-module-update'
+    'modules/sports/sports-modules-update'
 ],
 function(
     $,

@@ -43,7 +43,7 @@ function(
 
         initialize: function(options) {
             this.$primary = $('.sports-front-galleries-primary');
-            this.$module = $('.sports-front-galleries-module');
+            this.$module = $('.sports-front-galleries-modules');
             this.$closer = this.$('.gallery-sidebar-close');
             this.$sidebar = this.$('.gallery-sidebar-ad');
             this.$counter = $('.gallery-count');
@@ -225,7 +225,7 @@ function(
             }
         },
 
-        // the following 2 functions mimic web-standard-apps.git: utility-bar-module-share.js
+        // the following 2 functions mimic web-standard-apps.git: utility-bar-modules-share.js
         onClickFlyoutNavBtn: function(e) {
             var $btn = $(e.currentTarget);
             var moduleSection = $(e.currentTarget).data('share-method'),
