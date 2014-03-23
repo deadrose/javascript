@@ -1,7 +1,7 @@
 /**
  * Created by comahead on 2014-03-18.
  */
-exports.active = function(request, response) {
+exports.active = function(app, db) {
     // 테스트 전용
     app.get('/users', function(request, response) {
         db.users.find(function(error, data) {

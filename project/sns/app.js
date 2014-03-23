@@ -50,7 +50,7 @@ app.use(express.session({
 }));
 app.use(everyauth.middleware());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('/Users/comahead/WebstormProjects/javascript/project/sns/SocialNode/public'));
 
 // ?쒕쾭瑜??ㅼ젙?⑸땲?? 媛쒕컻 紐⑤뱶
 app.configure('development', function(){
@@ -70,4 +70,4 @@ customSocket.active(io, redisClient, sessionStore);
 
 server.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
-})
+});
