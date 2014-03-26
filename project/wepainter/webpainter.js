@@ -59,7 +59,6 @@
                 object = args.shift();
 
             return function (context) {
-                // bind로 넘어오는 인자와 원본함수의 인자를 병합하여 넘겨줌.
                 var local_args = args.concat(arraySlice.call(arguments));
                 if (this !== window) {
                     local_args.push(this);
@@ -85,11 +84,11 @@
             detect.isTouch = !!('ontouchstart' in window);
 
             match = /(msie) ([\w.]+)/.exec(ua.toLowerCase()) || /(trident)(?:.*rv.?([\w.]+))?/.exec(ua.toLowerCase()) || ['', null, -1];
-            detect.isIE = !detect.isWebKit && !detect.isOpera && match[1] !== null;		//(/MSIE/gi).test(ua) && (/Explorer/gi).test(na.appName);
+            detect.isIE = !detect.isWebKit && !detect.isOpera && match[1] !== null;
             detect.isIE6 = detect.isIE && /MSIE [56]/i.test(ua);
             detect.isIE7 = detect.isIE && /MSIE [567]/i.test(ua);
             detect.isOldIE = detect.isIE && /MSIE [5678]/i.test(ua);
-            detect.version = parseInt(match[2], 10);		// 사용법: if (browser.isIE && browser.version > 8) { // 9이상인 ie브라우저
+            detect.version = parseInt(match[2], 10);
 
             detect.isChrome = (ua.indexOf('Chrome') !== -1);
             detect.isGecko = (ua.indexOf('Firefox') !== -1);
@@ -209,7 +208,7 @@
             statics = attr.$statics || false;
             mixins = attr.$mixins || false;
 
-            // 생성자 몸체
+            // 占쏙옙占쏙옙 占쏙옙체
             function constructor() {
                 if (singleton && instance) {
                     return instance;

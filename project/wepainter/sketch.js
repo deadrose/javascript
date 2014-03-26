@@ -1222,16 +1222,16 @@
 "undefined" !== typeof module && module.exports && (module.exports = sketch.color);
 "undefined" === typeof sketch && (sketch = {});
 "undefined" === typeof sketch.util && (sketch.util = {});
-(function(a) {
+(function(sketch) {
     var h = function(sketchUtil) {
-        sketchUtil.Canvas = function(b, f, c) {
+        sketchUtil.Canvas = function(width, height, id) {
             var canvasEl;
-            c && (canvasEl = document.getElementById(c));
+            id && (canvasEl = document.getElementById(id));
             canvasEl || (canvasEl = document.createElement("canvas"));
-            "function" === typeof FlashCanvas && (canvasEl.onload = a.supports.fn.init);
-            canvasEl.id = c || "";
+            "function" === typeof FlashCanvas && (canvasEl.onload = sketch.supports.fn.init);
+            canvasEl.id = id || "";
             canvasEl.ctx = canvasEl.getContext("2d");
-            b && f ? (canvasEl.width = b || 1, canvasEl.height = f || 1) : (b = a.canvas2d, canvasEl.width = b.width * b.pixelRatio, canvasEl.height = b.height * b.pixelRatio);
+            width && height ? (canvasEl.width = width || 1, canvasEl.height = height || 1) : (width = sketch.canvas2d, canvasEl.width = width.width * width.pixelRatio, canvasEl.height = width.height * width.pixelRatio);
             return canvasEl
         };
         sketchUtil.Canvas.getContext = function(a, b, c) {
@@ -1246,7 +1246,7 @@
         sketchUtil.getTime = function() {
             return window.performance && window.performance.now ? window.performance.now() : (new Date).getTime()
         };
-        sketchUtil.perf = a.perf = function() {
+        sketchUtil.perf = sketch.perf = function() {
             var a = sketchUtil.getTime();
             return function() {
                 var b = sketchUtil.getTime();
@@ -1498,20 +1498,20 @@ var dom = {};
     var a, h = {};
     dom.loadImage = function(d) {
         var img = new Image,
-            e = function() {
+            loadImageBase64 = function() {
                 var b = d.src;
                 return dom.loadImageBase64({
                     url: b,
                     onerror: function(a) {
                         f(3);
-                        h[l.host] = 3
+                        h[alink.host] = 3
                     },
                     onload: function(c) {
                         if (c) {
                             var k = b.split(".").pop();
                             d.src = "data:image/" + k + ";base64," + c.responseText;
                             f(0);
-                            h[l.host] = !0 === a ? 1 : 0
+                            h[alink.host] = !0 === a ? 1 : 0
                         }
                     },
                     onprogress: d.onprogress
@@ -1529,7 +1529,7 @@ var dom = {};
                         img.src = d.src;
                         break;
                     case 2:
-                        e();
+                        loadImageBase64();
                         break;
                     case 3:
                         if (!dom.loadImage.proxyUrl) break;
@@ -1547,17 +1547,17 @@ var dom = {};
                 if ("data:" === a[1] || "blob:" === a[1] || "filesystem:" === a[1]) return !0
             }, m = function() {
                 if (c(d.src)) return f(0);
-                var b = h[l.host];
-                return "undefined" !== typeof b ? f(b) : !1 !== a || "withCredentials" in req ? e() : f(3)
-            }, l = document.createElement("a");
-        l.href = d.src;
+                var b = h[alink.host];
+                return "undefined" !== typeof b ? f(b) : !1 !== a || "withCredentials" in req ? loadImageBase64() : f(3)
+            }, alink = document.createElement("a");
+        alink.href = d.src;
         if (c(d.src)) return !d.onprogress || k(d.src) || sketch.userAgent.ie || sketch.userAgent.nodewebkit ? f(0) : f(2);
         if ("undefined" !== typeof a) return m(a);
-        var p = new Image;
-        p.crossOrigin = "anonymous";
-        p.onload = function() {
+        var img2 = new Image;
+        img2.crossOrigin = "anonymous";
+        img2.onload = function() {
             var b = document.createElement("canvas").getContext("2d");
-            b.drawImage(p,
+            b.drawImage(img2,
                 0, 0);
             try {
                 b.getImageData(0, 0, 1, 1), m(a = !0)
@@ -1565,8 +1565,8 @@ var dom = {};
                 m(a = !1)
             }
         };
-        p.src = "https://lh4.googleusercontent.com/-Qw7nlh9DWec/TvV5qTZ9yfI/AAAAAAAADOA/XdalA5bQBOY/s128/1x1.png";
-        return img
+        img2.src = "https://lh4.googleusercontent.com/-Qw7nlh9DWec/TvV5qTZ9yfI/AAAAAAAADOA/XdalA5bQBOY/s128/1x1.png";
+        return img2
     };
     var d = function(a) {
         var b = "",
@@ -2872,28 +2872,28 @@ eventjs.proxy = function(a) {
 }(eventjs.proxy);
 "undefined" === typeof sketch && (sketch = {});
 "undefined" === typeof sketch.language && (sketch.language = {});
-(function(a) {
+(function(sketch) {
     var h;
-    a.language.setLocale = function(g) {
+    sketch.language.setLocale = function(g) {
         h ? h.setLocale(g) : h = new d({
             directory: "./js/project/locales",
             locale: g,
             extension: ".json",
             onload: function(b) {
-                a.configure.lang = g
+                sketch.configure.lang = g
             }
         })
     };
-    a.language.translate = function(d) {
-        var b = a.configure.lang,
+    sketch.language.translate = function(d) {
+        var b = sketch.configure.lang,
             e = h.__(d);
-        e ? -1 !== e.indexOf("{") && (e = e.replace("{sk-version}", a.__version)) : (e = d, "en" !== b && a.feature.debug && console.log("Missing translation:", arguments));
+        e ? -1 !== e.indexOf("{") && (e = e.replace("{sk-version}", sketch.__version)) : (e = d, "en" !== b && sketch.feature.debug && console.log("Missing translation:", arguments));
         return e
     };
     var d = function(d) {
         for (var b in d) this[b] = d[b];
         d = this.locale;
-        a.language[d] ? this.setLocaleData(d, a.language[d]) : this.setLocale(d)
+        sketch.language[d] ? this.setLocaleData(d, sketch.language[d]) : this.setLocale(d)
     };
     d.localeCache = {};
     d.prototype = {
@@ -3037,22 +3037,22 @@ eventjs.proxy = function(a) {
 })(sketch);
 "undefined" === typeof sketch && (sketch = {});
 "undefined" === typeof sketch.util && (sketch.util = {});
-(function(a) {
-    a.util.RAD_DEG = 180 / Math.PI;
-    a.util.DEG_RAD = 1 / a.util.RAD_DEG;
-    a.util.INFINITY = 4294967295;
-    a.util.INFINITY_MINUS_24bit = a.util.INFINITY - 16777215;
-    a.util.INFINITY_MINUS_16bit = a.util.INFINITY - 65535;
-    a.util.INFINITY_MINUS_8bit = a.util.INFINITY - 255;
-    a.util.Random = function(h) {
-        this.seed = "number" === typeof h ? h : a.util.Random.seed();
+(function(sketch) {
+    sketch.util.RAD_DEG = 180 / Math.PI;
+    sketch.util.DEG_RAD = 1 / sketch.util.RAD_DEG;
+    sketch.util.INFINITY = 4294967295;
+    sketch.util.INFINITY_MINUS_24bit = sketch.util.INFINITY - 16777215;
+    sketch.util.INFINITY_MINUS_16bit = sketch.util.INFINITY - 65535;
+    sketch.util.INFINITY_MINUS_8bit = sketch.util.INFINITY - 255;
+    sketch.util.Random = function(h) {
+        this.seed = "number" === typeof h ? h : sketch.util.Random.seed();
         this.n = Number(this.seed);
         return this
     };
-    a.util.Random.seed = function() {
+    sketch.util.Random.seed = function() {
         return 2147483648 * Math.random() >> 0
     };
-    a.util.Random.prototype = {
+    sketch.util.Random.prototype = {
         toInt: function() {
             return this.n = 16807 * this.n % 2147483647
         },
@@ -3067,7 +3067,7 @@ eventjs.proxy = function(a) {
             return a + (d - a) * ((this.n = 16807 * this.n % 2147483647) / 2147483647)
         }
     };
-    a.util.getScreenMetrics = function() {
+    sketch.util.getScreenMetrics = function() {
         var a = function(a) {
             try {
                 g.style.fontSize = a
@@ -3110,7 +3110,7 @@ eventjs.proxy = function(a) {
         });
         return e
     };
-    a.util.createHash = function(a) {
+    sketch.util.createHash = function(a) {
         if (!a) return 0;
         for (var d = 5381, g = 0, b = a.length; g < b; g++) var e = a[g].charCodeAt(),
             d = (d << 5) + d + e;
@@ -3119,8 +3119,8 @@ eventjs.proxy = function(a) {
 })(sketch);
 "undefined" === typeof sketch && (sketch = {});
 "undefined" === typeof sketch.util && (sketch.util = {});
-(function(a) {
-    a.util.version = function(a, d) {
+(function(sketch) {
+    sketch.util.version = function(a, d) {
         function g(a, e) {
             e = e || 4;
             a = a.split(".").map(function(a) {
@@ -3463,8 +3463,8 @@ var STRING = {
 });
 "undefined" === typeof sketch && (sketch = {});
 "undefined" === typeof sketch.util && (sketch.util = {});
-(function(a) {
-    a.Queue = function(a) {
+(function(sketchUtil) {
+    sketchUtil.Queue = function(a) {
         var d = this,
             g = a.oncomplete || a.callback,
             b = a.onprogress || a.progress,
@@ -3514,7 +3514,7 @@ var STRING = {
         this.next();
         return this
     };
-    "undefined" !== typeof module && module.exports && (module.exports = a.Queue)
+    "undefined" !== typeof module && module.exports && (module.exports = sketchUtil.Queue)
 })(sketch.util);
 "undefined" === typeof sketch && (sketch = {});
 "undefined" === typeof sketch.language && (sketch.language = {});
@@ -3548,7 +3548,7 @@ sketch.language.en = {
     "Hello %s": "Hello %s"
 };
 var _html2canvas;
-(function(a, h, d) {
+(function(win, doc, d) {
     function g(a, b, c) {
         var f = a.runtimeStyle && a.runtimeStyle[b],
             e, d = a.style;
@@ -3688,7 +3688,7 @@ var _html2canvas;
     var c;
     _html2canvas.Util = {};
     _html2canvas.Util.log = function(b) {
-        _html2canvas.logging && (a.console && a.console.log) && a.console.log(b)
+        _html2canvas.logging && (win.console && win.console.log) && win.console.log(b)
     };
     _html2canvas.Util.trimText = function(a) {
         return function(b) {
@@ -3789,7 +3789,7 @@ var _html2canvas;
         }
     };
     _html2canvas.Util.getCSS = function(a, f, e) {
-        void 0 !== a && (c = h.defaultView.getComputedStyle(a, null));
+        void 0 !== a && (c = doc.defaultView.getComputedStyle(a, null));
         var p = c[f];
         if (/^background(Size|Position)$/.test(f)) {
             a: {
@@ -4039,7 +4039,7 @@ var _html2canvas;
         };
         c.Gradient = function(b, c) {
             if (0 !== c.width && 0 !== c.height) {
-                var f = h.createElement("canvas"),
+                var f = doc.createElement("canvas"),
                     e = f.getContext("2d"),
                     l, m;
                 f.width = c.width;
@@ -4059,7 +4059,7 @@ var _html2canvas;
                         e.fillRect(0, 0, c.width, c.height);
                         break;
                     case "ellipse":
-                        var d = h.createElement("canvas"),
+                        var d = doc.createElement("canvas"),
                             g = d.getContext("2d");
                         m = Math.max(l.rx, l.ry);
                         var p = 2 * m;
@@ -4435,13 +4435,13 @@ var _html2canvas;
                 1))
         }
         function L(b, c) {
-            var f = a.getComputedStyle(b, c);
+            var f = win.getComputedStyle(b, c);
             if (f && f.content && "none" !== f.content && "-moz-alt-content" !== f.content && "none" !== f.display) {
                 var e = f.content + "",
                     k = e.substr(0, 1);
                 k === e.substr(e.length - 1) && k.match(/'|"/) && (e = e.substr(1, e.length - 2));
                 var k = "url" === e.substr(0, 3),
-                    l = h.createElement(k ? "img" : "span");
+                    l = doc.createElement(k ? "img" : "span");
                 l.className = sa + "-before " + sa + "-after";
                 Object.keys(f).filter(Q).forEach(function(a) {
                     try {
@@ -4455,7 +4455,7 @@ var _html2canvas;
             }
         }
         function Q(b) {
-            return isNaN(a.parseInt(b, 10))
+            return isNaN(win.parseInt(b, 10))
         }
         function K(a, b) {
             var c = L(a, ":before"),
@@ -4633,8 +4633,8 @@ var _html2canvas;
                 f.nodeType === f.ELEMENT_NODE ? na(f, b, c) : f.nodeType === f.TEXT_NODE && s(a, f, b)
             })
         }
-        a.scroll(0, 0);
-        var ea = c.elements === d ? h.body : c.elements[0],
+        win.scroll(0, 0);
+        var ea = c.elements === d ? doc.body : c.elements[0],
             R = ea.ownerDocument,
             ba = _html2canvas.Util,
             ya = ba.Support(c, R),
@@ -4710,8 +4710,8 @@ var _html2canvas;
             }(4 * ((Math.sqrt(2) - 1) / 3)),
             W = /(matrix)\((.+)\)/;
         return function() {
-            var a = ca(h.documentElement, "backgroundColor"),
-                b = ba.isTransparent(a) && ea === h.body,
+            var a = ca(doc.documentElement, "backgroundColor"),
+                b = ba.isTransparent(a) && ea === doc.body,
                 c = ia(ea, null, !1, b);
             pa(ea,
                 c);
@@ -4738,11 +4738,11 @@ var _html2canvas;
             h = -1 < h.indexOf("?") ? h + "&" : h + "?";
             h += "url=" + encodeURIComponent(e) + "&callback=" + p;
             r = B.createElement("script");
-            a[p] = function(b) {
+            win[p] = function(b) {
                 "error:" === b.substring(0, 6) ? (g.succeeded = !1, s.numLoaded++, s.numFailed++, c()) : (v(l, g), l.src = b);
-                a[p] = d;
+                win[p] = d;
                 try {
-                    delete a[p]
+                    delete win[p]
                 } catch (f) {}
                 r.parentNode.removeChild(r);
                 r = null;
@@ -4752,10 +4752,10 @@ var _html2canvas;
             r.setAttribute("type", "text/javascript");
             r.setAttribute("src", h);
             g.script = r;
-            a.document.body.appendChild(r)
+            win.document.body.appendChild(r)
         }
         function e(b, c) {
-            var f = a.getComputedStyle(b, c),
+            var f = win.getComputedStyle(b, c),
                 k = f.content;
             "url" === k.substr(0, 3) && A.loadImage(_html2canvas.Util.parseBackgroundImage(k)[0].args[0]);
             q(f.backgroundImage, b)
@@ -4801,14 +4801,14 @@ var _html2canvas;
         }
         function v(e, g) {
             e.onload = function() {
-                g.timer !== d && a.clearTimeout(g.timer);
+                g.timer !== d && win.clearTimeout(g.timer);
                 s.numLoaded++;
                 g.succeeded = !0;
                 e.onerror = e.onload = null;
                 c()
             };
             e.onerror = function() {
-                if ("anonymous" === e.crossOrigin && (a.clearTimeout(g.timer), b.proxy)) {
+                if ("anonymous" === e.crossOrigin && (win.clearTimeout(g.timer), b.proxy)) {
                     var d = e.src;
                     e = new Image;
                     g.img = e;
@@ -4830,7 +4830,7 @@ var _html2canvas;
                 cleanupDone: !1
             }, x, w = _html2canvas.Util,
             A, y, z = 0;
-        y = b.elements[0] || h.body;
+        y = b.elements[0] || doc.body;
         var B = y.ownerDocument,
             D = y.getElementsByTagName("img"),
             E = D.length,
@@ -4839,7 +4839,7 @@ var _html2canvas;
                 return a.crossOrigin !== d
             }(new Image),
             C;
-        G.href = a.location.href;
+        G.href = win.location.href;
         x = G.protocol + G.host;
         A = {
             loadImage: function(a) {
@@ -4859,26 +4859,26 @@ var _html2canvas;
                 if (!s.cleanupDone) {
                     f && "string" === typeof f ? w.log("html2canvas: Cleanup because: " + f) : w.log("html2canvas: Cleanup after timeout: " + b.timeout + " ms.");
                     for (l in s) if (s.hasOwnProperty(l) && (e = s[l], "object" === typeof e && e.callbackname && e.succeeded === d)) {
-                        a[e.callbackname] = d;
+                        win[e.callbackname] = d;
                         try {
-                            delete a[e.callbackname]
+                            delete win[e.callbackname]
                         } catch (g) {}
                         e.script && e.script.parentNode && (e.script.setAttribute("src", "about:blank"), e.script.parentNode.removeChild(e.script));
                         s.numLoaded++;
                         s.numFailed++;
                         w.log("html2canvas: Cleaned up failed img: '" + l + "' Steps: " + s.numLoaded + " / " + s.numTotal)
                     }
-                    a.stop !== d ? a.stop() : h.execCommand !== d && h.execCommand("Stop", !1);
-                    h.close !== d && h.close();
+                    win.stop !== d ? win.stop() : doc.execCommand !== d && doc.execCommand("Stop", !1);
+                    doc.close !== d && doc.close();
                     s.cleanupDone = !0;
                     f && "string" === typeof f || c()
                 }
             },
             renderingDone: function() {
-                C && a.clearTimeout(C)
+                C && win.clearTimeout(C)
             }
         };
-        0 < b.timeout && (C = a.setTimeout(A.cleanupDOM, b.timeout));
+        0 < b.timeout && (C = win.setTimeout(A.cleanupDOM, b.timeout));
         w.log("html2canvas: Preload starts: finding background-images");
         s.firstRun = !0;
         u(y);
@@ -4896,7 +4896,7 @@ var _html2canvas;
             else throw Error("Unknown renderer");
             if ("function" !== typeof a) throw Error("Invalid renderer defined");
             return a
-        }(b.renderer)(a, b, h, function(a) {
+        }(b.renderer)(a, b, doc, function(a) {
                 function b(a) {
                     Object.keys(a).sort().forEach(function(f) {
                         var e = [],
@@ -4973,7 +4973,7 @@ var _html2canvas;
             svgRendering: a.svgRendering && c()
         }
     };
-    a.html2canvas = function(b, c) {
+    win.html2canvas = function(b, c) {
         b = b.length ? b : [b];
         var f, e, d = {
             logging: !1,
@@ -4997,7 +4997,7 @@ var _html2canvas;
         d.complete = function(a) {
             if ("function" !== typeof d.onpreloaded || !1 !== d.onpreloaded(a)) if (f = _html2canvas.Parse(a, d), "function" !== typeof d.onparsed || !1 !== d.onparsed(f)) if (e = _html2canvas.Renderer(f, d), "function" === typeof d.onrendered) d.onrendered(e)
         };
-        a.setTimeout(function() {
+        win.setTimeout(function() {
             _html2canvas.Preload(d)
         }, 0);
         return {
@@ -5014,8 +5014,8 @@ var _html2canvas;
             log: _html2canvas.Util.log
         }
     };
-    a.html2canvas.log = _html2canvas.Util.log;
-    a.html2canvas.Renderer = {
+    win.html2canvas.log = _html2canvas.Util.log;
+    win.html2canvas.Renderer = {
         Canvas: d
     };
     _html2canvas.Renderer.Canvas = function(a) {
@@ -5027,9 +5027,9 @@ var _html2canvas;
             a.closePath()
         }
         a = a || {};
-        var c = h,
+        var c = doc,
             f = [],
-            e = h.createElement("canvas"),
+            e = doc.createElement("canvas"),
             g = e.getContext("2d"),
             u = _html2canvas.Util,
             v = a.canvas || c.createElement("canvas");
@@ -5235,8 +5235,8 @@ Array.prototype.concat = Array.prototype.concat || function(a) {
     return this
 };
 "undefined" === typeof sketch && (sketch = {});
-(function(a) {
-    a.orientation = function(a, d) {
+(function(sketch) {
+    sketch.orientation = function(a, d) {
         var g = this;
         this.mirrorY = this.mirrorX = 1;
         this.zoom = {
@@ -5512,64 +5512,64 @@ Array.prototype.concat = Array.prototype.concat || function(a) {
         this.setMedia(this.src);
         return this
     };
-    a.orientation.init = function() {
-        var h = a.feature.canvas.zoom || "",
+    sketch.orientation.init = function() {
+        var h = sketch.feature.canvas.zoom || "",
             d = h.min || 0.25,
             g = h.max || 6,
             h = h.increment || 0.1;
-        a.orientation.reset = function() {
-            a.orient.reset().render();
+        sketch.orientation.reset = function() {
+            sketch.orient.reset().render();
             var b = this.getKnobOffset(1);
             this.setController(b)
         };
-        a.orientation.setZoom = function(a) {
+        sketch.orientation.setZoom = function(a) {
             a = this.getKnobOffset(a || 1);
             this.setController(a)
         };
-        a.orientation.getKnobOffset = function(f) {
-            var c = a.orient.zoom.max;
-            f = f || a.canvas2d.zoom;
+        sketch.orientation.getKnobOffset = function(f) {
+            var c = sketch.orient.zoom.max;
+            f = f || sketch.canvas2d.zoom;
             var e = b.offsetHeight || 100;
             return (1 - (Math.log(f) / Math.log(2) + 2) / c) * e
         };
-        a.orientation.zoomOut = function() {
-            var b = Math.max(a.orient.zoom.min, a.canvas2d.zoom - a.orient.zoom.increment),
+        sketch.orientation.zoomOut = function() {
+            var b = Math.max(sketch.orient.zoom.min, sketch.canvas2d.zoom - sketch.orient.zoom.increment),
                 b = this.getKnobOffset(b);
             this.setController(b)
         };
-        a.orientation.zoomIn = function() {
-            var b = Math.max(a.orient.zoom.min, a.canvas2d.zoom + a.orient.zoom.increment),
+        sketch.orientation.zoomIn = function() {
+            var b = Math.max(sketch.orient.zoom.min, sketch.canvas2d.zoom + sketch.orient.zoom.increment),
                 b = this.getKnobOffset(b);
             this.setController(b)
         };
-        a.orientation.setController = function(f) {
+        sketch.orientation.setController = function(f) {
             var c = b.offsetHeight || 100;
             e && (e.style.top = f - e.offsetHeight / 2 + "px");
-            f = Math.pow(2, (1 - f / c) * a.orient.zoom.max - 2);
-            a.orient.setZoom(f)
+            f = Math.pow(2, (1 - f / c) * sketch.orient.zoom.max - 2);
+            sketch.orient.setZoom(f)
         };
-        a.ui.MenuOverlay({
+        sketch.ui.MenuOverlay({
             id: "sk-orientation",
             options: {
                 "icon-plus": function() {
-                    a.exec("zoom-in>render")
+                    sketch.exec("zoom-in>render")
                 },
                 "icon-minus": function() {
-                    a.exec("zoom-out>render")
+                    sketch.exec("zoom-out>render")
                 }
             },
             close: function() {
-                a.exec(a.tool.lastType)
+                sketch.exec(sketch.tool.lastType)
             }
         });
         var b = {}, e = null;
-        a.orient = new a.orientation(a, {
-            src: a.project.bounds,
-            canvas: a.ctx.canvas,
-            mouseLayer: a.active.canvas,
+        sketch.orient = new sketch.orientation(sketch, {
+            src: sketch.project.bounds,
+            canvas: sketch.ctx.canvas,
+            mouseLayer: sketch.active.canvas,
             center: {
-                x: a.ctx.canvas.width / 2,
-                y: a.ctx.canvas.height / 2
+                x: sketch.ctx.canvas.width / 2,
+                y: sketch.ctx.canvas.height / 2
             },
             rotate: {
                 clampFormat: "degree",
@@ -5914,8 +5914,8 @@ var detectZoom = function() {
 "undefined" === typeof sketch && (sketch = {});
 sketch.color = sketch.color || {};
 sketch.color.gradient = sketch.color.gradient || {};
-(function(a) {
-    a.color.gradient.getColors = function(h) {
+(function(sketch) {
+    sketch.color.gradient.getColors = function(h) {
         var d = sketch.color.space,
             g = new sketch.util.Random(h.seed || 1),
             b = h.dna,
@@ -5924,7 +5924,7 @@ sketch.color.gradient = sketch.color.gradient || {};
             c = !1,
             k = h.blend || "Normal",
             m;
-        a.color.blend ? (c = a.color.blend.isAlphaRequired[k], m = a.color.blend[k]) : m = function(a, b) {
+        sketch.color.blend ? (c = sketch.color.blend.isAlphaRequired[k], m = sketch.color.blend[k]) : m = function(a, b) {
             return a * b / 255
         };
         var l = h.H || 0,

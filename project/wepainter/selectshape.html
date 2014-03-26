@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        #c {border: 1px solid black; }
+    </style>
+</head>
+<body>
+
+<canvas id="html5Canvas" width=500 height=400></canvas>
+<br>
+<input type="checkbox" id="mode" value=false><label for="mode">라인선택 모드</label>
+
+<script src="jquery-1.10.2.js"></script>
+<script>
+    var canvas = document.getElementById("html5Canvas");
+    var context = canvas.getContext("2d");
+    var drawing = false;
+    var lines = [], line;
+
+    canvas.addEventListener("mousedown", startDraw, false);
+    canvas.addEventListener("mousemove", continueDraw, false);
+    canvas.addEventListener("mouseup", endDraw, false);
+    canvas.addEventListener("click", checkLine, false);
+
+    context.lineWidth = 3;
+
+    function startDraw(event) {
+        if (mode.checked === true) return;
+        var pos = mouseXY(canvas, event);
+        drawing = true;
+        context.beginPath();
+        context.moveTo(pos.x, pos.y);
+        line = [];
+        line.push([pos.x, pos.y]);
+    }
+
+    function continueDraw(event) {
+        if (drawing) {
+            var pos = mouseXY(canvas, event);
+            context.lineTo(pos.x, pos.y);
+            context.stroke();
+            context.beginPath();
+            context.moveTo(pos.x, pos.y);
+            line.push([pos.x, pos.y]);
+        }
+    }
+
+    function endDraw(event) {
+        if (drawing)    {
+            var pos = mouseXY(canvas, event);
+            context.lineTo(pos.x, pos.y);
+            context.stroke();
+            drawing = false;
+            lines.push(line);
+        }
+    }
+    function mouseXY(c, e) {
+        var r = c.getBoundingClientRect();
+        return {x: e.clientX - r.left, y: e.clientY - r.top};
+    }
+
+    function checkLine(e) {
+        if (mode.checked === false) return;
+
+        var i = 0, line, l, p, pos = mouseXY(canvas, e);
+
+        context.lineWidth = 3;
+
+        for(; line = lines[i]; i++) {
+            context.beginPath();
+            context.moveTo(line[0][0], line[0][1]);
+            for(l = 1; p = line[l]; l++) {
+                context.lineTo(p[0], p[1]);
+            }
+
+            if (context.isPointInStroke(pos.x, pos.y) === true) {
+                context.strokeStyle = '#f00';
+                context.stroke();
+                context.strokeStyle = '#000';
+                alert('hit line ' + i);
+                return;
+            }
+        }
+    }
+</script>
+</body>
+</html>

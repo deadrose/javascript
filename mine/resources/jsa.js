@@ -3064,7 +3064,7 @@
                 View._instances.push(me);
                 superClass = me.constructor.superclass;
                 me.el = me.$el[0];													// 원래 엘리먼트도 변수에 설정
-                me.options = _core.extend({}, superClass.defaults, me.defaults, options);			// 옵션 병합
+                me.options = _core.extend({}, superClass.defaults, me.defaults, me.$el.data(), options);			// 옵션 병합
                 me.cid = me.moduleName + '_' + _core.nextSeq();					// 객체 고유 키
                 me.subViews = {};														// 하위 컨트롤를 관리하기 위함
                 me._eventNamespace = '.' + me.cid;	// 객체 고유 이벤트 네임스페이스명

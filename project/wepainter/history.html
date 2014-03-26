@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        #cv {border: 1px solid black; }
+    </style>
+</head>
+<body>
+
+<canvas width="400" height="400" id="cv"></canvas>
+<button id="b1">Random arc</button>
+<button id="b2">Undo</button>
+
+<script src="jquery-1.10.2.js"></script>
+<script>
+    var cv  = $('#cv').get(0);
+    var ctx = cv.getContext('2d');
+
+    var history = [];
+
+    $("#b1").click(function() {
+        history.push(cv.toDataURL());
+
+        ctx.beginPath();
+
+        ctx.arc(Math.random() * 200 + 100,
+                Math.random() * 200 + 100,
+                Math.random() * 200,
+                0,
+                2 * Math.PI);
+
+        ctx.stroke();
+    });
+
+    $("#b2").click(function() {
+        ctx.beginPath();
+
+        var img = new Image;
+
+        img.onload = function() {
+            ctx.clearRect(0, 0, 400, 400);
+            ctx.drawImage(img, 0, 0);
+        };
+
+        img.src = history.pop();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        body {
+            background-color: ivory;
+        }
+        canvas {
+            border:1px solid red;
+        }
+        #brush_size, #color {
+            width:30px;
+        }
+    </style>
+</head>
+<body>
+
+<button id="brushTool">Brush</button>
+<button id="eraserTool">Eraser</button>
+<input id="brush_size" type="text" width=10>
+<input id="color" type="text" width=10>
+<br/>
+<canvas id="canvas" width=300 height=300></canvas>
+
+<script src="jquery-1.10.2.js"></script>
+<script>
+
+    function Tool() {
+        var type = "none";
+        var mouseStart = false;
+        var x;
+        var y;
+        var lastX;
+        var lastY;
+    }
+
+    Tool.prototype.activate = function (newType) {
+
+        this.type = newType;
+        this.mouseStart = false;
+
+        if (this.type == "brush") {
+            context.globalCompositeOperation = "source-over";
+        }
+
+        if (this.type == "eraser") {
+            context.globalCompositeOperation = "destination-out";
+            context.strokeStyle = "rgba(0,0,0,1)";
+        }
+
+        console.log(this.type + ": " + context.globalCompositeOperation);
+    }
+
+    Tool.prototype.startLine = function () {
+        this.lastX = this.x;
+        this.lastY = this.y;
+        context.lineCap = 'round';
+        context.lineWidth = document.getElementById("brush_size").value;
+        if (this.type == "brush") {
+            context.strokeStyle = document.getElementById('color').value;
+        }
+        console.log(context.strokeStyle);
+    }
+
+    Tool.prototype.drawLineTo = function () {
+        context.beginPath();
+        context.moveTo(this.lastX, this.lastY);
+        context.lineTo(this.x, this.y);
+        context.stroke();
+        this.lastX = this.x;
+        this.lastY = this.y;
+    }
+
+    Tool.prototype.mousedown = function (e) {
+        this.setXY(e);
+        this.mouseStart = true;
+        this.startLine(this.x, this.y);
+    }
+
+    Tool.prototype.mousemove = function (e) {
+        if (this.mouseStart) {
+            this.setXY(e);
+            this.drawLineTo(this.x, this.y);
+        }
+    }
+
+    Tool.prototype.mouseup = function (e) {
+        if (this.mouseStart) {
+            this.setXY(e);
+            this.drawLine;
+            this.mouseStart = false;
+        }
+    }
+
+    Tool.prototype.setXY = function (e) {
+        this.x = parseInt(e.clientX - offsetX);
+        this.y = parseInt(e.clientY - offsetY);
+    }
+
+
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+
+    var canvasOffset = $("#canvas").offset();
+    var offsetX = canvasOffset.left;
+    var offsetY = canvasOffset.top;
+
+    var myTool = new Tool();
+    myTool.activate("brush");
+
+    document.getElementById("brush_size").value = 15;
+    document.getElementById('color').value = "green";
+
+    $("#canvas").mousedown(function (e) {
+        myTool.mousedown(e);
+    });
+    $("#canvas").mousemove(function (e) {
+        myTool.mousemove(e);
+    });
+    $("#canvas").mouseup(function (e) {
+        myTool.mouseup(e);
+    });
+
+    $('#eraserTool').click(function (e) {
+        myTool.activate("eraser");
+    });
+    $('#brushTool').click(function (e) {
+        myTool.activate("brush");
+    });
+</script>
+</body>
+</html>

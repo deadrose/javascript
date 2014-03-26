@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        #canvas {border: 1px solid black; }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width=300 height=300></canvas>
+
+<script src="jquery-1.10.2.js"></script>
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var $canvas = $("#canvas");
+    var canvasOffset = $canvas.offset();
+    var offsetX = canvasOffset.left;
+    var offsetY = canvasOffset.top;
+    var scrollX = $canvas.scrollLeft();
+    var scrollY = $canvas.scrollTop();
+    var cw = canvas.width;
+    var ch = canvas.height;
+
+    var isDown = false;
+    var startX;
+    var startY;
+
+    var shapes = [];
+    var selectedShape = null;
+
+    addShape(50, 50, [{
+        x: 0,
+        y: 20
+    }, {
+        x: 30,
+        y: 0
+    }, {
+        x: 70,
+        y: 45
+    }], "blue", "red");
+    addShape(100, 100, [{
+        x: 0,
+        y: 10
+    }, {
+        x: 30,
+        y: 10
+    }, {
+        x: 30,
+        y: 0
+    }, {
+        x: 45,
+        y: 15
+    }, {
+        x: 30,
+        y: 30
+    }, {
+        x: 30,
+        y: 20
+    }, {
+        x: 0,
+        y: 20
+    }],
+            "green", "red");
+
+    // begin...
+    drawAll();
+
+
+
+    function addShape(x, y, points, fill, stroke) {
+        shapes.push({
+            x: x,
+            y: y,
+            points: points,
+            fill: fill,
+            stroke: stroke
+        });
+    }
+
+    function define(shape) {
+        var x = shape.x;
+        var y = shape.y;
+        var points = shape.points;
+        ctx.beginPath();
+        ctx.moveTo(x + points[0].x, y + points[0].y);
+        for (var i = 1; i < points.length; i++) {
+            ctx.lineTo(x + points[i].x, y + points[i].y);
+        }
+        ctx.closePath();
+    }
+
+    function draw(shape) {
+        define(shape);
+        ctx.fillStyle = shape.fill;
+        ctx.fill();
+        ctx.strokeStyle = shape.stroke;
+        ctx.stroke();
+    }
+
+    function drawAll() {
+        ctx.clearRect(0, 0, cw, ch);
+        for (var i = 0; i < shapes.length; i++) {
+            draw(shapes[i]);
+        }
+    }
+
+
+    function handleMouseDown(e) {
+        e.preventDefault();
+        startX = parseInt(e.clientX - offsetX);
+        startY = parseInt(e.clientY - offsetY);
+        for (var i = 0; i < shapes.length; i++) {
+            define(shapes[i]);
+            if (ctx.isPointInPath(startX, startY)) {
+                selectedShape = shapes[i];
+                isDown = true;
+            }
+        }
+    }
+
+    function handleMouseUp(e) {
+        e.preventDefault();
+        isDown = false;
+        selectedShape = null;
+    }
+
+    function handleMouseOut(e) {
+        e.preventDefault();
+        isDown = false;
+        selectedShape = null;
+    }
+
+    function handleMouseMove(e) {
+        if (!isDown) {
+            return;
+        }
+        e.preventDefault();
+        mouseX = parseInt(e.clientX - offsetX);
+        mouseY = parseInt(e.clientY - offsetY);
+        var dx = mouseX - startX;
+        var dy = mouseY - startY;
+        startX = mouseX;
+        startY = mouseY;
+
+        selectedShape.x += dx;
+        selectedShape.y += dy;
+        drawAll();
+
+    }
+
+    $("#canvas").mousedown(function (e) {
+        handleMouseDown(e);
+    });
+    $("#canvas").mousemove(function (e) {
+        handleMouseMove(e);
+    });
+    $("#canvas").mouseup(function (e) {
+        handleMouseUp(e);
+    });
+    $("#canvas").mouseout(function (e) {
+        handleMouseOut(e);
+    });
+</script>
+</body>
+</html>
