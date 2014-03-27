@@ -52,6 +52,7 @@
 
         var mouse = {x: 0, y: 0};
         var start_mouse = {x: 0, y: 0};
+        var last_mouse = {x: 0, y: 0};
 
 
         /* Mouse Capturing Work */
@@ -95,11 +96,19 @@
             // Tmp canvas is always cleared up before drawing.
             tmp_ctx.clearRect(0, 0, tmp_canvas.width, tmp_canvas.height);
 
-            var x = Math.min(mouse.x, start_mouse.x);
-            var y = Math.min(mouse.y, start_mouse.y);
-            var width = Math.abs(mouse.x - start_mouse.x);
-            var height = Math.abs(mouse.y - start_mouse.y);
-            tmp_ctx.strokeRect(x, y, width, height);
+            var x = (mouse.x + start_mouse.x) / 2;
+            var y = (mouse.y + start_mouse.y) / 2;
+
+            var radius = Math.max(
+                    Math.abs(mouse.x - start_mouse.x),
+                    Math.abs(mouse.y - start_mouse.y)
+            ) / 2;
+
+            tmp_ctx.beginPath();
+            tmp_ctx.arc(x, y, radius, 0, Math.PI*2, false);
+            // tmp_ctx.arc(x, y, 5, 0, Math.PI*2, false);
+            tmp_ctx.stroke();
+            tmp_ctx.closePath();
 
         };
 
