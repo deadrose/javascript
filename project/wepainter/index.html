@@ -28,171 +28,45 @@
 </head>
 <body>
 <div id="content">
-
+<ul class="tool-list">
+    <li><a href="brush.html" target="_blank">브러쉬</a> : 브러쉬 툴</li>
+    <li><a href="dragdrawcircle.html" target="_blank">원그리기</a> : 원그리기 툴</li>
+    <li><a href="dragdrawline.html" target="_blank">라인그리기</a> : 라인그리기 툴</li>
+    <li><a href="dragdrawrectangle.html" target="_blank">사각형그리기</a> : 사각형그리기 툴</li>
+    <li><a href="erase.html" target="_blank">지우개</a> : 브러쉬 툴</li>
+    <li><a href="gradient.html" target="_blank">그래디언트</a> : 브러쉬 툴</li>
+    <li><a href="history.html" target="_blank">히스토리</a> : 브러쉬 툴</li>
+    <li><a href="layers.html" target="_blank">레이어</a> : 브러쉬 툴</li>
+    <li><a href="pattern-brush.html" target="_blank">패턴브러쉬</a> : 브러쉬 툴</li>
+    <li><a href="pen.html" target="_blank">펜</a> : 브러쉬 툴</li>
+    <li><a href="selectshape.html" target="_blank">쉐이프 선택</a> : 브러쉬 툴</li>
+    <li><a href="shapes.html" target="_blank">별모양 쉐이프</a> : 브러쉬 툴</li>
+    <li><a href="sliced.html" target="_blank">형광펜</a> : 브러쉬 툴</li>
+    <li><a href="spray.html" target="_blank">스프레이</a> : 브러쉬 툴</li>
+    <li><a href="timebase-spray.html" target="_blank">스프레이2</a> : 브러쉬 툴</li>
+</ul>
 </div>
 
 <script src="jquery-1.10.2.js"></script>
+<script src="wp-core.js"></script>
 <script>
-    (function () {
-        var arrayProto = Array.prototype,
-            objectProto = Object.prototype,
-            toString = objectProto.toString,
-            hasOwn = objectProto.hasOwnProperty,
-            arraySlice = arrayProto.slice,
-            isFn = function(val){ return typeof val === 'function'; },
-            win = window,
-            doc = win.document,
-            emptyFn = function () {
+    (function(wp) {
+        var BaseClass = wp.BaseClass,
+            UIBase = wp.UIBase;
+
+
+        var PaintTool = UIBase.extend({
+            initialize: function(name, options) {
+
             },
-            each = function (obj, cb, ctx) {
-                if (!obj) {
-                    return obj;
-                }
-                var i;
-                if (obj && obj.push) {
-                    if (obj.forEach) {
-                        if (obj.forEach(cb, ctx) === false) {
-                            return;
-                        }
-                    } else {
-                        for (i = 0; i < obj.length; i++) {
-                            if (cb.call(ctx || obj, obj[i], i, obj) === false) {
-                                return;
-                            }
-                        }
-                    }
-                } else {
-                    for (i in obj) {
-                        if (hasOwn.call(obj, i)) {
-                            if (cb.call(obj, obj[i], i, obj) === false) {
-                                return;
-                            }
-                        }
-                    }
-                }
-                return obj;
-            },
-            extend = function (obj) {
-                each(arraySlice.call(arguments, 1), function (source) {
-                    each(source, function (val, key) {
-                        obj[key] = source[key];
-                    });
-                });
-                return obj;
-            };
-
-        var Klass = (function(){
-            function wrap(k, fn, supr) {
-                return function () {
-                    var tmp = this.callParent, ret;
-
-                    this.callParent = supr.prototype[k];
-                    ret = undefined;
-                    try {
-                        ret = fn.apply(this, arguments);
-                    } finally {
-                        this.callParent = tmp;
-                    }
-                    return ret;
-                };
-            }
-
-            function inherits(what, o, supr) {
-                each(o, function (v, k) {
-                    what[k] = isFn(v) && isFn(supr.prototype[k]) ? wrap(k, v, supr) : v;
-                });
-            }
-
-            var Klass = emptyFn,
-                F = emptyFn;
-
-            var classExtend = function(attr){
-                var supr = this,
-                    NewClass = function(){
-                        if(this.initialize) {
-                            return this.initialize.apply(this, arguments);
-                        } else {
-                            supr.prototype.initialize && supr.prototype.initialize.apply(this, arguments);
-                        }
-                    };
-
-                F.prototype = supr.prototype;
-                NewClass.prototype = new F;
-                NewClass.prototype.constructor = NewClass;
-                NewClass._super_ = supr.prototype;
-                inherits(NewClass.prototype, attr, supr);
-                return NewClass.extend = classExtend, NewClass;
-            };
-            return Klass.extend = classExtend, Klass;
-        })();
-
-
-        // 이벤트 리스너
-        var UIClass = Klass.extend({
-            initialize: function () {
-                console.log(1);
-                this._listeners = $({});
-                this.$el = $(el);
-                this.options = extend({}, this.defaults, options);
-            },
-
-            on: function () {
-                var lsn = this._listeners;
-                lsn.on.apply(lsn, arguments);
-                return this;
-            },
-
-            once: function () {
-                var lsn = this._listeners;
-                lsn.once.apply(lsn, arguments);
-                return this;
-            },
-
-            off: function () {
-                var lsn = this._listeners;
-                lsn.off.apply(lsn, arguments);
-                return this;
-            },
-
-            trigger: function () {
-                var lsn = this._listeners;
-                lsn.trigger.apply(lsn, arguments);
-                return this;
-            }
+            start: function(){},
+            moving: function(){},
+            end: function(){}
         });
 
-        // 펜 속성 선택
-        var PenSettingDialog = UIClass.extend({
-            initialize: function(el, options) {
-                this.callParent(el, options);
 
-                this.render();
-            },
-            render: function(){
-                var html = '<div><div class="wp-header">Pen Setting</div></div>'
-            }
-        });
 
-        var WebPainter = UIClass.extend({
-            initialize: function(el, options) {
-                console.log(2);
-                this.render();
-            },
-            render: function(){
-                var html = '<div class="wp-setting"">'
-                        + '<button class="wp-btn-pen">펜</button>'
-                        + '<div class="wp-color-picker" style="display: none;"></div>'
-                        + '<button class="wp-btn-erase">Erase</button>'
-                        + '<button class="wp-btn-undo">Undo</button>'
-                        + '<button class="wp-btn-redo">Redo</button>'
-                        + '</div>'
-                        + '<canvas class="wp-canvas" width="500" height="300"></canvas>';
-            }
-        });
-
-        window.WebPainter = WebPainter;
-
-    })();
+    })(WpCore);
 </script>
 </body>
 </html>

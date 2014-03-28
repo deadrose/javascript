@@ -29,6 +29,8 @@
 <script src="jquery-1.10.2.js"></script>
 <script>
     (function(){
+        // 각 레이어마다 캔버스가 존재
+
         var btnAdd = $('#btnAdd'),
             wrap = $('#wrap'),
             cvs = $('#c'),
@@ -38,14 +40,14 @@
 
         function addLayer(){
             var newCvs = cvs.clone();
-            wrap.append(newCvs);
+            wrap.append(newCvs.show());
+            currLayer = no;
 
             var li = $('<li></li>');
             li.html('<span>layer ' + (no++) + '</span><input type="checkbox">숨김 <input type="text" class="opacity" value="1" />');
             li.attr('data-index', no);
             layers.append(li);
             li.siblings().removeClass('on').end().addClass('on');
-            currLayer = no;
         }
 
         btnAdd.on('click', function(e){
@@ -53,8 +55,21 @@
         });
 
         $('#btnMerge').click(function(){
-            var items = $('.cvs');
-            var cvs = items.eq(0);
+            var $items = $('.cvs');
+            var ctx = $items.get(0).getContext('2d');
+            var img = new Image;
+            for(var i = 1; i < $items.length ; i++ ){
+                var $c = $items.eq(i);
+                var opacity = $c.css('opacity');
+
+                ctx.globalAlpha = opacity;
+                img.src = $c.get(0).toDataURL();
+                ctx.drawImage(img, 0, 0, 500, 300);
+            }
+            ctx.globalAlpha = 1;
+            $items.filter(':gt(0)').remove();
+            currLayer = 0;
+            layers.find('>li').filter(':gt(0)').remove();
         });
 
         layers.on('click', 'li', function(e){
@@ -67,14 +82,7 @@
         });
 
         layers.on('focusout', 'input[type=text]', function() {
-            var ctx = $('.cvs').eq($(this).parent().index())[0].getContext('2d');
-            var data = ctx.getImageData(0, 0, 500, 400);
-            var idata = data.data;
-            for(var i = 0; i < idata.length; i += 4){
-                idata[i + 3] = Math.floor(idata[i + 3] * parseFloat($(this).val()));
-            }
-            ctx.putImageData(data, 0, 0);
-            ctx.globalAlpha = Math.min(1, parseFloat($(this).val()));
+            $('.cvs').eq(currLayer).css('opacity', Math.min(1, parseFloat($(this).val())));
         });
 
         var li = $('<li></li>');

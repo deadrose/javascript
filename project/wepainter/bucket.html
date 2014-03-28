@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<canvas id="canvas" width="500" height="400"></canvas>
+
+<script src="jquery-1.10.2.js"></script>
+<script>
+    var drawingAreaHeight = 0;
+    var curColorIndex = 0;
+    var colorLayerData;
+    var clickedColor = {};
+    var newColor = {r: 255, g: 0, b: 0, a:125};
+
+    var colorRow1Col1 = new Object();
+    colorRow1Col1.r = 51;
+    colorRow1Col1.g = 153;
+    colorRow1Col1.b = 0;
+
+    var curColor = colorRow1Col1;
+
+    var color = [colorRow1Col1];
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var canvasWidth = 500;
+    var canvasHeight = 400;
+
+
+    context.strokeStyle = 'blue';
+    context.beginPath();
+    context.moveTo(10, 10);
+    context.lineTo(10, 100);
+    context.lineTo(40, 100);
+    context.lineTo(40, 150);
+    context.lineTo(80, 120);
+    context.lineTo(80, 150);
+    context.lineTo(100, 100);
+    context.lineTo(100, 10);
+    context.lineTo(10, 10);
+    context.stroke();
+    context.closePath();
+
+    context.beginPath();
+    context.arc(200, 100, 50, 0, 2 * Math.PI, false);
+    context.stroke();
+
+    var drawingAreaX = 0;
+    var drawingAreaY = 0;
+    var drawingAreaWidth = 500;
+    var drawingAreaHeight = 400;
+    var pixelStack = [];
+    var neighbors = [[1,0], [0,-1], [-1,0], [0,1], [1,1], [1,-1], [-1,-1], [-1,1]];
+
+    function fill(x, y) {
+        var pixelPos = (y*canvasWidth + x)*4;
+        colorLayerData = context.getImageData(0, 0, canvasWidth, canvasHeight);
+
+        var r = colorLayerData.data[pixelPos + 0];
+        var g = colorLayerData.data[pixelPos + 1];
+        var b = colorLayerData.data[pixelPos + 2];
+        var a = colorLayerData.data[pixelPos + 3];
+        //console.log("clicked color:   " + r +","+ g +","+ b +","+ a);
+
+        console.log(r, g, b, a);
+
+        clickedColor = {
+            r: r,
+            g: g,
+            b: b,
+            a: a
+        };
+
+        pixelStack = [[x, y]];
+
+        floodFill();
+    }
+
+    function redraw()
+    {
+        context.clearRect(0, 0, 500, 400);
+        if(colorLayerData){
+            context.putImageData(colorLayerData, 0, 0);
+            colorLayerData = context.getImageData(0, 0, canvasWidth, canvasHeight);
+        }
+
+    }
+
+    function colorPixel(pixelPos)
+    {
+        colorLayerData.data[pixelPos] = newColor.r;
+        colorLayerData.data[pixelPos+1] = newColor.g;
+        colorLayerData.data[pixelPos+2] = newColor.b;
+        colorLayerData.data[pixelPos+3] = 255;
+    }
+
+    function floodFill()
+    {
+        var newPos, x, y, pixelPos, reachLeft, reachRight;
+
+        while(pixelStack.length)
+        {
+            newPos = pixelStack.pop();
+            x = newPos[0];
+            y = newPos[1];
+
+            pixelPos = (y*canvasWidth + x) * 4;
+            while(y-- >= 0 && matchClickedColor(pixelPos))
+            {
+                pixelPos -= canvasWidth * 4;
+            }
+            pixelPos += canvasWidth * 4;
+            ++y;
+            reachLeft = false;
+            reachRight = false;
+            while(y++ < canvasHeight && matchClickedColor(pixelPos))
+            {
+                colorPixel(pixelPos);
+                if(x > 0)
+                {
+                    if(matchClickedColor(pixelPos - 4)){
+                        if(!reachLeft){
+                            pixelStack.push([x - 1, y]);
+                            reachLeft = true;
+                        }
+                    }else if(reachLeft){
+                        reachLeft = false;
+                    }
+                }
+                if(x < canvasWidth)
+                {
+                    if(matchClickedColor(pixelPos + 4)){
+                        if(!reachRight){
+                            pixelStack.push([x + 1, y]);
+                            reachRight = true;
+                        }
+                    }else if(reachRight){
+                        reachRight = false;
+                    }
+                }
+
+                pixelPos += canvasWidth * 4;
+            }
+        }
+
+        redraw();
+    }
+
+    function matchClickedColor(pixelPos)
+    {
+        var r, g, b;
+        r = colorLayerData.data[pixelPos];
+        g = colorLayerData.data[pixelPos+1];
+        b = colorLayerData.data[pixelPos+2];
+
+        if(r == newColor.r && g == newColor.g && b == newColor.b) return false;
+        if(r == clickedColor.r && g == clickedColor.g && b == clickedColor.b) return true;
+
+        return false;
+    }
+
+    $('#canvas').mousedown(function(e)
+    {
+
+        var mouseX = e.pageX - this.offsetLeft;
+        var mouseY = e.pageY - this.offsetTop;
+        fill(mouseX, mouseY);
+    }).mouseup(function(){
+        //context.putImageData(colorLayerData, 0, 0);
+    });
+</script>
+</body>
+</html>
