@@ -41412,7 +41412,7 @@ widget.Thumbnailer = function(a) {
 if ("undefined" !== typeof module && module.exports && (module.exports = widget.Thumbnailer, "undefined" === typeof document)) {
     var canvas = require("canvas");
     document = {
-        createElement: function() {
+        createElement: function (s) {
             return new canvas
         }
     };

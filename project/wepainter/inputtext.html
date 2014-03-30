@@ -9,8 +9,9 @@
         }
 
         #sketch {
-            border: 10px solid gray;
-            height: 100%;
+            border: 1px solid #000000;
+            width: 500px;
+            height: 300px;
             position: relative;
         }
 
@@ -36,7 +37,7 @@
 <body>
 
 <div id="sketch">
-    <canvas id="paint"></canvas>
+    <canvas id="paint" width="500" height="300"></canvas>
 </div>
 
 <script src="jquery-1.10.2.js"></script>
@@ -47,10 +48,6 @@
         var ctx = canvas.getContext('2d');
 
         var sketch = document.querySelector('#sketch');
-        var sketch_style = getComputedStyle(sketch);
-        canvas.width = parseInt(sketch_style.getPropertyValue('width'));
-        canvas.height = parseInt(sketch_style.getPropertyValue('height'));
-
 
         // Creating a tmp canvas
         var tmp_canvas = document.createElement('canvas');
@@ -63,16 +60,10 @@
 
         var mouse = {x: 0, y: 0};
         var start_mouse = {x: 0, y: 0};
-        var last_mouse = {x: 0, y: 0};
-
-        var sprayIntervalID;
-
         var textarea = document.createElement('textarea');
         textarea.id = 'text_tool';
         sketch.appendChild(textarea);
 
-        // Text tool's text container for calculating
-        // lines/chars
         var tmp_txt_ctn = document.createElement('div');
         tmp_txt_ctn.style.display = 'none';
         sketch.appendChild(tmp_txt_ctn);
@@ -83,14 +74,11 @@
         }, false);
 
 
-        /* Mouse Capturing Work */
         tmp_canvas.addEventListener('mousemove', function(e) {
             mouse.x = typeof e.offsetX !== 'undefined' ? e.offsetX : e.layerX;
             mouse.y = typeof e.offsetY !== 'undefined' ? e.offsetY : e.layerY;
         }, false);
 
-
-        /* Drawing on Paint App */
         tmp_ctx.lineWidth = 5;
         tmp_ctx.lineJoin = 'round';
         tmp_ctx.lineCap = 'round';
@@ -105,9 +93,6 @@
 
             start_mouse.x = mouse.x;
             start_mouse.y = mouse.y;
-
-            // onPaint();
-            // sprayIntervalID = setInterval(onPaint, 50);
         }, false);
 
         tmp_canvas.addEventListener('mouseup', function() {
@@ -123,10 +108,6 @@
                     var text_node = document.createTextNode(lines[i][j]);
                     tmp_txt_ctn.appendChild(text_node);
 
-                    // Since tmp_txt_ctn is not taking any space
-                    // in layout due to display: none, we gotta
-                    // make it take some space, while keeping it
-                    // hidden/invisible and then get dimensions
                     tmp_txt_ctn.style.position   = 'absolute';
                     tmp_txt_ctn.style.visibility = 'hidden';
                     tmp_txt_ctn.style.display    = 'block';
@@ -138,8 +119,6 @@
                     tmp_txt_ctn.style.visibility = '';
                     tmp_txt_ctn.style.display    = 'none';
 
-                    // Logix
-                    // console.log(width, parseInt(textarea.style.width));
                     if (width > parseInt(textarea.style.width)) {
                         break;
                     }
@@ -166,9 +145,7 @@
                 );
             }
 
-            // Writing down to real canvas now
             ctx.drawImage(tmp_canvas, 0, 0);
-            // Clearing tmp canvas
             tmp_ctx.clearRect(0, 0, tmp_canvas.width, tmp_canvas.height);
 
             textarea.style.display = 'none';

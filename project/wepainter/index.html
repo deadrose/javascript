@@ -1,72 +1,19 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-    <title></title>
-    <style>
-        #c {
-            border: 1px solid black;
-        }
-
-        #tool {
-            position: relative;
-        }
-
-        #penSetting {
-            position: absolute;
-            left: 0;
-            top: 20px;
-        }
-
-        .wp-body {
-
-        }
-        .wp-header {
-            display: inline-block;
-            width:300px;
-        }
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>웹퍼블리싱 진행표</title>
+    <style type="text/css">
+        *, body	{margin:0; padding:0;}
     </style>
+    <meta name="lemonpen.site" content="750d15425d09045c" />
+    <!-- <link rel="stylesheet" id="lemonpen-css" type="text/css" href="http://style.lemonpen.com/site/lemonpen_release.css" />
+    <script src="http://script.lemonpen.com/site/lemonpen.js?sid=750d15425d09045c" type="text/javascript" charset="UTF-8"></script> -->
 </head>
+<frameset cols="200,*" frameborder="0" framespacing="0">
+    <frame src="left.html" name="leftFrame" scrolling="auto">
+    <frame src="about:blank" name="mainFrame">
+</frameset><noframes></noframes>
 <body>
-<div id="content">
-<ul class="tool-list">
-    <li><a href="brush.html" target="_blank">브러쉬</a> : 브러쉬 툴</li>
-    <li><a href="dragdrawcircle.html" target="_blank">원그리기</a> : 원그리기 툴</li>
-    <li><a href="dragdrawline.html" target="_blank">라인그리기</a> : 라인그리기 툴</li>
-    <li><a href="dragdrawrectangle.html" target="_blank">사각형그리기</a> : 사각형그리기 툴</li>
-    <li><a href="erase.html" target="_blank">지우개</a> : 브러쉬 툴</li>
-    <li><a href="gradient.html" target="_blank">그래디언트</a> : 브러쉬 툴</li>
-    <li><a href="history.html" target="_blank">히스토리</a> : 브러쉬 툴</li>
-    <li><a href="layers.html" target="_blank">레이어</a> : 브러쉬 툴</li>
-    <li><a href="pattern-brush.html" target="_blank">패턴브러쉬</a> : 브러쉬 툴</li>
-    <li><a href="pen.html" target="_blank">펜</a> : 브러쉬 툴</li>
-    <li><a href="selectshape.html" target="_blank">쉐이프 선택</a> : 브러쉬 툴</li>
-    <li><a href="shapes.html" target="_blank">별모양 쉐이프</a> : 브러쉬 툴</li>
-    <li><a href="sliced.html" target="_blank">형광펜</a> : 브러쉬 툴</li>
-    <li><a href="spray.html" target="_blank">스프레이</a> : 브러쉬 툴</li>
-    <li><a href="timebase-spray.html" target="_blank">스프레이2</a> : 브러쉬 툴</li>
-</ul>
-</div>
-
-<script src="jquery-1.10.2.js"></script>
-<script src="wp-core.js"></script>
-<script>
-    (function(wp) {
-        var BaseClass = wp.BaseClass,
-            UIBase = wp.UIBase;
-
-
-        var PaintTool = UIBase.extend({
-            initialize: function(name, options) {
-
-            },
-            start: function(){},
-            moving: function(){},
-            end: function(){}
-        });
-
-
-
-    })(WpCore);
-</script>
 </body>
 </html>

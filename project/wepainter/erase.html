@@ -3,11 +3,8 @@
 <head>
     <title></title>
     <style>
-        body {
-            background-color: ivory;
-        }
         canvas {
-            border:1px solid red;
+            border:1px solid #000000;
         }
         #brush_size, #color {
             width:30px;
@@ -21,22 +18,21 @@
 <input id="brush_size" type="text" width=10>
 <input id="color" type="text" width=10>
 <br/>
-<canvas id="canvas" width=300 height=300></canvas>
+<canvas id="canvas" width=500 height=300></canvas>
 
 <script src="jquery-1.10.2.js"></script>
 <script>
 
     function Tool() {
-        var type = "none";
-        var mouseStart = false;
-        var x;
-        var y;
-        var lastX;
-        var lastY;
+        this.type = "none";
+        this.mouseStart = false;
+        this.x = 0;
+        this.y = 0;
+        this.lastX = 0;
+        this.lastY = 0;
     }
 
     Tool.prototype.activate = function (newType) {
-
         this.type = newType;
         this.mouseStart = false;
 
@@ -107,18 +103,19 @@
     var offsetY = canvasOffset.top;
 
     var myTool = new Tool();
+    var canvas = document.getElementById("canvas");
     myTool.activate("brush");
 
     document.getElementById("brush_size").value = 15;
     document.getElementById('color').value = "green";
 
-    $("#canvas").mousedown(function (e) {
+    canvas.addEventListener('mousedown', function (e) {
         myTool.mousedown(e);
     });
-    $("#canvas").mousemove(function (e) {
+    canvas.addEventListener('mousemove', function (e) {
         myTool.mousemove(e);
     });
-    $("#canvas").mouseup(function (e) {
+    canvas.addEventListener('mouseup', function (e) {
         myTool.mouseup(e);
     });
 

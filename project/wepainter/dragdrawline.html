@@ -14,37 +14,46 @@
 <script>
     var el = document.getElementById('c');
     var ctx = el.getContext('2d');
+    var offset = $(el).offset();
+
     ctx.lineJoin = ctx.lineCap = 'round';
     ctx.strokeStyle = 'blue';
     ctx.lineWidth = 2;
-    var data = null;
+    var imgData = null;
 
-    var isDrawing, lastPoint;
+    var isDrawing, startPos;
 
-    el.onmousedown = function(e) {
+    function getPos(e){
+        return {
+            x: e.clientX - offset.left,
+            y: e.clientY - offset.top
+        };
+    }
+
+    el.addEventListener('mousedown', function(e) {
         isDrawing = true;
-        lastPoint = { x: e.clientX, y: e.clientY };
+        startPos = getPos(e);
 
-        data = ctx.getImageData(0, 0, 500, 300);
-    };
+        imgData = ctx.getImageData(0, 0, 500, 300);
+    });
 
-    el.onmousemove = function(e) {
+    el.addEventListener('mousemove', function(e) {
         if (!isDrawing) return;
 
-        var currentPoint = { x: e.clientX, y: e.clientY };
+        var pos = getPos(e);
 
         ctx.clearRect(0, 0, 500, 400);
-        ctx.putImageData(data, 0, 0);
+        ctx.putImageData(imgData, 0, 0);
         ctx.beginPath();
-        ctx.moveTo(lastPoint.x,lastPoint.y);
-        ctx.lineTo(currentPoint.x,currentPoint.y);
+        ctx.moveTo(startPos.x,startPos.y);
+        ctx.lineTo(pos.x,pos.y);
         ctx.stroke();
         ctx.closePath();
-    };
+    });
 
-    el.onmouseup = function() {
+    el.addEventListener('mouseup', function() {
         isDrawing = false;
-    };
+    });
 </script>
 </body>
 </html>

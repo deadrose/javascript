@@ -37,7 +37,7 @@ var WpCore = (function () {
             }
             return obj;
         },
-        extend = function (obj) {
+        extend = function () {
             each(arraySlice.call(arguments, 1), function (source) {
                 each(source, function (val, key) {
                     obj[key] = source[key];
@@ -95,9 +95,7 @@ var WpCore = (function () {
             statics = attrs.$statics || supr.$statics || {},
             singleton = !!attrs.$singleton,
             name = attrs.$name || 'Unknown Class',
-            F = function () {
-                if(autoRunParent && this.initialize) { this.initialize(); }
-            };
+            F = function () {};
 
         delete attrs.$statics;
         delete attrs.$singleton;
@@ -114,6 +112,8 @@ var WpCore = (function () {
         F.prototype = supr.prototype;
         Klass.prototype = new F;
         Klass.prototype.constructor = Klass;
+        Klass.prototype.klass = Klass;
+        Klass.prototype.supr = supr.prototype;
         Klass.extend = classExtend;
         inherits(Klass.prototype, attrs, supr);
         return Klass;
@@ -123,6 +123,7 @@ var WpCore = (function () {
         $name: 'UIBase',
         initialize: function () {
             this.callParent();
+
             this._listeners = {};
         },
         on: function (name, callback) {

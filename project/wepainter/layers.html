@@ -50,10 +50,12 @@
             li.siblings().removeClass('on').end().addClass('on');
         }
 
+        // 새 레이어 추가
         btnAdd.on('click', function(e){
             addLayer();
         });
 
+        // 전체 병합
         $('#btnMerge').click(function(){
             var $items = $('.cvs');
             var ctx = $items.get(0).getContext('2d');
@@ -72,19 +74,23 @@
             layers.find('>li').filter(':gt(0)').remove();
         });
 
+        // 레이어 선택
         layers.on('click', 'li', function(e){
             currLayer = $(this).siblings().removeClass('on').end().addClass('on').index();
         });
 
+        // 레이어 토글
         layers.on('click', 'input[type=checkbox]', function(e){
             $('.cvs').eq($(this).parent().index()).toggle(!$(this).is(":checked"));
             e.stopPropagation();
         });
 
+        // 투명도 변경
         layers.on('focusout', 'input[type=text]', function() {
             $('.cvs').eq(currLayer).css('opacity', Math.min(1, parseFloat($(this).val())));
         });
 
+        // 기본 레이어 연결
         var li = $('<li></li>');
         li.html('layer ' + (no++));
         li.attr('data-index', no).addClass('on');
@@ -104,8 +110,7 @@
         }
 
         var el = document.getElementById('wrap');
-        var ctx;/* = el.getContext('2d');
-        ctx.lineJoin = ctx.lineCap = 'round';*/
+        var ctx;
 
         var isDrawing, lastPoint;
 

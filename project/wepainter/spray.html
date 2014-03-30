@@ -9,8 +9,9 @@
         }
 
         #sketch {
-            border: 10px solid gray;
-            height: 100%;
+            border: 1px solid #000000;
+            width: 500px;
+            height: 300px;
             position: relative;
         }
 
@@ -25,7 +26,7 @@
 <body>
 
 <div id="sketch">
-    <canvas id="paint"></canvas>
+    <canvas id="paint" width="500" height="300"></canvas>
 </div>
 
 <script src="jquery-1.10.2.js"></script>
@@ -37,8 +38,6 @@
 
         var sketch = document.querySelector('#sketch');
         var sketch_style = getComputedStyle(sketch);
-        canvas.width = parseInt(sketch_style.getPropertyValue('width'));
-        canvas.height = parseInt(sketch_style.getPropertyValue('height'));
 
 
         var tmp_canvas = document.createElement('canvas');

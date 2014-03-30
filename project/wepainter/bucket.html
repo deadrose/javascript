@@ -2,9 +2,12 @@
 <html>
 <head>
     <title></title>
+    <style>
+        #canvas { border: 1px solid black; }
+    </style>
 </head>
 <body>
-<canvas id="canvas" width="500" height="400"></canvas>
+<canvas id="canvas" width="500" height="300"></canvas>
 
 <script src="jquery-1.10.2.js"></script>
 <script>
@@ -14,10 +17,11 @@
     var clickedColor = {};
     var newColor = {r: 255, g: 0, b: 0, a:125};
 
-    var colorRow1Col1 = new Object();
-    colorRow1Col1.r = 51;
-    colorRow1Col1.g = 153;
-    colorRow1Col1.b = 0;
+    var colorRow1Col1 = {
+        r: 51,
+        g: 153,
+        b: 0
+    };
 
     var curColor = colorRow1Col1;
 
@@ -27,7 +31,7 @@
     var canvasWidth = 500;
     var canvasHeight = 400;
 
-
+    // 다각형
     context.strokeStyle = 'blue';
     context.beginPath();
     context.moveTo(10, 10);
@@ -42,6 +46,7 @@
     context.stroke();
     context.closePath();
 
+    // 원
     context.beginPath();
     context.arc(200, 100, 50, 0, 2 * Math.PI, false);
     context.stroke();
@@ -51,8 +56,8 @@
     var drawingAreaWidth = 500;
     var drawingAreaHeight = 400;
     var pixelStack = [];
-    var neighbors = [[1,0], [0,-1], [-1,0], [0,1], [1,1], [1,-1], [-1,-1], [-1,1]];
 
+    // 채우기
     function fill(x, y) {
         var pixelPos = (y*canvasWidth + x)*4;
         colorLayerData = context.getImageData(0, 0, canvasWidth, canvasHeight);
@@ -61,9 +66,6 @@
         var g = colorLayerData.data[pixelPos + 1];
         var b = colorLayerData.data[pixelPos + 2];
         var a = colorLayerData.data[pixelPos + 3];
-        //console.log("clicked color:   " + r +","+ g +","+ b +","+ a);
-
-        console.log(r, g, b, a);
 
         clickedColor = {
             r: r,
@@ -84,9 +86,9 @@
             context.putImageData(colorLayerData, 0, 0);
             colorLayerData = context.getImageData(0, 0, canvasWidth, canvasHeight);
         }
-
     }
 
+    // 지정한 곳의 새로운 색을 변경
     function colorPixel(pixelPos)
     {
         colorLayerData.data[pixelPos] = newColor.r;
@@ -95,6 +97,7 @@
         colorLayerData.data[pixelPos+3] = 255;
     }
 
+    // 클릭한 점이 속한 공간을 검색하여 새로운 색으로 채운다.
     function floodFill()
     {
         var newPos, x, y, pixelPos, reachLeft, reachRight;
@@ -147,6 +150,7 @@
         redraw();
     }
 
+    // 지정된 곳이 클릭한 곳과 동일한 색인가
     function matchClickedColor(pixelPos)
     {
         var r, g, b;

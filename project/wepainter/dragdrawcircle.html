@@ -8,109 +8,72 @@
             height: 100%;
         }
 
-        #sketch {
-            border: 10px solid gray;
+        #canvas {
+            border: 1px solid gray;
             height: 100%;
             position: relative;
-        }
-
-        #tmp_canvas {
-            position: absolute;
-            left: 0px; right: 0;
-            bottom: 0; top: 0;
-            cursor: crosshair;
         }
     </style>
 </head>
 <body>
 
 <div id="sketch">
-    <canvas id="paint"></canvas>
+    <canvas id="canvas" width="500" height="300"></canvas>
 </div>
 
 <script src="jquery-1.10.2.js"></script>
 <script>
-    (function() {
+    // imgData를 이용한 방식
+    (function () {
 
-        var canvas = document.querySelector('#paint');
+        var canvas = document.querySelector('#canvas');
         var ctx = canvas.getContext('2d');
+        var startPos = {x: 0, y: 0};
+        var offset = $(canvas).offset();
+        var isDragging = false;
+        var imgData;
 
-        var sketch = document.querySelector('#sketch');
-        var sketch_style = getComputedStyle(sketch);
-        canvas.width = parseInt(sketch_style.getPropertyValue('width'));
-        canvas.height = parseInt(sketch_style.getPropertyValue('height'));
+        ctx.lineWidth = 2;
+        ctx.lineCap = ctx.lineJoin = 'round';
+        ctx.strokeStyle = 'red';
 
+        function getPos(e) {
+            return {
+                x: e.clientX - offset.left,
+                y: e.clientY - offset.top
+            };
+        }
 
-        // Creating a tmp canvas
-        var tmp_canvas = document.createElement('canvas');
-        var tmp_ctx = tmp_canvas.getContext('2d');
-        tmp_canvas.id = 'tmp_canvas';
-        tmp_canvas.width = canvas.width;
-        tmp_canvas.height = canvas.height;
+        canvas.addEventListener('mousedown', function (e) {
+            var pos = getPos(e);
+            startPos = pos;
+            isDragging = true;
+            imgData = ctx.getImageData(0, 0, 500, 300);
+        });
+        canvas.addEventListener('mousemove', function (e) {
+            if (!isDragging) return;
 
-        sketch.appendChild(tmp_canvas);
+            var pos = getPos(e);
+            var xsize = Math.abs(startPos.x - pos.x);
+            var ysize = Math.abs(startPos.y - pos.y);
+            var angle = Math.atan(ysize / xsize);
+            var radius = ysize / Math.sin(angle);
 
-        var mouse = {x: 0, y: 0};
-        var start_mouse = {x: 0, y: 0};
-        var last_mouse = {x: 0, y: 0};
+            if (startPos.y === pos.y) {
+                radius = Math.abs(pos.x - startPos.x);
+            }
 
-
-        /* Mouse Capturing Work */
-        tmp_canvas.addEventListener('mousemove', function(e) {
-            mouse.x = typeof e.offsetX !== 'undefined' ? e.offsetX : e.layerX;
-            mouse.y = typeof e.offsetY !== 'undefined' ? e.offsetY : e.layerY;
-        }, false);
-
-
-        /* Drawing on Paint App */
-        tmp_ctx.lineWidth = 5;
-        tmp_ctx.lineJoin = 'round';
-        tmp_ctx.lineCap = 'round';
-        tmp_ctx.strokeStyle = 'blue';
-        tmp_ctx.fillStyle = 'blue';
-
-        tmp_canvas.addEventListener('mousedown', function(e) {
-            tmp_canvas.addEventListener('mousemove', onPaint, false);
-
-            mouse.x = typeof e.offsetX !== 'undefined' ? e.offsetX : e.layerX;
-            mouse.y = typeof e.offsetY !== 'undefined' ? e.offsetY : e.layerY;
-
-            start_mouse.x = mouse.x;
-            start_mouse.y = mouse.y;
-
-            onPaint();
-        }, false);
-
-        tmp_canvas.addEventListener('mouseup', function() {
-            tmp_canvas.removeEventListener('mousemove', onPaint, false);
-
-            // Writing down to real canvas now
-            ctx.drawImage(tmp_canvas, 0, 0);
-            // Clearing tmp canvas
-            tmp_ctx.clearRect(0, 0, tmp_canvas.width, tmp_canvas.height);
-
-        }, false);
-
-        var onPaint = function() {
-
-            // Tmp canvas is always cleared up before drawing.
-            tmp_ctx.clearRect(0, 0, tmp_canvas.width, tmp_canvas.height);
-
-            var x = (mouse.x + start_mouse.x) / 2;
-            var y = (mouse.y + start_mouse.y) / 2;
-
-            var radius = Math.max(
-                    Math.abs(mouse.x - start_mouse.x),
-                    Math.abs(mouse.y - start_mouse.y)
-            ) / 2;
-
-            tmp_ctx.beginPath();
-            tmp_ctx.arc(x, y, radius, 0, Math.PI*2, false);
-            // tmp_ctx.arc(x, y, 5, 0, Math.PI*2, false);
-            tmp_ctx.stroke();
-            tmp_ctx.closePath();
-
-        };
+            ctx.beginPath();
+            ctx.clearRect(0, 0, 500, 300);
+            ctx.putImageData(imgData, 0, 0);
+            ctx.arc(startPos.x, startPos.y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+            //ctx.fill(); 원 내부를 채우고자 할 경우
+        });
+        canvas.addEventListener('mouseup', function (e) {
+            ctx.closePath();
+            isDragging = false;
+        });
 
     }());
 
