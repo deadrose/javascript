@@ -21,29 +21,7 @@
     <favorites_list name="mine" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="62" selection-start="92" selection-end="92" vertical-scroll-proportion="-2.0357144" vertical-offset="0" max-vertical-offset="285">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="jsa.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/jsa.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="2752" column="63" selection-start="88458" selection-end="88458" vertical-scroll-proportion="0.5248027" vertical-offset="47348" max-vertical-offset="59299">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#76564#85405#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -55,6 +33,7 @@
       <list>
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/resources/jsa.js" />
+        <option value="$PROJECT_DIR$/resources/ParallaxPage.js" />
       </list>
     </option>
   </component>
@@ -63,6 +42,34 @@
     <option name="y" value="-8" />
     <option name="width" value="1096" />
     <option name="height" value="1906" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>CSS</id>
+          </State>
+          <State>
+            <id>RELAX NG</id>
+          </State>
+          <State>
+            <id>XPath</id>
+          </State>
+          <State>
+            <id>XSLT</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>CoffeeScript</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -129,6 +136,13 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.colors.JavaScript" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="FullScreen" value="false" />
+    <property name="LayoutCode.rearrangeEntriesJavaScript" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="RunManager">
     <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
@@ -197,26 +211,26 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1096" height="1906" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968238" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968238" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.075925924" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2495183" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -238,19 +252,77 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="62" selection-start="92" selection-end="92" vertical-scroll-proportion="-2.0357144" vertical-offset="0" max-vertical-offset="285">
-          <folding />
-        </state>
+        <state line="3" column="62" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/jsa.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2752" column="63" selection-start="88458" selection-end="88458" vertical-scroll-proportion="0.5248027" vertical-offset="47348" max-vertical-offset="59299">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#76564#85405#0" expanded="false" />
-          </folding>
-        </state>
+        <state line="2735" column="18" selection-start="87722" selection-end="87722" vertical-scroll-proportion="0.0" vertical-offset="51965" max-vertical-offset="63308" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/ParallaxPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="35" selection-start="3372" selection-end="3372" vertical-scroll-proportion="0.0" vertical-offset="1938" max-vertical-offset="10621" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/paralllaxer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="0" selection-start="1320" selection-end="1320" vertical-scroll-proportion="0.0" vertical-offset="342" max-vertical-offset="12882" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="62" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/jsa.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2735" column="18" selection-start="87722" selection-end="87722" vertical-scroll-proportion="0.0" vertical-offset="51965" max-vertical-offset="63308" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/ParallaxPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="35" selection-start="3372" selection-end="3372" vertical-scroll-proportion="0.0" vertical-offset="1938" max-vertical-offset="10621" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/paralllaxer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="13" selection-start="1136" selection-end="1136" vertical-scroll-proportion="0.0" vertical-offset="342" max-vertical-offset="12882" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="62" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="375" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/jsa.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2735" column="18" selection-start="87722" selection-end="87722" vertical-scroll-proportion="0.0" vertical-offset="68375" max-vertical-offset="83300" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/ParallaxPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="536" column="26" selection-start="0" selection-end="47758" vertical-scroll-proportion="0.0" vertical-offset="12051" max-vertical-offset="13875" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/jsa.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2735" column="18" selection-start="87722" selection-end="87722" vertical-scroll-proportion="0.0" vertical-offset="68375" max-vertical-offset="83300" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/paralllaxer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="0" selection-start="1320" selection-end="1320" vertical-scroll-proportion="0.0" vertical-offset="11089" max-vertical-offset="12882" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/ParallaxPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="35" selection-start="3372" selection-end="3372" vertical-scroll-proportion="-0.6732283" vertical-offset="1938" max-vertical-offset="10621" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="62" selection-start="92" selection-end="92" vertical-scroll-proportion="0.032571428" vertical-offset="0" max-vertical-offset="1750" />
       </provider>
     </entry>
   </component>

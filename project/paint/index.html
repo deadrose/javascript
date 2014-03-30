@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        #c {
+            border: 1px solid black;
+        }
+
+        #tool {
+            position: relative;
+        }
+
+        #penSetting {
+            position: absolute;
+            left: 0;
+            top: 20px;
+        }
+
+        .wp-body {
+
+        }
+        .wp-header {
+            display: inline-block;
+            width:300px;
+        }
+    </style>
+</head>
+<body>
+<div id="content">
+    <ul class="tool-list">
+        <li><a href="brush.html" target="_blank">브러쉬</a></li>
+        <li><a href="bucket.html" target="_blank">채우기</a></li>
+        <li><a href="dragdrawcircle.html" target="_blank">원그리기</a></li>
+        <li><a href="dragdrawline.html" target="_blank">라인그리기</a></li>
+        <li><a href="dragdrawrectangle.html" target="_blank">사각형그리기</a></li>
+        <li><a href="erase.html" target="_blank">지우개</a></li>
+        <li><a href="gradient.html" target="_blank">그래디언트</a></li>
+        <li><a href="history.html" target="_blank">히스토리</a></li>
+        <li><a href="layers.html" target="_blank">레이어</a></li>
+        <li><a href="pattern-brush.html" target="_blank">패턴브러쉬</a></li>
+        <li><a href="pen.html" target="_blank">펜</a></li>
+        <li><a href="selectshape.html" target="_blank">쉐이프 선택</a></li>
+        <li><a href="shapes.html" target="_blank">별모양 쉐이프</a></li>
+        <li><a href="sliced.html" target="_blank">형광펜</a></li>
+        <li><a href="spray.html" target="_blank">스프레이</a></li>
+        <li><a href="timebase-spray.html" target="_blank">스프레이2</a></li>
+    </ul>
+</div>
+<div style="width:500px;height:400px;" id="wrap">
+    <canvas id="canvas" width="500" height="400"></canvas>
+</div>
+
+
+<script src="jquery-1.10.2.js"></script>
+<script src="../paint/wp-core.js"></script>
+<script>
+    (function(wp) {
+        var UIBase = wp.UIBase;
+
+        var ToolsBar = UIBase.extend({
+            defaults: {
+
+            },
+            initialize: function(options){
+                this.options = $.extend({}, this.defaults, options);
+            },
+            render: function(){
+                this.el = $('<div></div>');
+                return this;
+            }
+        });
+
+        var PaintTool = UIBase.extend({
+            initialize: function(name, canvas, options) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+
+                this.setSetting();
+            },
+            setSetting: function(setting) {
+
+            },
+            start: function(){ throw new Error('start를 구현해주세요.'); },
+            moving: function(){ throw new Error('moving를 구현해주세요.'); },
+            end: function(){ throw new Error('end를 구현해주세요.'); }
+        });
+
+        var tools = {};
+        tools.Brush = PaintTool.extend({
+            _distanceBetween: function(point1, point2) {
+                return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+            },
+            _angleBetween: function(point1, point2) {
+                return Math.atan2( point2.x - point1.x, point2.y - point1.y );
+            },
+            setSetting: function(setting) {
+                this.settings = $.extend({
+                    color: {
+                        r: 50,
+                        g: 50,
+                        b: 50,
+                        a: 255
+                    },
+                    lineWidth: 20,
+                    lineCap: 'round',
+                    lineJoin: 'round'
+                }, setting);
+
+                this.ctx.lineCap = this.lineJoin = 'round';
+                this.ctx.lineWidth = 40;
+            },
+            start: function(x, y){
+                console.log('start', x, y);
+                this.isDrawing = true;
+                this.lastPoint = { x: x, y: y };
+                this.ctx.save();
+            },
+            moving: function(x, y) {
+                if (!this.isDrawing) return;
+                console.log('moving', x, y);
+
+                var currentPoint = { x: x, y: y },
+                    lastPoint = this.lastPoint,
+                    radgrad,
+                    dist = this._distanceBetween(lastPoint, currentPoint),
+                    angle = this._angleBetween(lastPoint, currentPoint),
+                    s = this.settings,
+                    color = s.color.r + ',' + s.color.g + ',' + s.color.b,
+                    incolor = 'rgba(' + color + ', 1)',
+                    midcolor = 'rgba(' + color + ', 0.3)',
+                    outcolor = 'rgba(' + color + ', 0)',
+                    ctx = this.ctx;
+
+                for (var i = 0; i < dist; i+=5) {
+                    x = lastPoint.x + (Math.sin(angle) * i);
+                    y = lastPoint.y + (Math.cos(angle) * i);
+
+                    radgrad = ctx.createRadialGradient(x,y,2,x,y, s.lineWidth);
+
+                    radgrad.addColorStop(0, incolor);
+                    radgrad.addColorStop(0.3, midcolor);
+                    radgrad.addColorStop(1, outcolor);
+
+                    ctx.fillStyle = radgrad;
+                    ctx.fillRect(x-(s.lineWidth), y-(s.lineWidth), s.lineWidth * 2, s.lineWidth * 2);
+                }
+                this.lastPoint = currentPoint;
+            },
+            end: function(x, y){
+                console.log('end', x, y);
+                this.isDrawing = false;
+                this.ctx.restore();
+            }
+        });
+
+        var PaintCanvas = UIBase.extend({
+            initialize: function(canvas, options) {
+                this.options = $.extend({}, this.defaults, options);
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+
+                this._currentTool = null;
+                this._bind();
+            },
+            _bind: function(){
+                var me = this,
+                    toolType = 'Brush',
+                    offset = $(me.canvas).offset();
+
+                console.log(offset);
+
+                me._currentTool = new tools[toolType]('brush', me.canvas);
+                $(me.canvas).on('mousedown', function(e){
+                    me._currentTool && me._currentTool.start(e.clientX - offset.left, e.clientY - offset.top);
+                }).on('mousemove', function(e){
+                    me._currentTool && me._currentTool.moving(e.clientX - offset.left, e.clientY - offset.top);
+                }).on('mouseup', function(e){
+                    me._currentTool && me._currentTool.end(e.clientX - offset.left, e.clientY - offset.top);
+                });
+            }
+        });
+
+        new PaintCanvas($('#canvas')[0]);
+
+    })(WpCore);
+</script>
+</body>
+</html>
